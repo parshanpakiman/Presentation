@@ -2,7 +2,14 @@
 
 ## Open
 
-Double-click **Open slides.html** in the parent folder, or open `_site/index.html` directly in your browser. The main talk has 28 slides and runs in browser JavaScript without Python or a local server.
+[View slides online](https://parshanpakiman.github.io/Presentation/Self-adaptingADP-UB-Fall26/)
+after GitHub Pages is deployed. See the [publishing instructions](../../README.md#view-presentations-online)
+for first-time setup.
+
+For local viewing, render the project first (see below), then double-click
+**Open slides.html** in the parent folder, or open `_site/index.html` directly in
+your browser. The generated `_site/` folder is excluded from Git. The main talk
+has 28 slides and runs in browser JavaScript without Python or a local server.
 
 Use arrows to advance, **Esc** for overview, **M** for Contents, and **F** for full screen. Presenter notes use **S**; browser restrictions may require serving the files over HTTP for that optional feature.
 

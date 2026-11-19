@@ -8,8 +8,26 @@ supporting materials.
 - [Self-Adapting Approximations of Markov Decision Processes](Self-adaptingADP-UB-Fall26/)
   — Departmental presentation at the University at Buffalo, Fall 2026, on
   self-adapting approximate dynamic programming, drawing on my tutorial and earlier
-  *Management Science* paper. The presentation folder includes instructions for
-  opening the slides.
+  *Management Science* paper.
+  [View slides](https://parshanpakiman.github.io/Presentation/Self-adaptingADP-UB-Fall26/)
+  · [Source and local instructions](Self-adaptingADP-UB-Fall26/).
+
+## View presentations online
+
+Use **View slides** to open the presentation as a website. Clicking an HTML file
+in GitHub's file browser displays its source code.
+
+The website is published by [GitHub Actions](.github/workflows/pages.yml).
+For the first deployment:
+
+1. Open the repository's [Pages settings](https://github.com/parshanpakiman/Presentation/settings/pages).
+2. Under **Build and deployment → Source**, select **GitHub Actions**.
+3. Commit and push the publishing workflow to `main`. In the **Actions** tab,
+   wait for **Publish presentations** to finish successfully.
+
+The **View slides** link becomes available after the first successful deployment.
+Later changes to the presentation on `main` are published automatically. To retry
+after enabling Pages, open **Actions → Publish presentations → Run workflow**.
 
 ## Organization
 

@@ -1,0 +1,72 @@
+name: Publish presentations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Self-adaptingADP-UB-Fall26/presentation/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: '1.9.38'
+
+      - name: Render presentation
+        working-directory: Self-adaptingADP-UB-Fall26/presentation
+        run: quarto render
+
+      - name: Assemble website
+        run: |
+          mkdir -p "$RUNNER_TEMP/presentation-pages/Self-adaptingADP-UB-Fall26"
+          cp -a Self-adaptingADP-UB-Fall26/presentation/_site/. "$RUNNER_TEMP/presentation-pages/Self-adaptingADP-UB-Fall26/"
+          cat > "$RUNNER_TEMP/presentation-pages/index.html" <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta http-equiv="refresh" content="0;url=Self-adaptingADP-UB-Fall26/">
+          <title>Academic Presentations</title>
+          <p><a href="Self-adaptingADP-UB-Fall26/">Open Self-Adapting Approximations of Markov Decision Processes</a></p>
+          </html>
+          HTML
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/presentation-pages
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

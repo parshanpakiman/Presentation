@@ -2,7 +2,18 @@
 
 ## Open the presentation
 
-Double-click **Open slides.html** in this folder. It opens the prepared 28-slide presentation in your browser. No installation, terminal, Python, or server is needed for the main talk.
+### Online
+
+[View slides](https://parshanpakiman.github.io/Presentation/Self-adaptingADP-UB-Fall26/)
+in your browser. This link works after the first successful GitHub Pages
+deployment; see the [repository publishing instructions](../README.md#view-presentations-online).
+Clicking **Open slides.html** on GitHub displays its source code.
+
+### On your computer
+
+After rendering the presentation (see below), double-click **Open slides.html**
+in this folder. It opens the 28-slide presentation in your browser. Once built,
+the main talk needs no Python or local server.
 
 - Use the arrow keys to advance slides and animations.
 - Press **Esc** for the slide overview.
@@ -10,6 +21,8 @@ Double-click **Open slides.html** in this folder. It opens the prepared 28-slide
 - Press **F** for full screen.
 
 Keep `presentation/_site/` intact: it contains the slides and their local images, styles, and JavaScript.
+This generated folder is excluded from Git, so a fresh clone needs to be rendered
+before the local launcher works.
 
 ## Edit the presentation
 
