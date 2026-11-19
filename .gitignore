@@ -1,0 +1,31 @@
+# Operating-system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Office and LibreOffice lock files
+~$*
+.~lock.*#
+
+# Editor temporary files and backups
+*.swp
+*.swo
+*~
+
+# LaTeX / Beamer build artifacts
+*.aux
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
