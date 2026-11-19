@@ -3,6 +3,14 @@
 Academic presentations by Parshan Pakiman, including slides, source files, and
 supporting materials.
 
+## Presentations
+
+- [Self-Adapting Approximations of Markov Decision Processes](Self-adaptingADP-UB-Fall26/)
+  — Departmental presentation at the University at Buffalo, Fall 2026, on
+  self-adapting approximate dynamic programming, drawing on my tutorial and earlier
+  *Management Science* paper. The presentation folder includes instructions for
+  opening the slides.
+
 ## Organization
 
 Keep each presentation in its own folder, using a descriptive name such as

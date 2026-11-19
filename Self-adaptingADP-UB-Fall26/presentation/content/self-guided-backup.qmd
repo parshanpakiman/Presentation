@@ -1,0 +1,109 @@
+## Bermudan options: continuous prices, finite actions {#b-sg-options-model}
+
+::: {.eyebrow}
+Self-guided ALPs · Backup
+:::
+
+::: {.slide-body}
+<div class="cols"><div><p>State: asset prices and whether the option has already been knocked out.</p><p>Action: exercise now or continue until a later exercise date.</p><p>A barrier crossing makes the option worthless.</p></div><div class="panel sage"><p><strong>Reward maximization</strong></p><p>An exercise policy gives a lower bound on the optimal option value.</p><p>Information relaxation gives an upper bound.</p></div></div>
+<div class="equation compact">g(p,y) = (1 − y) max{max<sub>j</sub> p<sub>j</sub> − K, 0}</div>
+<p class="small">Finite horizon and two actions. This backup application illustrates the method beyond the talk’s continuous-action setting.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.source}
+Pakiman, Nadarajah, Soheili & Lin (2025), §7 · [Paper](assets/self-guided-alp.pdf) · [DOI](https://doi.org/10.1287/mnsc.2020.00038)
+:::
+
+::: {.notes}
+Source: Self-Guided Approximate Linear Programs, §7.1–7.2, PDF pages 19–20 / printed pages 3401–3402. K denotes the strike price, written p_S in the paper, and y=1 means the option has been knocked out. The barrier indicator records whether any earlier observation crossed the barrier; the current price vector alone does not summarize that history. The payoff is discounted from the exercise date. Exercise labels are given as words because §7.1 contains inconsistent binary action labels between its prose and reward expressions.
+
+The nine instances use 4, 8, or 16 assets and common initial prices 90, 100, or 110. The strike is 100, barrier 170, horizon 3 years, number of exercise opportunities 54, risk-free rate 5%, asset volatility 20%, and asset-price correlations zero. State dimension includes the binary knockout indicator. Do not call this a continuous-action application.
+
+The bound direction reverses relative to inventory: any feasible exercise policy yields reward no greater than the optimal expected reward. The paper estimates policy values with 20,000 price trajectories and constructs upper bounds with the information-relaxation duality framework. Simulation estimates have sampling uncertainty. The reported maximum standard error of policy-value estimates is 0.4%; that is not a deterministic error guarantee.
+:::
+
+
+## Bermudan options: Table 5 {#b-sg-options-table}
+
+::: {.eyebrow}
+Self-guided ALPs · Backup
+:::
+
+::: {.slide-body}
+<p class="small">Nine instances. Compare policy gaps or the quality of each method’s upper bound.</p>
+<div data-paper-table="options"><div class="paper-table-controls"><button data-paper-metric="policy">Policy gaps</button><button data-paper-metric="bound">Upper-bound gaps</button></div><div class="paper-table-output"></div><p class="paper-table-formula"></p></div>
+<p class="small">LSM: least squares Monte Carlo. ALP<sub>DFM</sub>: application-specific basis functions. FALP and self-guided FALP: random features.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.source}
+Pakiman, Nadarajah, Soheili & Lin (2025), Table 5 · [Paper](assets/self-guided-alp.pdf) · [DOI](https://doi.org/10.1287/mnsc.2020.00038)
+:::
+
+::: {.notes}
+Source: Self-Guided Approximate Linear Programs, Table 5 and §7.3, PDF page 20 / printed page 3402. The interactive table reproduces all nine instance rows for all four methods while switching between the two reported metric groups. Policy averages are retained. Upper-bound averages are omitted because the printed ALP_DFM average conflicts with its displayed 1054.4% row. It is a presentation of published results, not a live numerical solver.
+
+Policy gaps use the best upper bound available for the instance as their common reference. Upper-bound gaps compare a method’s own information-relaxation upper bound with that reference. Read the displayed formula before comparing numbers. A zero in the upper-bound-gap view means that method supplied or matched the best reported upper bound; it does not mean its policy is exactly optimal. The large 992.0, 172.5, and 1054.4 entries in the upper-bound group are published values, not decimal transcription errors.
+
+The paper’s finite-horizon self-guided model uses the notation FALP^SG_{500,6}, with six self-guidance passes and 500 random Fourier features. Do not interpret the second subscript as the inventory experiment’s feature batch size. Policy-guided FALP is omitted in this application. The main inventory experiments and this options study use different empirical setups, bound directions, and comparison metrics.
+:::
+
+
+## What the representation guarantees assume {#b-sg-assumptions}
+
+::: {.eyebrow}
+Self-guided ALPs · Technical backup
+:::
+
+::: {.slide-body}
+<div class="cols"><div class="panel blue"><p><strong>MDP regularity</strong></p><p>Compact continuous state space, continuous optimal value function, and an optimal policy.</p></div><div class="panel sage"><p><strong>Feature regularity</strong></p><p>A universal feature family, the stated integrability and sampling conditions, and a finite LP optimum.</p></div></div>
+<div class="equation compact">V<sub>0</sub>(s) ≤ V<sub>B</sub>(s) ≤ V<sub>2B</sub>(s) ≤ ⋯ ≤ V<sup>∗</sup>(s)</div>
+<p class="small">Pointwise monotonicity applies to the fully constrained self-guided LPs. Approximation-error rates have problem-dependent constants.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.source}
+Pakiman et al. (2025), Assumptions 1–4, Theorems 1–2 & Proposition 5 · [Paper](assets/self-guided-alp.pdf) · [DOI](https://doi.org/10.1287/mnsc.2020.00038)
+:::
+
+::: {.notes}
+Source: Self-Guided Approximate Linear Programs, Assumption 1 on PDF page 5 / printed page 3387, Assumption 2 on PDF page 6 / printed page 3388, Assumption 3 and Theorem 1 on PDF page 7 / printed page 3389, Proposition 5 on PDF page 11 / printed page 3393, and the self-guided analysis in §4.3 on PDF pages 12–14 / printed pages 3394–3396.
+
+Assumption 1 allows each feasible action space to be compact continuous or finite. Assumption 2 includes a suitable integral representation of V*, universality, Lipschitz and boundedness properties of the feature family, and moment conditions. Theorem 1(ii) additionally requires a strictly positive lower bound on the sampling density over its support. Mentioning universality alone does not state the entire theorem. A finite optimum is Assumption 3; the paper discusses bounding coefficients to ensure existence. The self-guided error theorem introduces further conditions and projection-dependent terms through Assumption 4.
+
+The exponent 1/√N for FALP is independent of state dimension, but its constants depend on the dimension and other problem properties. This is not dimension-free computational complexity. Theorem 2 analyzes adding H features to a baseline self-guided VFA, with a term accounting for its prior feature space and guidance. Do not replace this theorem by an unconditional O(1/√N) convergence claim for every implementation.
+
+Proposition 5 guarantees pointwise nondecreasing VFAs bounded above by V*. Hence error decreases under every fixed proper state weighting. The connection to policy quality is a worst-case performance-bound statement, not monotone realized policy costs at every iteration. The greedy policy changes its visitation measure when the VFA changes.
+:::
+
+
+## Sampled constraints need a separate certificate {#b-sg-certification}
+
+::: {.eyebrow}
+Self-guided ALPs · Technical backup
+:::
+
+::: {.slide-body}
+<p>A finite constraint sample need not enforce Bellman feasibility or the VFA floor between sampled points.</p>
+<div class="equation compact">If V(s) − γ E[V(S′) | s,a] − c(s,a) ≤ ε for all (s,a),<br>then V(s) − ε/(1 − γ) is a feasible cost lower bound.</div>
+<div class="cols"><div><p><strong>Optimization</strong><br>Control constraint violation and expectation error.</p></div><div><p><strong>Policy evaluation</strong><br>Report simulation uncertainty separately.</p></div></div>
+<p class="small">A grid check or simulation mean alone is not a deterministic continuum certificate.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.source}
+Pakiman et al. (2025), §§3.2 & 4.4, EC.4 · [Paper](assets/self-guided-alp.pdf) · [DOI](https://doi.org/10.1287/mnsc.2020.00038)
+:::
+
+::: {.notes}
+Source: Self-Guided Approximate Linear Programs, constraint sampling in §3.2 on PDF pages 8–9 / printed pages 3390–3391, self-guided implementation in §4.4 on PDF page 14 / printed page 3396, and the bound-estimation discussion referring to EC.4. The supplied publisher PDF contains the main article and references; the electronic companion itself is not appended. This slide’s constant-shift formula follows directly from the discounted Bellman inequalities rather than claiming an additional theorem from the missing companion.
+
+Let ε≥0 be a valid uniform upper bound on the positive Bellman residual over the full feasible state–action space, with the true conditional expectation. Subtracting ε/(1−γ) from V subtracts ε from V−γEV, which restores all cost Bellman inequalities. Consequently the corrected VFA is a pointwise lower bound on V*. Obtaining a valid uniform residual bound is the hard part; a sampled maximum does not establish it. If expectations are estimated, their error must also be accounted for. For an initial distribution χ the corrected expectation Eχ[V]−ε/(1−γ) lower-bounds the optimal expected cost from χ.
+
+Pointwise guiding constraints and Bellman constraints have different roles. A correction that certifies one approximate VFA’s Bellman feasibility does not automatically certify pointwise monotonicity of the entire sampled VFA sequence. Finite LP dual multipliers support the state-relevance interpretation for the finite model, and do not by themselves certify its continuous counterpart. A feasible cost policy has true expected cost at least the optimum, but a simulation mean is an estimate with sampling error, not a deterministic upper bound.
+:::

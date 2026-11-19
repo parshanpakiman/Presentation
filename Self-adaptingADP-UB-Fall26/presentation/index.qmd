@@ -1,0 +1,33 @@
+---
+pagetitle: "Self-Guided Approximation of Markov Decision Processes"
+format:
+  revealjs:
+    theme: [default, styles/theme.scss]
+    css: [styles/layout.css?v=excel-solver, styles/assortment.css, styles/continuous.css, styles/continuous-decisions.css, styles/functional-clt.css?v=2, styles/continuous-import.css?v=final-summary, styles/closing.css, styles/summary-campus.css?v=2, styles/ac-future.css?v=three-ideas-2, styles/projection.css?v=persistent-falp-steps-5, styles/navigation.css?v=elp-constraint-first, styles/paper-results.css?v=purple-final-bound, styles/alp-comparison.css?v=discussion-finale]
+    html-math-method: mathml
+    width: 1280
+    height: 720
+    margin: 0.05
+    center: false
+    slide-number: c/t
+    show-slide-number: all
+    transition: fade
+    controls: true
+    controls-layout: edges
+    menu:
+      side: left
+      numbers: true
+      width: 420px
+    progress: true
+    hash: true
+    history: true
+    navigation-mode: linear
+    title-slide: false
+    slide-level: 2
+    scroll-view:
+      activation-width: 650
+    include-after-body: components/scripts.html
+---
+
+{{< include content/slides.qmd >}}
+

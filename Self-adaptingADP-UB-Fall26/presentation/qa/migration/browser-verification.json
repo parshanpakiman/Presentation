@@ -1,0 +1,145 @@
+{
+  "slides": 42,
+  "originalSlidesUnchanged": "1\u201324",
+  "migratedSlides": 18,
+  "notesPreserved": 18,
+  "pythonDemosRun": 9,
+  "editedCode": true,
+  "errorHandling": true,
+  "stop": true,
+  "reset": true,
+  "outOfOrderRelevance": true,
+  "originalLpObjective": 40,
+  "phoneWidth": 390,
+  "phoneDocumentWidth": 390,
+  "errors": [],
+  "finalLayouts": [
+    {
+      "bottom": 660,
+      "footer": 800,
+      "id": "s25",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 636,
+      "footer": 800,
+      "id": "s26",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 755,
+      "footer": 800,
+      "id": "s27",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 705,
+      "footer": 800,
+      "id": "s28",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 721,
+      "footer": 800,
+      "id": "s29",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 558,
+      "footer": 800,
+      "id": "s30",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 732,
+      "footer": 800,
+      "id": "s31",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 731,
+      "footer": 800,
+      "id": "s32",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 642,
+      "footer": 800,
+      "id": "s33",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 694,
+      "footer": 800,
+      "id": "s34",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 664,
+      "footer": 800,
+      "id": "s35",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 667,
+      "footer": 800,
+      "id": "s36",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 775,
+      "footer": 800,
+      "id": "s37",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 605,
+      "footer": 800,
+      "id": "s38",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 760,
+      "footer": 800,
+      "id": "s39",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 686,
+      "footer": 800,
+      "id": "s40",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 785,
+      "footer": 800,
+      "id": "s41",
+      "overlap": false,
+      "wide": []
+    },
+    {
+      "bottom": 636,
+      "footer": 800,
+      "id": "s42",
+      "overlap": false,
+      "wide": []
+    }
+  ],
+  "allNewSlidesFit": true
+}

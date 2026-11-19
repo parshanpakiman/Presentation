@@ -1,0 +1,1966 @@
+{{< include /content/self-guided-backup.qmd >}}
+
+## Inventory assumptions {#b01}
+
+::: {.eyebrow}
+Technical backup · 01
+:::
+
+::: {.slide-body}
+<div class="cols"><div><p>State s ∈ [−4,12]; order a ∈ [0,6].</p><p>Demand: Normal(6, 3.5²), truncated to [0,10].</p><p>Immediate replenishment; independent period demand; discount γ = 0.95.</p></div><div class="panel peach"><p>Unit costs</p><p>Purchase 20 · holding 1 · backlog 25<br>Disposal 5 · lost sales 3000</p></div></div><div class="equation compact">X = s + a − G, &nbsp; S′ = min{12, max{−4, X}}<br>c(s,a) = 20a + E[(S′)⁺ + 25(−S′)⁺ + 5(X−12)⁺ + 3000(−4−X)⁺]</div><p class="small">x⁺ means max{x,0}. Expected cost averages over demand; a single animation is one realization.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §4.1, inventory example · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Rewards, costs, and bounds {#b02}
+
+::: {.eyebrow}
+Technical backup · 02
+:::
+
+::: {.slide-body}
+<table class="method-table"><tr><th></th><th>Reward maximization</th><th>Cost minimization</th></tr><tr><td>Policy</td><td>Lower than or equal to optimum</td><td>Higher than or equal to optimum</td></tr><tr><td>Fully feasible value-function LP</td><td>V ≥ Bellman reward operator</td><td>V ≤ Bellman cost operator</td></tr><tr><td>Approximation certificate</td><td>Upper bound on reward</td><td>Lower bound on cost</td></tr></table><div class="callout">A sampled relaxation, grid minimum, or simulation mean does not automatically inherit a deterministic continuum certificate.</div>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §§2 and 4 · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Occupation flows and policy recovery {#b03}
+
+::: {.eyebrow}
+Technical backup · 03
+:::
+
+::: {.slide-body}
+<div class="equation compact">max<sub>ρ ≥ 0</sub> Σ<sub>t,s,a</sub> r<sub>t</sub>(s,a)ρ<sub>t</sub>(s,a)<br>Σ<sub>a</sub>ρ<sub>0</sub>(s,a) = χ(s)<br>Σ<sub>a</sub>ρ<sub>t</sub>(s,a) = Σ<sub>s′,a′</sub>P<sub>t−1</sub>(s|s′,a′)ρ<sub>t−1</sub>(s′,a′)</div><div class="equation">π<sub>t</sub>(a|s) = ρ<sub>t</sub>(s,a) / Σ<sub>a′</sub>ρ<sub>t</sub>(s,a′)</div><p class="small">Normalize only when the denominator is positive. Assign a feasible action at unreachable states. This specialization injects probability at period 0 only.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §2.2, D-ELP · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Marginal flows and missing coordination {#b04}
+
+::: {.eyebrow}
+Technical backup · 04
+:::
+
+::: {.slide-body}
+<p class="lede">Local flow conservation does not specify a joint distribution.</p><div class="equation compact">Σ<sub>j,sⱼ,aⱼ</sub> C<sub>k,j</sub>(a<sub>j</sub>) x<sub>t,j</sub>(s<sub>j</sub>,a<sub>j</sub>) ≤ b<sub>k</sub></div><p>This is an expected resource constraint. It permits marginals that cannot be realized by any distribution over feasible joint actions.</p><div class="callout">Example: product 1 always offered and product 2 offered with probability ½, although they cannot coexist.</div><p class="small">Repair can enforce feasibility but changes the action distribution and policy value.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §3.2, LAG · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Link component flows to network flows {#b05}
+
+::: {.eyebrow}
+Technical backup · 05
+:::
+
+::: {.slide-body}
+<div class="equation compact">x<sub>t,j</sub>(s<sub>j</sub>,a<sub>j</sub>) = Σ<sub>e labeled (j,sⱼ,aⱼ)</sub> y<sub>t,e</sub><br>Σ<sub>e leaving v</sub> y<sub>t,e</sub> = Σ<sub>e entering v</sub> y<sub>t,e</sub></div><p>Internal network nodes conserve flow. Source-to-sink paths encode feasible joint actions.</p><div class="callout">The network represents action feasibility within a period; the component flow equations represent evolution across periods.</div><p class="small">Compression depends on structure. A network may still become large, and the resulting relaxation need not solve the original MDP exactly.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §3.2, FNR linking and balance constraints · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Pricing and stopping {#b06}
+
+::: {.eyebrow}
+Technical backup · 06
+:::
+
+::: {.slide-body}
+<div class="equation">max<sub>a feasible</sub> Σ<sub>j</sub> d<sub>t,j</sub>(a<sub>j</sub>) − ξ<sub>t</sub></div><p>d prices support for a component action; ξ prices the unit probability budget.</p><div class="cols"><div class="panel sage">Positive reduced cost<br>Add an improving feasible action and re-solve.</div><div class="panel peach">Exact optimum ≤ 0<br>No improving action remains for that period.</div></div><p class="small rule">A heuristic that finds no improving action cannot certify this stopping condition. Intermediate restricted objectives are not automatically bounds on the original MDP optimum.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §3.3, delayed allocation · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## From a violation search to a density {#b07}
+
+::: {.eyebrow}
+Technical backup · 07
+:::
+
+::: {.slide-body}
+<div class="equation compact">f(β;s,a) = [c(s,a) − Σ<sub>n≥1</sub> β<sub>n</sub>(φ<sub>n</sub>(s) − γ E[φ<sub>n</sub>(S′)|s,a])] / (1−γ)</div><p>The ALP constraint is β₀ ≤ f(β;s,a).</p><div class="equation compact">min<sub>s,a</sub> f(β;s,a) = inf<sub>density y</sub> E<sub>y</sub>[f(β;s,a)]</div><p>Add λ D<sub>KL</sub>(y ‖ uniform) to discourage concentration. For fixed β and λ, the minimizing density is proportional to exp(−f/λ).</p><p class="small">Lifting preserves the infimum under the regularity assumptions; positive regularization introduces smoothing bias.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §4.2, saddle-point reformulation · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## PSMD: assumptions and interpretation {#b08}
+
+::: {.eyebrow}
+Technical backup · 08
+:::
+
+::: {.slide-body}
+<div class="diagram-row"><div><strong>Sample</strong><small>State/action pair<br>and next state</small></div><span class="arrow">→</span><div><strong>Primal update</strong><small>Projected gradient<br>step in coefficients</small></div><span class="arrow">→</span><div><strong>Dual update</strong><small>KL-proximal step<br>in density space</small></div></div><p>The analysis depends on compactness, regularity, gradient/sampling conditions, and the approximation assumptions of the cited theorem.</p><div class="callout">A bound on the optimization gap is different from a guarantee that a fixed basis represents the optimal value function.</div><p class="small">The repository’s lightweight fixed-temperature Gibbs surrogate is not the complete paper algorithm. No PSMD solver runs in this presentation.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §4.2; Lin et al. (2020), as cited in manuscript · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Guidance changes state relevance {#b09}
+
+::: {.eyebrow}
+Technical backup · 09
+:::
+
+::: {.slide-body}
+<div class="equation">V<sub>new</sub>(s) ≥ V<sub>previous</sub>(s)</div><p>The guide’s dual multipliers can add effective objective weight where the previous approximation remains an active floor.</p><div class="equation compact">ν′(s) ∝ ν(s) + multiplier of the guiding constraint at s</div><p class="small">Normalize to a distribution. The interpretation is ex post: it describes the solved model. A sampled guide yields discrete multipliers; smoothing their plot is a visualization choice, not a new continuous certificate.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §4.3, dual interpretation of self-guidance · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Representation and policy guarantees {#b10}
+
+::: {.eyebrow}
+Technical backup · 10
+:::
+
+::: {.slide-body}
+<div class="cols"><div class="panel blue"><span class="term-name">Representation</span><p>Universal random features can approximate continuous value functions under the stated assumptions.</p></div><div class="panel sage"><span class="term-name">Policy evaluation</span><p>The greedy policy uses local action comparisons. Measure its performance separately.</p></div></div><div class="callout">A better average VFA error does not imply that every successive simulated policy cost is smaller.</div><p class="small">Full pointwise guidance preserves a VFA floor. Claims about policy bounds require the precise theorem and its conditions.</p>
+:::
+
+{{< include /components/logos.qmd >}}
+
+
+::: {.notes}
+Source: Tutorial §4.3; Pakiman et al., cited in manuscript · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+## Further reading and reproducibility {#b11}
+
+::: {.eyebrow}
+Technical backup · 11
+:::
+
+::: {.slide-body}
+<p><a href="assets/tutorial.pdf">Self-Adapting Approximations of Markov Decision Processes: A Guided Tour</a><br><span class="small">Cire, Nadarajah, Pakiman, and Soheili · full references in the manuscript</span></p><div class="cols"><div><p class="small">Background: Puterman; Schweitzer & Seidmann; de Farias & Van Roy.</p><p class="small">Weak coupling: Caro & Gallien; Adelman & Mersereau; Nadarajah & Cire.</p></div><div><p class="small">Continuous methods: Lin et al.; Rahimi & Recht; Pakiman et al.</p><p class="small">Authoring settings and data provenance are documented in presentation/README.md and assets/data/README.md.</p></div></div><div class="deck-links"><a href="index.html">Main slides</a><a href="reading.html">Reading view</a></div>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Source: Local manuscript and supplied research code · [Manuscript](assets/tutorial.pdf)
+
+:::
+
+
+<!-- ====================================================================
+BACKUP — Adapt and self-adaptive
+==================================================================== -->
+
+## Adapt and self-adaptive {#b-adaptation-definitions .dictionary}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<div class="definition-grid">
+ <div class="definition">
+  <span class="term">adapt</span>
+  <p class="pronunciation">
+   verb · /əˈdæpt/
+  </p>
+  <p>
+   <em>“<span class="definition-emphasis">to change</span>, or <span class="definition-emphasis">to
+   change</span> something, to suit different conditions or uses”</em>
+  </p>
+  <a class="definition-source" href="https://dictionary.cambridge.org/dictionary/english/adapt">Cambridge Dictionary</a>
+ </div>
+ <div class="definition fragment">
+  <span class="term">self-adaptive</span>
+  <p class="pronunciation">
+   adjective · /ˌsɛlf əˈdæp.tɪv/
+  </p>
+  <p>
+   <em>"able to adjust itself to become <span class="definition-emphasis">more effective</span> or <span class="definition-emphasis">suitable</span></em>
+  </p>
+  <a class="definition-source" href="https://dictionary.cambridge.org/dictionary/english/self-adjusting">Working
+  definition adapted from Cambridge’s “self-adjusting”</a>
+ </div>
+</div>
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: Dictionary sources linked above.
+
+The first definition is a dictionary quotation. The second is a working definition adapted from a related
+dictionary entry, not a verbatim entry for self-adaptive. We will give the tutorial’s technical interpretation
+after the inventory example and COR introduction.
+:::
+
+
+<!-- ====================================================================
+BACKUP — The common elements of sequential problems
+==================================================================== -->
+
+## The common elements of sequential problems {#b-sequential-elements .content-slide}
+
+::: {.eyebrow}
+Sequential decision models
+:::
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<table class="terminology-table" aria-label="Sequential decision terminology and inventory examples">
+ <thead>
+  <tr>
+   <th scope="col">
+   Term
+   </th>
+   <th scope="col">
+   Intuition
+   </th>
+   <th scope="col">
+   Inventory example
+   </th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th scope="row">
+   State <span class="term-symbol">s<sub>t</sub></span>
+   </th>
+   <td data-label="What it means">
+   Information needed to estimate costs, available options, and possible future realizations.
+   </td>
+   <td data-label="Inventory example">
+   Current inventory level: <strong>0 units</strong>.
+   </td>
+  </tr>
+  <tr class="fragment" data-fragment-index="0">
+   <th scope="row">
+   Action <span class="term-symbol">a<sub>t</sub></span>
+   </th>
+   <td data-label="What it means">
+   A choice made before uncertainty is observed.
+   </td>
+   <td data-label="Inventory example">
+   Order quantity: <strong>2 units</strong>.
+   </td>
+  </tr>
+  <tr class="fragment" data-fragment-index="1">
+   <th scope="row">
+   Uncertainty <span class="term-symbol">G<sub>t</sub></span>
+   </th>
+   <td data-label="What it means">
+   Something not yet known when choosing an action.
+   </td>
+   <td data-label="Inventory example">
+   Customer demand: for example, <strong>5 units</strong>.
+   </td>
+  </tr>
+  <tr class="fragment" data-fragment-index="2">
+   <th scope="row">
+   Transition <span class="term-symbol">s<sub>t+1</sub></span>
+   </th>
+   <td data-label="What it means">
+   How the action and outcome change the state.
+   </td>
+   <td data-label="Inventory example">
+   Next inventory: <strong>0 + 2 − 5 = −3</strong>.
+   </td>
+  </tr>
+  <tr class="fragment" data-fragment-index="3">
+   <th scope="row">
+   Cost <span class="term-symbol">c(s,a)</span>
+   </th>
+   <td data-label="What it means">
+   The expected immediate expense of a decision.
+   </td>
+   <td data-label="Inventory example">
+   Purchasing, holding, and stockout costs.
+   </td>
+  </tr>
+  <tr class="fragment" data-fragment-index="4">
+   <th scope="row">
+   Policy <span class="term-symbol">π</span>
+   </th>
+   <td data-label="What it means">
+   A rule for choosing an action in each state.
+   </td>
+   <td data-label="Inventory example">
+   Order toward 6 units: if stock is 0, buy 6.
+   </td>
+  </tr>
+ </tbody>
+</table>
+<p class="terminology-summary fragment" data-fragment-index="5">
+ A <strong>Markov decision process (MDP)</strong> uses these elements to <b>model</b> a sequential
+ decision problem.
+</p>
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: [Tutorial §2 and §4](assets/tutorial.pdf)
+
+Read each row from left to right: name the term, give its meaning, then connect it to the inventory problem.
+State is visible on arrival; advance to reveal action, uncertainty, transition, cost, and policy one at a
+time. Finally reveal the Markov decision process definition. Here t indexes periods. The numerical example
+fixes one possible first period: stock 0, order 2, demand 5, then inventory −3 (three units of unmet demand);
+it need not match the audience's random draw on slide 3. G_t is random demand and g_t is its observed
+realization. Inventory can be negative to represent unmet demand. The opening animation carries all unmet
+demand forward. The later full transition clips the result to the model's backlog and storage limits; keep
+that detail for the later inventory slide and technical backup. With independent demand and immediate
+replenishment, current inventory together with the period index is sufficient; lead times would require
+outstanding orders in the state. c(s,a) averages immediate costs over demand, while the animation displays
+realized costs. The illustrative policy is π(s) = min{6, max{0, 6−s}}, so stock 0 gives order 6 and stock 1
+gives order 5. It is a rule for all states, not one particular order or a claim of optimality.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Bellman’s equation and the policy objective
+==================================================================== -->
+
+## Bellman’s equation and the policy objective {#b-bellman-objective .content-slide .bellman-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+```{=html}
+<p class="bellman-definition">
+  <span class="bellman-value"><math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>V</mi><mi>t</mi><mo>∗</mo></msubsup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></math></span>
+  is the minimum expected cost from period <i>t</i> onward, starting in state <i>s</i>.
+</p>
+```
+
+::: {.bellman-equation-native .fragment data-fragment-index="0"}
+$$
+\underbrace{V_t^*(s)}_{\text{optimal cost}}=\underbrace{\min_{a\in \mathcal{A}(s)}}_{\text{feasible action}}\left\{\underbrace{c_t(s,a)}_{\text{cost now}}+\underbrace{\mathbb E[V_{t+1}^*(s')\mid s,a]}_{\text{future cost}}\right\}
+$$
+:::
+
+```{=html}
+<div class="bellman-recursion-tail">
+  <p class="bellman-boundary">
+    <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>s′</mi><mo>∼</mo><msub><mi>P</mi><mi>t</mi></msub><mo stretchy="false">(</mo><mo>·</mo><mo>|</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo stretchy="false">)</mo></math>
+    &nbsp;·&nbsp;
+    <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi><mo>=</mo><mn>0</mn><mo>,</mo><mo>…</mo><mo>,</mo><mi>T</mi><mo>−</mo><mn>1</mn></math> &nbsp;·&nbsp;
+    <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>V</mi><mi>T</mi><mo>∗</mo></msubsup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></math>:
+    no additional terminal cost.
+  </p>
+</div>
+<div class="bellman-connection fragment" data-fragment-index="5">
+  <h3>
+    Connection to the MDP formulation
+  </h3>
+  <div class="bellman-objective-link">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" displaystyle="true" aria-label="The minimum expected total cost over all feasible policies equals V star at period zero and the initial state."><munder><mo>min</mo><mi>π</mi></munder><mspace width="0.3em"/><msup><mi mathvariant="normal">E</mi><mi>π</mi></msup><mo>[</mo><mrow><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><mrow><msub><mi>c</mi><mi>t</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><mrow><msub><mi>π</mi><mi>t</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><mo stretchy="false">)</mo></mrow><mo>|</mo><msub><mi>s</mi><mn>0</mn></msub></mrow><mo>]</mo><mo>=</mo><mrow mathcolor="#267f77"><msubsup><mi>V</mi><mn>0</mn><mo>∗</mo></msubsup><mo stretchy="false">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow></math>
+  </div>
+  <p>
+    The optimal objective is the value at the <strong>initial period and state</strong>. For our inventory
+    example, <i>s</i><sub>0</sub> = 0, so it is <span class="bellman-value"><math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>V</mi><mn>0</mn><mo>∗</mo></msubsup><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></math></span>.
+  </p>
+  <p class="bellman-profit-note">
+    For a profit-maximization formulation, define <i>V</i> using profits and a maximum; the initial value is
+    then the optimal expected profit.
+  </p>
+</div>
+```
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: [Tutorial §2.1, Bellman optimality equations](assets/tutorial.pdf). Cost-minimization convention
+matches the opening inventory example.
+
+Define V_t^* as the minimum expected remaining cost. Reveal the equation, then reveal its four underbraces and
+matching labels individually from left to right: optimal remaining cost, feasible action choice, expected
+immediate cost, and expected optimal continuation cost. c_t already averages realized period costs; those
+costs are not counted twice. P_t is the transition distribution from the MDP formulation slide. The horizon is finite and
+undiscounted, and V_T^* = 0 means no additional terminal cost; final-period holding and stockout costs remain
+in c_{T−1}.
+
+The last reveal connects Bellman’s equation directly to the policy optimization objective, with each
+period cost written as c_t(s_t, π_t(s_t)). The Bellman recursion itself minimizes over a feasible current
+action a. For a fixed initial state s_0, the minimum over feasible policies of the expected sum of costs is
+exactly V_0^*(s_0). The subscript 0 is the initial period; the argument s_0 is the initial state. Starting the
+inventory example with zero stock therefore gives V_0^*(0). This is an optimal expected total, not the
+realized cost of one animation run. Keep the displayed formula in costs to match the inventory formulation. If the model instead
+maximizes profits, its value function is defined using profits and max, and its initial value is the optimal
+expected profit. For the specific reward transformation r_t = −c_t, the optimal reward value is the negative
+of the cost value; do not equate profit to the displayed minimum-cost value. Do not add a backward-induction
+walkthrough here.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Existing methods for solving MDPs
+==================================================================== -->
+
+## Existing methods for solving MDPs {#b-method-survey .content-slide .methods-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+```{=html}
+<p class="methods-intro">
+  Many approaches are available. <strong>Our focus: approximations built with mathematical optimization.</strong>
+</p>
+<div class="interactive methods-browser" data-widget="methods">
+  <div class="method-menu">
+    <div class="method-selector" role="group" aria-label="Method families">
+      <button
+        type="button"
+        id="method-button-dynamic"
+        data-action="method"
+        data-method="dynamic"
+        aria-pressed="false"
+        aria-controls="method-panel-dynamic"
+      >
+        <span class="method-number">01</span><strong>Dynamic
+        programming</strong><span class="method-subtitle">Solve the Bellman equations</span>
+      </button>
+      <button
+        type="button"
+        id="method-button-value"
+        data-action="method"
+        data-method="value"
+        aria-pressed="false"
+        aria-controls="method-panel-value"
+      >
+        <span class="method-number">02</span><strong>Value-function
+        approximation</strong><span class="method-subtitle">Represent future value compactly</span>
+      </button>
+      <button
+        type="button"
+        id="method-button-policy"
+        data-action="method"
+        data-method="policy"
+        aria-pressed="false"
+        aria-controls="method-panel-policy"
+      >
+        <span class="method-number">03</span><strong>Policy search &amp;
+        learning</strong><span class="method-subtitle">Fit the decision rule directly</span>
+      </button>
+      <button
+        type="button"
+        id="method-button-tree"
+        data-action="method"
+        data-method="tree"
+        aria-pressed="false"
+        aria-controls="method-panel-tree"
+      >
+        <span class="method-number">04</span><strong>Simulation &amp; tree
+        search</strong><span class="method-subtitle">Look ahead from the current state</span>
+      </button>
+      <button
+        type="button"
+        id="method-button-optimization"
+        data-action="method"
+        data-method="optimization"
+        aria-pressed="true"
+        aria-controls="method-panel-optimization"
+      >
+        <span class="method-number">05</span><strong>Optimization-based
+        approximations</strong><span class="method-subtitle">This tutorial's focus</span>
+      </button>
+      <button
+        type="button"
+        id="method-button-structure"
+        data-action="method"
+        data-method="structure"
+        aria-pressed="false"
+        aria-controls="method-panel-structure"
+      >
+        <span class="method-number">06</span><strong>Index &amp; fluid
+        policies</strong><span class="method-subtitle">Exploit a particular model structure</span>
+      </button>
+    </div>
+    <button type="button" class="reset" data-action="reset">
+      Return to tutorial focus
+    </button>
+  </div>
+  <div class="method-panel" aria-live="polite" aria-atomic="true">
+    <div class="method-detail" role="region" id="method-panel-dynamic" aria-labelledby="method-button-dynamic">
+      <h3>
+        Dynamic programming
+      </h3>
+      <p class="method-description">
+        Use a known transition model to compute values and select actions. Methods include finite-horizon
+        recursion, value iteration, and policy iteration.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> An exact baseline for manageable models; state and action growth can
+        make it impractical.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://doi.org/10.1002/9780470316887" target="_blank" rel="noopener noreferrer" data-citation="puterman_markov_2014"><strong>Puterman</strong><span>Markov
+          Decision Processes: Discrete Stochastic Dynamic Programming</span></a>
+        </li>
+      </ul>
+    </div>
+    <div class="method-detail" role="region" id="method-panel-value" aria-labelledby="method-button-value">
+      <h3>
+        Value-function approximation
+      </h3>
+      <p class="method-description">
+        Replace a value table with a function whose parameters are fitted using simulated transitions or
+        model-based updates. Choose actions using estimated future value.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> Performance depends on the representation and where the method samples
+        or evaluates states.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://doi.org/10.1002/9781118029176" target="_blank" rel="noopener noreferrer" data-citation="Powell2011"><strong>Powell
+          (2011)</strong><span>Approximate Dynamic Programming: Solving the Curses of Dimensionality</span></a>
+        </li>
+        <li>
+          <a href="https://doi.org/10.1287/educ.1063.0027" target="_blank" rel="noopener noreferrer" data-citation="powell2006"><strong>Powell
+          &amp; Topaloglu (2006)</strong><span>Approximate Dynamic Programming for Large-Scale Resource
+          Allocation Problems</span></a>
+        </li>
+      </ul>
+    </div>
+    <div class="method-detail" role="region" id="method-panel-policy" aria-labelledby="method-button-policy">
+      <h3>
+        Policy search &amp; learning
+      </h3>
+      <p class="method-description">
+        Parameterize the policy and improve it using sampled trajectories. Policy-gradient and actor–critic
+        methods are examples within reinforcement learning.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> Exploration, training stability, and enforcing constraints require
+        design choices.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/" target="_blank" rel="noopener noreferrer" data-citation="SuttonBarto2018"><strong>Sutton
+          &amp; Barto (2018)</strong><span>Reinforcement Learning: An Introduction</span></a>
+        </li>
+        <li>
+          <a href="https://doi.org/10.1002/9781118029176" target="_blank" rel="noopener noreferrer" data-citation="Powell2011"><strong>Powell
+          (2011)</strong><span>Approximate Dynamic Programming: Solving the Curses of Dimensionality</span></a>
+        </li>
+      </ul>
+    </div>
+    <div class="method-detail" role="region" id="method-panel-tree" aria-labelledby="method-button-tree">
+      <h3>
+        Simulation &amp; tree search
+      </h3>
+      <p class="method-description">
+        Simulate possible future decisions and outcomes. Monte Carlo tree search focuses simulations on
+        promising branches, then selects the next action.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> Requires a simulator; the branching factor and planning depth affect
+        the computation needed.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://doi.org/10.1287/educ.2017.0166" target="_blank" rel="noopener noreferrer" data-citation="fu2017"><strong>Fu
+          (2017)</strong><span>Markov Decision Processes, AlphaGo, and Monte Carlo Tree Search: Back to the Future</span></a>
+        </li>
+        <li>
+          <a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/" target="_blank" rel="noopener noreferrer" data-citation="SuttonBarto2018"><strong>Sutton
+          &amp; Barto (2018)</strong><span>Reinforcement Learning: An Introduction</span></a>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="method-detail"
+      role="region"
+      id="method-panel-optimization"
+      aria-labelledby="method-button-optimization"
+    >
+      <h3>
+        Optimization-based approximations
+      </h3>
+      <p class="method-description">
+        Fit approximate values through linear programs, or relax shared constraints to separate component
+        problems. These models can also provide bounds under appropriate conditions.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> Choosing features, finding violated constraints, and recovering
+        feasible policies can be difficult.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://doi.org/10.1287/opre.51.6.850.24925" target="_blank" rel="noopener noreferrer" data-citation="de_farias_linear_2003"><strong>de
+          Farias &amp; Van Roy (2003)</strong><span>The Linear Programming Approach to Approximate Dynamic Programming</span></a>
+        </li>
+        <li>
+          <a href="https://doi.org/10.1287/opre.1070.0445" target="_blank" rel="noopener noreferrer" data-citation="adelman2008"><strong>Adelman
+          &amp; Mersereau (2008)</strong><span>Relaxations of Weakly Coupled Stochastic Dynamic Programs</span></a>
+        </li>
+      </ul>
+    </div>
+    <div class="method-detail" role="region" id="method-panel-structure" aria-labelledby="method-button-structure">
+      <h3>
+        Index &amp; fluid policies
+      </h3>
+      <p class="method-description">
+        Index policies rank alternatives using a priority score. Fluid approximations replace random
+        population flows with deterministic quantities and derive decisions from that model.
+      </p>
+      <p class="method-limit">
+        <strong>Consideration.</strong> Guarantees depend on structural assumptions or limiting regimes; these
+        are not general-purpose exact methods.
+      </p>
+      <h4>
+        Selected references
+      </h4>
+      <ul class="method-references">
+        <li>
+          <a href="https://arxiv.org/abs/2506.10872" target="_blank" rel="noopener noreferrer" data-citation="scully2025"><strong>Scully
+          &amp; Terenin (2025)</strong><span>The Gittins Index: A Design Principle for Decision-Making Under Uncertainty</span></a>
+        </li>
+        <li>
+          <a href="https://doi.org/10.1287/opre.2016.1531" target="_blank" rel="noopener noreferrer" data-citation="bertsimas2016decomposable"><strong>Bertsimas
+          &amp; Mišić (2016)</strong><span>Decomposable Markov Decision Processes: A Fluid Optimization Approach</span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<p class="methods-overlap">
+  These families overlap: learning, search, and optimization can be combined.
+</p>
+```
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Sources: tutorial introduction and §2; `text/latex/references.bib`. The six families are a teaching
+organization of the cited literature, not a mutually exclusive taxonomy. Approximate dynamic programming and
+reinforcement learning both include value-based and policy-based methods; tree search can use learned values,
+and approximate linear programming is also value-function approximation. Separate the optimization family here
+to introduce the tutorial's emphasis.
+
+Use this backup on request to locate the tutorial within the broader landscape. Start with the selected
+optimization family. Large state and action spaces motivate approximations.
+The tutorial asks how those approximations can adapt to reduce user effort and improve performance.
+Avoid a tour of all six families. If useful, briefly contrast one familiar family, then return to the tutorial
+focus. Participants can explore the other descriptions and references independently.
+
+Each button changes the panel on the right; Tab and Enter/Space also work. Reference links open separately.
+The return button selects optimization based approximations. The descriptions and links remain available in this backup;
+printing shows all six families. No algorithms are run by this selector.
+
+References: Puterman (`puterman_markov_2014`); Powell (2011, `Powell2011`); Powell and Topaloglu (2006,
+`powell2006`); Sutton and Barto (2018, `SuttonBarto2018`); Fu (2017, `fu2017`); de Farias and Van Roy (2003,
+`de_farias_linear_2003`); Adelman and Mersereau (2008, `adelman2008`); Scully and Terenin (2025,
+`scully2025`); Bertsimas and Mišić (2016, `bertsimas2016decomposable`). Publisher or author links were checked
+against these works. Puterman's bibliography entry uses a 2014 edition date; the DOI identifies the original
+book, so the on-slide link omits the year. Powell and Topaloglu's chapter is ©2006 even though the publisher
+landing page lists a later online publication date. The Scully–Terenin link leads to the authors' 2025 preprint.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Mathematical optimization analogy
+==================================================================== -->
+
+## Motivation for this tutorial {#b-optimization-analogy .content-slide .motivation-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<p class="motivation-question">
+ How can we better formulate and represent sequential decision problems?
+</p>
+<p class="motivation-context fragment" data-fragment-index="0">
+ Turning an MDP model into a useful policy requires choices about representation and solution methods.
+</p>
+<h3 class="motivation-inspiration fragment" data-fragment-index="1">
+ Our inspiration: mathematical optimization
+</h3>
+<div class="diagram-row motivation-workflow">
+ <div class="fragment" data-fragment-index="2">
+  <strong>Model</strong>
+  <img
+   class="optimization-model"
+   src="assets/figures/optimization-model.svg"
+   alt="Example linear program: minimize 3x₁ + 2x₂, subject to x₁ + x₂ ≥ 5, 2x₁ + x₂ ≤ 8, and x₁, x₂ ≥ 0. Objective and constraints are labeled."
+  >
+ </div>
+ <span class="arrow fragment" data-fragment-index="3" aria-hidden="true">→</span>
+ <div class="fragment" data-fragment-index="3">
+  <strong>Solve</strong>
+  <div class="solver-brands" aria-label="Examples of optimization solvers">
+   <img class="solver-gurobi" src="assets/logos/gurobi.svg" alt="Gurobi">
+   <img class="solver-hexaly" src="assets/logos/hexaly.svg" alt="Hexaly">
+   <div class="solver-scip">
+   <img src="assets/logos/scip.png" alt="SCIP Optimization Suite mascot">
+   <span>SCIP</span>
+   </div>
+  </div>
+  <small class="workflow-caption">Use a solver to manage the solution process.</small>
+ </div>
+ <span class="arrow fragment" data-fragment-index="4" aria-hidden="true">→</span>
+ <div class="fragment" data-fragment-index="4">
+  <strong>Refine</strong>
+  <img
+   class="optimization-solution"
+   src="assets/figures/optimization-solution.svg"
+   alt="Optimal solution of the displayed program: x₁ = 0, x₂ = 5, objective value 10. Feasible, with zero optimality gap."
+  >
+  <small class="workflow-caption">Obtain and evaluate a solution; add cuts or revise the model.</small>
+ </div>
+</div>
+<div class="motivation-connection fragment" data-fragment-index="5">
+ <h3>
+  Bringing this workflow to MDPs
+ </h3>
+ <p>
+  Aim: make it easier to <b>model</b> sequential problems and leverage <b>optimization tools</b> to obtain
+  better policies.
+ </p>
+</div>
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: [Tutorial introduction, modeling-to-solution gap and mathematical-programming analogy](assets/tutorial.pdf).
+
+Solver logo sources:
+[Gurobi logo on the official SCIP site](https://scipopt.org/images/GurobiLogo_Black-1-1-1.svg),
+[Hexaly](https://www.hexaly.com/wp-content/themes/hexaly/assets/images/hexaly-logo-orange.svg), and
+[SCIP](https://scipopt.org/images/newscippy.png). These are examples of solvers, not a claim about identical
+capabilities. The result illustration corresponds to the displayed mathematical program: x₁ = 0, x₂ = 5 gives
+objective 10. Since 3x₁ + 2x₂ = 2(x₁ + x₂) + x₁ ≥ 10 for every feasible solution, it is optimal with zero gap.
+This is an illustrative result, not a live solver run.
+
+Transition from the learning outcomes: we want to reduce the work of choosing an approximation and configuring
+its solution method, while retaining the model features that matter for decisions. This tutorial focuses on
+approximations built with mathematical optimization. Start with the question at the top, then explain why
+mathematical optimization is our inspiration. The broader method survey is available in technical backup.
+
+The workflow is to model a problem, solve it, and use the solution to refine the formulation. Evaluate the
+solution and its quality, then add cuts or revise the model when useful. In mixed-integer programming, the
+user specifies variables, an objective, and constraints; the solver manages much of the search and reports
+feasible solutions and bounds when available. The small program illustrates the output available for
+evaluation; its exact optimum does not itself require further refinement. This does not imply that all
+formulations are easy or that all runs find an optimum. This introductory analogy groups formulation
+improvements broadly; the next slide distinguishes refinement across solves from solver operations such as cut
+generation within a solve.
+
+Return to the lower question: how can we offer a comparable modeling and solution workflow for MDPs, where the
+output is a policy? We need representations and approximation methods that do more of the work currently left
+to the user. This motivates the next slide's construct–optimize–refine framework. The analogy is an aspiration
+for accessibility and useful performance, not a promise that arbitrary MDPs become easy to solve. The opening
+question is visible on arrival. Advance to reveal the context, inspiration, Model, Solve, Refine, and closing
+question in that order. Each arrow appears with its destination. The model illustration is an illustrative
+two-variable linear program; “s.t.” means “subject to.” There are no numerical controls or automatic animations.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Illustrated Construct, Optimize, Refine cycle
+==================================================================== -->
+
+## Construct, optimize, refine {#b-cor-illustration .content-slide .cor-slide}
+
+::: {.eyebrow}
+COR framework
+:::
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+```{=html}
+<p class="cor-definition">
+  <strong>A self adapting approximation</strong> uses problem structure, data or solution progress
+  to make approximation choices automatically.
+</p>
+<div
+  class="cor-flow"
+  aria-label="Construct, optimize, refine: an optimization workflow with feedback across solves"
+>
+  <div class="cor-stage cor-construct">
+    <span class="cor-step">01</span><strong>Construct</strong>
+  </div>
+  <div class="cor-artifact cor-construct fragment cor-rise" data-fragment-index="0">
+    <h3>
+      Representation + model
+    </h3>
+    <p>
+      Choose how to model actions and future costs.
+    </p>
+    <svg
+      class="cor-sketch"
+      viewBox="0 0 320 124"
+      role="img"
+      aria-label="Schematic inventory example: a complicated piecewise cost function appears first, followed by an initial smooth approximation."
+    >
+      <path class="cor-axes" d="M28 22V100H304"/>
+      <text x="28" y="13">Illustrative future cost</text><text x="304" y="119" text-anchor="end">Inventory</text>
+      <path
+        class="cor-piecewise cor-reference-reveal"
+        pathLength="1"
+        d="M40 42L50 45L60 67L70 67L80 85L90 78L100 89L110 81L120 89L130 77L140 83L150 67L160 72L170 58L180 68L190 59L200 68L210 58L220 68L230 56L240 63L250 49L260 54L270 37L280 40L290 28L294 29"
+      />
+      <path
+        class="cor-representation"
+        pathLength="1"
+        d="M40 26C66.67 50 93.33 74 120 75C149.33 76 178.67 47 208 42C236.67 37 265.33 39 294 48"
+      />
+    </svg>
+    <span class="cor-caption cor-legend"><span class="cor-reference-key">Exact costs</span><span class="cor-approximation-key">Approximation</span></span>
+  </div>
+  <div class="cor-arrow cor-arrow-first fragment" data-fragment-index="1" aria-hidden="true">
+    <svg viewBox="0 0 80 32">
+      <path class="cor-trace" pathLength="1" d="M7 16H69"/>
+      <path class="cor-arrowhead" d="m60 8 10 8-10 8"/>
+    </svg>
+  </div>
+  <div class="cor-stage cor-optimize fragment cor-rise" data-fragment-index="1">
+    <span class="cor-step">02</span><strong>Optimize</strong>
+  </div>
+  <div class="cor-artifact cor-optimize fragment cor-rise" data-fragment-index="2">
+    <h3>
+      Fitted parameters
+    </h3>
+    <p>
+      Fit the approximation by optimization.
+    </p>
+    <svg
+      class="cor-sketch"
+      viewBox="0 0 320 124"
+      role="img"
+      aria-label="Schematic inventory example: the initial smooth curve changes shape to fit the same fixed piecewise cost function more closely."
+    >
+      <path class="cor-axes" d="M28 22V100H304"/>
+      <text x="28" y="13">Future cost</text><text x="304" y="119" text-anchor="end">Inventory</text>
+      <path
+        class="cor-piecewise"
+        d="M40 42L50 45L60 67L70 67L80 85L90 78L100 89L110 81L120 89L130 77L140 83L150 67L160 72L170 58L180 68L190 59L200 68L210 58L220 68L230 56L240 63L250 49L260 54L270 37L280 40L290 28L294 29"
+      />
+      <path
+        class="cor-curve cor-fit"
+        data-fit-start="M40 26C66.67 50 93.33 74 120 75C149.33 76 178.67 47 208 42C236.67 37 265.33 39 294 48"
+        d="M40 42C66.67 70 93.33 96 120 84C149.33 72 178.67 57 208 63C236.67 69 265.33 41 294 29"
+      />
+    </svg>
+    <span class="cor-caption cor-legend"><span class="cor-reference-key">Exact
+    costs</span><span class="cor-approximation-key">Fitted curve</span></span>
+  </div>
+  <div class="cor-arrow cor-arrow-second fragment" data-fragment-index="3" aria-hidden="true">
+    <svg viewBox="0 0 80 32">
+      <path class="cor-trace" pathLength="1" d="M7 16H69"/>
+      <path class="cor-arrowhead" d="m60 8 10 8-10 8"/>
+    </svg>
+  </div>
+  <div class="cor-stage cor-refine fragment cor-rise" data-fragment-index="3">
+    <span class="cor-step">03</span><strong>Refine</strong>
+  </div>
+  <div class="cor-artifact cor-refine fragment cor-rise" data-fragment-index="4">
+    <h3>
+      Quality + feedback
+    </h3>
+    <p>
+      Check bounds or simulated policy costs.
+    </p>
+    <svg
+      class="cor-sketch"
+      viewBox="0 0 320 124"
+      role="img"
+      aria-label="Schematic inventory example: evaluation identifies a region where the representation may need improvement."
+    >
+      <path class="cor-axes" d="M28 22V100H304"/>
+      <text x="28" y="13">Future cost</text><text x="304" y="119" text-anchor="end">Inventory</text>
+      <path
+        class="cor-piecewise"
+        d="M40 42L50 45L60 67L70 67L80 85L90 78L100 89L110 81L120 89L130 77L140 83L150 67L160 72L170 58L180 68L190 59L200 68L210 58L220 68L230 56L240 63L250 49L260 54L270 37L280 40L290 28L294 29"
+      />
+      <path
+        class="cor-previous-curve"
+        d="M40 42C66.67 70 93.33 96 120 84C149.33 72 178.67 57 208 63C236.67 69 265.33 41 294 29"
+      />
+      <rect class="cor-focus" x="34" y="20" width="83" height="77" rx="10"/>
+      <path class="cor-feedback-mark cor-trace" pathLength="1" d="m81 30 13-13h44"/>
+      <text class="cor-feedback-label" x="145" y="21">Where to improve</text>
+    </svg>
+    <span class="cor-caption">Identify what the model is missing</span>
+  </div>
+  <div class="cor-feedback fragment" data-fragment-index="5">
+    <svg
+      viewBox="0 0 1200 80"
+      preserveAspectRatio="none"
+      role="img"
+      aria-label="Feedback returns from refine to construct for another solve."
+    >
+      <path class="cor-trace" pathLength="1" d="M1028 2V44Q1028 60 1012 60H188Q172 60 172 44V4"/>
+      <path class="cor-arrowhead" d="m164 15 8-12 8 12"/>
+    </svg>
+    <span>Enrich the representation and solve again</span>
+  </div>
+</div>
+```
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: [Tutorial introduction and §2.3](assets/tutorial.pdf)
+
+The definition is visible on arrival. Explain that the method automates approximation choices using information
+about the problem instance or the solution process. The aim is less manual design effort together with useful
+performance. Adaptation can occur in one or more stages; it need not occur in all three. In the later delayed
+allocation example, the current LP solution guides which feasible assortments to represent next. This is an
+example of adaptation during refinement, not the definition of all self adapting approximations.
+
+COR stands for construct–optimize–refine. Construction chooses the approximation and model. Optimization fits
+its parameters. Refinement changes the representation across solves. Adaptation inside a fixed-model solve
+belongs to optimize. A self-adapting method need not use a separate refine stage. The aim is accessibility
+together with useful performance, rather than automation alone.
+
+Use six advances to walk through the diagram: reveal the representation and model; connect to optimize; reveal
+the fitted parameters; connect to refine; reveal the quality assessment; then close the feedback loop. All
+earlier elements remain visible. Within Construct, a complicated piecewise cost function appears first, then
+an initial smooth representation is drawn. Optimize begins with that same smooth curve already complete; after
+a short pause, its parameters change continuously to fit the fixed piecewise function more closely. The
+reference stays identical across all three sketches, and Refine shows the final fitted curve with a region to
+inspect. This is a schematic illustration of representation and fitting, not a live optimizer, computed MDP
+solution, or error certificate. The known reference function is a teaching device; actual MDP approximation
+methods need not know the true value function and solve the appropriate constrained models. The fitted
+approximation can be used to select actions. A bound or simulated policy cost can guide refinement without
+necessarily identifying a particular state region. Enrichment may add features, strengthen a formulation, or
+change which states receive emphasis. The final arrow represents changes across solves, not iterations of the
+solver. The reading view and reduced-motion mode show the final fitted curve without animation.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Construct: initial assortment choices
+==================================================================== -->
+
+## Construct: start with displays we know or use {#b-initial-assortments .content-slide .assortment-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<p class="assort-lede">
+ Begin with existing plans, familiar combinations, domain knowledge, or a simple heuristic.
+</p>
+```{=html}
+<div class="assort-tuple-key">
+  <strong>Read each action as (backpack, cooler, tent).</strong><span>1 = feature the product · 0 = do not
+  feature it</span>
+</div>
+```
+<div class="assort-library">
+ <div class="assort-assignment">
+  <div class="assort-empty">
+   ∅
+  </div>
+  <strong>Feature nothing</strong><span>(0, 0, 0) · uses 0 units</span>
+ </div>
+ <div class="assort-assignment">
+  <div>
+   <img src="assets/products/backpack.svg" alt="Backpack">
+   <img src="assets/products/cooler.svg" alt="Cooler">
+  </div>
+  <strong>Backpack + cooler</strong><span>(1, 1, 0) · uses 5 units</span>
+ </div>
+ <div class="assort-assignment">
+  <div>
+   <img src="assets/products/tent.svg" alt="Tent">
+  </div>
+  <strong>Tent only</strong><span>(0, 0, 1) · uses 6 units</span>
+ </div>
+</div>
+```{=html}
+<div class="assort-collection fragment" data-fragment-index="0">
+  <strong>Initial collection <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>&#92;widehat{&#92;mathcal{A}}_t &#92;subseteq &#92;mathcal{A}</mtext><annotation encoding="application/x-tex">&#92;widehat{&#92;mathcal{A}}_t &#92;subseteq &#92;mathcal{A}</annotation></semantics></math></strong><span>Every display fits the budget, in every demand state.</span>
+</div>
+```
+<p class="assort-takeaway fragment" data-fragment-index="1">
+ Build a flow model to decide <strong>how to use these displays under uncertainty</strong>.
+</p>
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: tutorial section 3, delayed allocation, Construct. The example origins are illustrative, not retailer data.
+
+The initial collection in both periods is empty, backpack+cooler, and tent only. Feature nothing is a valid
+reference action. Backpack+tent is also feasible (2+6=8), but omitted initially. The tuple is a complete
+display assignment with one binary position for each named product. The collection is not a policy: it lists
+which actions are represented. State-independent feasibility does not imply state-independent rewards or
+policies. Construct includes both selecting this initial collection and building the uncertainty model on the
+following slides.
+:::
+
+
+<!-- ====================================================================
+BACKUP — The full display MDP formulation
+==================================================================== -->
+
+## The display problem as an MDP {#b-display-mdp .content-slide .assortment-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<div class="assort-definitions">
+ <div>
+  <b>State s = (s<sub>B</sub>, s<sub>C</sub>, s<sub>T</sub>)</b><span>Demand information for each
+  product:<br>unknown, known low, or known high</span>
+ </div>
+ <div>
+  <b>Action a = (a<sub>B</sub>, a<sub>C</sub>, a<sub>T</sub>)</b><span>Feature (1) or do not feature
+  (0)<br>Order: backpack, cooler, tent</span>
+ </div>
+ <div>
+  <b>Reward r<sub>t,j</sub>(s<sub>j</sub>, a<sub>j</sub>)</b><span>Expected incremental profit<br>from product
+  j in period t</span>
+ </div>
+</div>
+
+::: {.assort-bellman .fragment data-fragment-index="0"}
+$$
+V_t(s)=\max_{a\in\mathcal{A}}\left\{\underbrace{\sum_{j=1}^{J}r_{t,j}(s_j,a_j)}_{\text{current profit}}+\underbrace{\mathbb E[V_{t+1}(s')\mid s,a]}_{\text{future profit}}\right\}
+$$
+:::
+
+<div class="assort-equation-key fragment" data-fragment-index="1">
+ <div>
+  <strong>Feasible assortments</strong><span>2a<sub>B</sub> + 3a<sub>C</sub> + 6a<sub>T</sub> ≤ 8<br>Each
+  a<sub>j</sub> is 0 or 1.</span>
+ </div>
+ <div>
+  <strong>Local transitions</strong><span>s′<sub>j</sub> ∼ P<sub>t,j</sub>(· | s<sub>j</sub>,
+  a<sub>j</sub>)<br>Observe sales; update demand information.</span>
+ </div>
+ <div>
+  <strong>Optimal total profit</strong><span>V₀(s₀), with V₂(s) = 0<br>Two periods; no terminal reward.</span>
+ </div>
+</div>
+<p class="assort-takeaway assort-weak-coupling fragment" data-fragment-index="2">
+ <strong>Weakly coupled:</strong> separate product rewards and transitions, linked by the display-space budget.
+</p>
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: tutorial section 3, weakly coupled MDP formulation.
+
+Introduce the tuple order explicitly: (backpack, cooler, tent). For example, (1,0,0) means feature only the
+backpack. These are binary decisions, not order quantities or probabilities. J=3 here. The state records
+demand information, so a product's expected reward changes as its demand type becomes known. The Bellman
+policy can depend on all observed states even though the feasible action set does not. The expectation uses
+the product of the local transition probabilities. V_0(s_0) is optimal expected total profit. The display
+example maximizes profit; the earlier inventory example minimizes cost.
+:::
+
+
+<!-- ====================================================================
+BACKUP — Display MDP computational difficulty
+==================================================================== -->
+
+## Why is the Bellman equation difficult to solve? {#b-display-difficulty .content-slide .assortment-slide}
+
+<!-- SLIDE CONTENT -->
+
+::: {.slide-body}
+<p class="assort-lede">
+ The state combines all products’ demand information, and actions must satisfy the shared budget.
+</p>
+<div class="assort-growth">
+ <div>
+  <span class="assort-label">Joint information states</span>
+  <div class="assort-count">
+   3,486,784,401
+  </div>
+  <p>
+   20 products · 3 local states each
+  </p>
+  <div class="assort-math">
+   3<sup>20</sup> possible state combinations
+  </div>
+ </div>
+ <div class="fragment" data-fragment-index="0">
+  <span class="assort-label">Candidate displays</span>
+  <div class="assort-count">
+   1,048,576
+  </div>
+  <p>
+   20 binary feature decisions
+  </p>
+  <div class="assort-math">
+   2<sup>20</sup> subsets before checking the budget
+  </div>
+ </div>
+</div>
+<div class="assort-coupling fragment" data-fragment-index="1">
+ <div class="assort-mini-products">
+  <img src="assets/products/cooler.svg" alt="Cooler">
+  <img src="assets/products/tent.svg" alt="Tent">
+ </div>
+ <p>
+  A cooler and tent may each look attractive, but together need <strong>9 space units out of 8</strong>.
+ </p>
+</div>
+```{=html}
+<div class="assort-focus fragment" data-fragment-index="2">
+  <strong>Our focus: delayed allocation</strong><span>Start with a small collection of feasible displays;
+  expand it as needed.</span><small>The paper also presents a feasibility network relaxation.</small>
+</div>
+```
+:::
+
+<!-- FOOTER: shared author names and university logos. -->
+{{< include /components/logos.qmd >}}
+
+<!-- NOTES: presenter guidance and reading-view explanations. -->
+
+::: {.notes}
+Source: tutorial section 3. Counts illustrate the full Cartesian state space and unconstrained binary action
+candidates for 20 products: 3^20 = 3,486,784,401 and 2^20 = 1,048,576. Reachability and the budget can reduce
+these counts. This scaling example does not replace the three-product numerical instance. Local transitions do
+not make the coupled value function separable. Delayed allocation uses local probability flows coordinated by
+feasible joint actions. It remains an approximation. Feasibility network relaxation is an alternative
+representation, with details in backup B5.
+:::
+
+## Constraint violation learning {#b-cvl-paper .content-slide}
+
+::: {.slide-body}
+<div class="panel sage">
+<h3>Technical appendix</h3>
+<p>The continuous MDP approach based on constraint violation learning and PSMD.</p>
+<p>The original sequence follows, including its LP background and inventory example.</p>
+</div>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Source: Tutorial §4.2, constraint violation learning, Lin et al. The main presentation focuses on self guided ALP from §4.3. Shared LP and inventory background is repeated here so this technical sequence can be presented independently.
+:::
+
+<!-- ====================================================================
+SLIDE 24 — Continuous decisions
+==================================================================== -->
+
+## Continuous decisions {#s24 .content-slide .continuous-slide .continuous-story-slide .speaker-change data-background-color="#30353b"}
+
+::: {.slide-body}
+
+```{=html}
+<div class="dc-story" data-continuous-story data-phase="business">
+ <p class="dc-intro">Continuous states and decisions arise across <strong>many business problems.</strong></p>
+ <div class="dc-applications">
+  <div class="dc-app-panel dc-inventory">
+   <h3 class="dc-app-title">Inventory control</h3>
+   <div class="dc-illustration dc-inventory-art" data-dc-inventory-art></div>
+   <div class="dc-operating-labels"><span>Delivery takes time</span><span>Stock can expire</span></div>
+  </div>
+  <div class="dc-app-panel dc-options">
+   <h3 class="dc-app-title">Options pricing</h3>
+   <div class="dc-illustration" data-dc-options-art></div>
+  </div>
+ </div>
+
+</div>
+```
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+This is a visual introduction to continuous models. Inventory levels and option prices are continuous state quantities in these illustrations; they are not themselves the control decisions. Order quantities, exercise policies, or hedging positions are decisions in the associated models.
+
+Both examples appear immediately and animate while the slide is visible. Inventory rises with replenishment and falls with demand; three illustrative asset-price paths evolve over time. Motion runs locally and respects reduced-motion preferences. These are illustrative paths, not calibrated market data.
+
+:::
+
+
+<!-- ====================================================================
+SLIDE 25 — Linear programming model
+==================================================================== -->
+
+## Linear programming model {#s25 .content-slide .continuous-import-slide .exact-lp-slide}
+
+::: {.slide-body}
+
+<div class="equation-box compact-equation optimality-equation" style="border-left:3px solid var(--teal)">
+<h3><strong>Bellman optimality equation</strong></h3>
+
+$$
+V^*(s)=\min_{a\in\mathcal{A}(s)}\left\{c(s,a)+\gamma\int_{\mathcal{S}}V^*(s')\,P(ds'\mid s,a)\right\},\qquad s\in\mathcal{S}.
+$$
+
+</div>
+
+<div class="lp-model-stage">
+
+<div class="equation-box compact-equation lp-model-equation fragment" data-fragment-index="0" style="border-left:3px solid var(--accent)">
+<h3><strong>Exact linear program</strong></h3>
+
+$$
+\begin{aligned}
+\max_{V:\,\mathcal{S}\to\mathbb R}\quad
+&\int_{\mathcal{S}}V(s)\,\nu(ds)\\
+\text{s.t.}\quad
+&V(s)\le c(s,a)+\gamma\int_{\mathcal{S}}V(s')\,P(ds'\mid s,a),
+\qquad \forall s\in\mathcal{S},\ a\in\mathcal{A}(s).
+\end{aligned}
+$$
+
+
+</div>
+
+```{=html}
+<div class="lp-value-plot" aria-label="Conceptual animation of Bellman-feasible value functions rising to the optimal value function">
+ <div class="lp-value-chart">
+  <svg viewBox="0 0 620 280" role="img" aria-label="Value versus state. Feasible curves rise from below toward V star.">
+   <defs><clipPath id="lp-value-clip"><rect x="50" y="28" width="540" height="202"/></clipPath><marker id="lp-value-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#a4592f"/></marker></defs>
+   <g clip-path="url(#lp-value-clip)"><path data-value-shade fill="#e6eef7"/><g data-value-guides fill="none" stroke="#a8b4bd" stroke-width="2"/><path data-value-moving fill="none" stroke="#267f77" stroke-width="3.5"/><path data-value-optimum fill="none" stroke="#183c84" stroke-width="4"/><path data-value-push fill="none" stroke="#a4592f" stroke-width="2.5" marker-end="url(#lp-value-arrow)"/></g>
+   <path d="M50 28V230H590" fill="none" stroke="#5f7180" stroke-width="1.2"/>
+   <g fill="#5f7180" font-family="Avenir Next,Segoe UI,sans-serif" font-size="14" text-anchor="middle"><text x="50" y="250">−4</text><text x="185" y="250">0</text><text x="320" y="250">4</text><text x="455" y="250">8</text><text x="590" y="250">12</text><text x="320" y="274">state s</text><text transform="translate(18 132) rotate(-90)">value</text></g>
+   <g font-size="15" font-family="Georgia,serif"><path d="M65 17H100" stroke="#a8b4bd" stroke-width="2"/><text x="108" y="22" fill="#5f7180">feasible V</text><path d="M340 17H375" stroke="#183c84" stroke-width="4"/><text x="383" y="22" fill="#183c84">V*</text></g>
+  </svg>
+ </div>
+ <div class="lp-value-explanation">
+```
+<p class="lp-value-heading">Maximizing the objective pushes feasible values upward</p>
+
+$$
+\max_V\int_{\mathcal{S}}V(s)\,\nu(ds)
+$$
+
+```{=html}
+ <button type="button" class="lp-value-replay">Replay animation</button>
+ </div>
+</div>
+<span class="fragment lp-plot-step" data-fragment-index="1" aria-hidden="true"></span>
+```
+
+</div>
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Begin with the discounted-cost Bellman optimality equation. Advance once to reveal its equivalent exact linear program. The decision variable in the LP is the full value function; the objective averages it under the state-relevance distribution. Every feasible state-action pair contributes a Bellman inequality. Advance again to replace the LP with a conceptual animated plot; a further advance moves directly to the next slide. The animation uses V_delta = V* - delta, with delta decreasing to zero. Constant downward shifts of V* are Bellman-feasible in a discounted cost MDP: their Bellman slack gains (1-gamma)delta. Hence raising this family increases the integral objective and reaches V*. The plot is schematic, not a numerical inventory solution or an optimization algorithm. Being below V* is necessary but not sufficient for Bellman feasibility. Under the usual assumptions V* is the pointwise largest Bellman-feasible function and an LP optimizer. An objective under nu does not distinguish differences on nu-null sets without additional support/regularity assumptions.
+:::
+
+
+<!-- ====================================================================
+SLIDE 26 — Two key bottlenecks
+==================================================================== -->
+
+## Two key bottlenecks {#s26 .content-slide .continuous-import-slide .exact-lp-slide}
+
+::: {.slide-body}
+
+<div class="badge">One LP, two infinities</div>
+
+<div class="equation-box compact-equation" style="border-left:3px solid var(--accent)">
+<h3><strong>Exact linear program</strong></h3>
+
+$$
+\begin{aligned}
+\max_{V:\,\mathcal{S}\to\mathbb R}\quad
+&\int_{\mathcal{S}}V(s)\,\nu(ds)\\
+\text{s.t.}\quad
+&V(s)\le c(s,a)+\gamma\int_{\mathcal{S}}V(s')\,P(ds'\mid s,a),
+\qquad \forall s\in\mathcal{S},\ a\in\mathcal{A}(s).
+\end{aligned}
+$$
+
+<div class="infinity-tags">
+<div class="infinity-tag">$\infty$ constraints: every feasible $(s,a)$</div>
+<div class="infinity-tag">$\infty$ columns: the full function $V$</div>
+</div>
+</div>
+
+```{=html}
+<div class="feedback-paths">
+<div class="feedback-card constraints fragment" data-fragment-index="0">
+ <h3>1 · Manage the constraint bottleneck</h3>
+ <p class="bottleneck-status">Fixed value function approximation (VFA)</p>
+ <div class="bottleneck-cycle">
+  <div class="bottleneck-stage fragment" data-fragment-index="1"><b>Construct</b><span>saddle-point model</span></div>
+  <span class="bottleneck-arrow fragment" data-fragment-index="2" aria-hidden="true">→</span>
+  <div class="bottleneck-stage fragment" data-fragment-index="2"><b>Optimize</b></div>
+  <span class="bottleneck-arrow fragment" data-fragment-index="3" aria-hidden="true">→</span>
+  <div class="bottleneck-stage fragment" data-fragment-index="3"><b>Refine</b><span>saddle-point model</span></div>
+  <div class="bottleneck-return fragment" data-fragment-index="4">
+   <svg viewBox="0 0 520 38" role="img" aria-label="Refinement returns to construction for the next solve">
+    <defs><marker id="return-constraints" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs>
+    <path class="bottleneck-return-path" d="M 440 2 V 17 Q 440 27 430 27 H 90 Q 80 27 80 17 V 3" pathLength="1" marker-end="url(#return-constraints)"/>
+   </svg>
+   <span>Refine the saddle-point model</span>
+  </div>
+ </div>
+</div>
+<div class="feedback-card approximation fragment" data-fragment-index="5">
+ <h3>2 · Manage the approximation bottleneck</h3>
+ <p class="bottleneck-status">Refine the value function approximation</p>
+ <div class="bottleneck-cycle">
+  <div class="bottleneck-stage fragment" data-fragment-index="6"><b>Construct</b><span>VFA</span></div>
+  <span class="bottleneck-arrow fragment" data-fragment-index="7" aria-hidden="true">→</span>
+  <div class="bottleneck-stage fragment" data-fragment-index="7"><b>Optimize</b></div>
+  <span class="bottleneck-arrow fragment" data-fragment-index="8" aria-hidden="true">→</span>
+  <div class="bottleneck-stage fragment" data-fragment-index="8"><b>Refine</b><span>VFA</span></div>
+  <div class="bottleneck-return fragment" data-fragment-index="9">
+   <svg viewBox="0 0 520 38" role="img" aria-label="Refinement returns to construction for the next solve">
+    <defs><marker id="return-approximation" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs>
+    <path class="bottleneck-return-path" d="M 440 2 V 17 Q 440 27 430 27 H 90 Q 80 27 80 17 V 3" pathLength="1" marker-end="url(#return-approximation)"/>
+   </svg>
+   <span>Refine the VFA</span>
+  </div>
+ </div>
+</div>
+</div>
+```
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+The exact linear program is visible on arrival. Its infinitely many constraints and full-function decision motivate the two bottlenecks. The left panel holds the value function approximation fixed: reveal construction of the saddle-point model, optimization, refinement of that model, and the return arrow in successive advances. The right panel instead refines the value function approximation: reveal construction, optimization, refinement, and the return arrow. Each feedback arrow returns to construction for another solve. These are two distinct modeling loops. The left loop does not add VFA features; the right loop changes the VFA. This conceptual formulation-refinement loop does not assert that the particular PSMD algorithm has a separate outer Refine stage.
+:::
+
+
+<!-- ====================================================================
+SLIDE 27 — Approximate Linear Program
+Adapted from Site 1; Site 2 template and browser-local Python runtime.
+==================================================================== -->
+
+## Approximate linear program {#s27 .content-slide .continuous-import-slide}
+
+::: {.slide-body}
+
+<div class="badge">Theory · §4.1</div>
+
+<h3>ALP Construction</h3>
+
+<div class="alp-inputs">
+<div class="equation-box alp-input">
+<p><strong>Features or basis functions</strong></p>
+
+$\varphi_1,\ldots,\varphi_N:\mathcal{S}\to\mathbb R$
+
+<p>Choose the functions used to represent value.</p>
+</div>
+<div class="equation-box alp-input">
+<p><strong>Weights</strong></p>
+
+$\beta:=(\beta_0,\ldots,\beta_N)\in\mathbb R^{N+1}$
+
+<p>Optimize the coefficients of the approximation.</p>
+</div>
+</div>
+
+<div class="equation-box compact-equation fragment" data-fragment-index="0">
+<p class="center"><strong>Finite-dimensional value function approximation (VFA)</strong></p>
+
+$$
+V_\beta(s)=\beta_0+\sum_{n=1}^{N}\beta_n\varphi_n(s),
+\qquad \beta\in\mathbb R^{N+1}
+$$
+</div>
+
+<div class="equation-box compact-equation fragment" data-fragment-index="1" style="border-left:3px solid var(--accent)">
+<p class="center"><strong>Semi-infinite approximate linear program (ALP)</strong></p>
+
+$$
+\begin{aligned}
+\max_{\beta\in B}\quad
+    & \mathbb E_\nu[V_\beta(s)] \\
+\text{s.t.}\quad
+    & V_\beta(s) \le c(s,a)
+      +\gamma\,\mathbb E[V_\beta(S')\mid s,a], \quad \forall(s,a)\in\mathcal{S}\times\mathcal{A}(s).
+\end{aligned}
+$$
+
+
+</div>
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Introduce the two top boxes: fixed features or basis functions on the left and optimized weights on the right. Advance to combine them into the finite-dimensional VFA, then advance to the semi-infinite ALP below it. The coefficient vector is finite, but feasibility must hold for every continuous state and every feasible action in the set $\mathcal{A}(s)$. That is the tension driving Section 4: the representation is compact, while finding the important constraints remains difficult.
+:::
+
+
+<!-- ====================================================================
+SLIDE 28 — Constraint violation function
+==================================================================== -->
+
+## Constraint violation function {#s28 .content-slide .continuous-import-slide .cv-general-slide}
+
+::: {.slide-body}
+
+<div class="cv-derivation" data-cv-step="0">
+<p class="cv-step-heading" data-cv-heading>
+<span data-cv-heading-step="0">Start from the ALP formulation</span>
+<span data-cv-heading-step="1" hidden>Substitute the VFA formulation: <span class="cv-heading-formula">$V_\beta(s)=\beta_0+\sum_{n=1}^{N}\beta_n\varphi_n(s)$</span></span>
+<span data-cv-heading-step="2" hidden>Collect the intercept on the left</span>
+<span data-cv-heading-step="3" hidden>Divide by $1-\gamma>0$ and define $f(\beta;s,a)$</span>
+</p>
+
+<div class="equation-box cv-model">
+<p class="center"><strong>Semi-infinite approximate linear program (ALP)</strong></p>
+$$
+\max_{\beta\in B}\quad \mathbb E_\nu[V_\beta(s)]
+$$
+<p class="cv-subject">subject to</p>
+<div class="cv-constraint-stages">
+<div class="cv-constraint-stage" data-cv-stage="0">
+$$
+V_\beta(s)\le c(s,a)+\gamma\,\mathbb E[V_\beta(S')\mid s,a]
+$$
+</div>
+<div class="cv-constraint-stage" data-cv-stage="1">
+$$
+\begin{aligned}
+\beta_0+\sum_{n=1}^{N}\beta_n\varphi_n(s)
+&\le c(s,a)+\gamma\beta_0 +\gamma\sum_{n=1}^{N}\beta_n\mathbb E[\varphi_n(S')\mid s,a]
+\end{aligned}
+$$
+</div>
+<div class="cv-constraint-stage" data-cv-stage="2">
+$$
+(1-\gamma)\beta_0\le c(s,a)-\sum_{n=1}^{N}\beta_n\!\left(\varphi_n(s)-\gamma\,\mathbb E[\varphi_n(S')\mid s,a]\right)
+$$
+</div>
+<div class="cv-constraint-stage" data-cv-stage="3">
+$$
+\beta_0\le f(\beta;s,a):=\frac{c(s,a)-\displaystyle\sum_{n=1}^{N}\beta_n\!\left(\varphi_n(s)-\gamma\,\mathbb E[\varphi_n(S')\mid s,a]\right)}{1-\gamma}
+$$
+</div>
+</div>
+<p class="center cv-domain">For every feasible pair $(s,a)$.</p>
+</div>
+<p class="cv-violation-note">The constraint is violated when $\beta_0>f(\beta;s,a)$.</p>
+<span class="fragment cv-step-1" data-fragment-index="0" aria-hidden="true"></span>
+<span class="fragment cv-step-2" data-fragment-index="1" aria-hidden="true"></span>
+<span class="fragment cv-step-3" data-fragment-index="2" aria-hidden="true"></span>
+</div>
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Start with the generic semi-infinite ALP, keeping its objective unchanged throughout. First advance: substitute the feature expansion for both V_beta(s) and V_beta(S'). The expectation of the constant beta-zero is beta-zero because the transition kernel is a probability measure. Second advance: move gamma beta-zero to the left and collect the remaining feature terms on the right. Third advance: divide by positive one minus gamma and name the resulting intercept threshold f(beta;s,a). Each displayed constraint replaces the previous one; no quadratic inventory specialization is used. The next advance proceeds to Inventory control example.
+
+The function f depends on the nonintercept coefficients even though the notation retains the full beta vector. It is an upper threshold on beta-zero, rather than itself a signed Bellman residual. A pair is violated precisely when beta-zero exceeds f; the original Bellman residual is (1-gamma)(beta-zero-f). The subsequent inventory landscape applies this generic derivation to the quadratic basis.
+:::
+
+
+<!-- ====================================================================
+SLIDE 29 — Inventory control example
+Adapted from Site 1; Site 2 template and browser-local Python runtime.
+==================================================================== -->
+
+## Inventory control example {#s29 .content-slide .continuous-import-slide .inventory-slide}
+
+::: {.slide-body}
+
+
+::: {.columns}
+::: {.column width="36%"}
+<div class="inventory-model-visual">
+<div class="inventory-state-box"><h3>State: inventory level</h3>
+```{=html}
+<svg class="inventory-state-scale" viewBox="0 0 400 145" role="img" aria-label="Inventory state ranges from minus four units of backlog to twelve units of stock.">
+ <rect x="30" y="45" width="85" height="24" rx="5" fill="#edc19e"/>
+ <path d="M115 45H365V69H115Z" fill="#b9d9d0"/>
+ <path d="M30 78H365M30 73V85M115 73V85M365 73V85" stroke="#7b9ba9" stroke-width="1.5"/>
+ <circle cx="183" cy="57" r="6" fill="#226a85" stroke="white" stroke-width="2"/>
+ <path d="M183 32V47" stroke="#226a85" stroke-width="1.5"/>
+ <g font-family="Avenir Next,Segoe UI,sans-serif" text-anchor="middle" fill="#182c3e" font-size="16"><text x="30" y="105">−4</text><text x="115" y="105">0</text><text x="365" y="105">12</text><text x="72" y="34" fill="#a46e38">Backlog</text><text x="264" y="34" fill="#527f6b">Stock</text><text x="72" y="133" font-size="13" font-weight="700">Max backlog: 4</text><text x="302" y="133" font-size="13" font-weight="700">Max inventory: 12</text></g>
+ <text x="183" y="24" font-family="Georgia,serif" font-style="italic" font-size="20" text-anchor="middle" fill="#226a85">s</text>
+</svg>
+```
+
+</div><div class="inventory-action-visual fragment" data-fragment-index="0">
+<h3>Action: order quantity</h3>
+```{=html}
+<svg class="inventory-order-arrow" viewBox="0 0 400 58" role="img" aria-label="An order adds inventory, up to six units before demand.">
+ <g fill="white" stroke="#7b9ba9" stroke-width="1.5"><rect x="34" y="10" width="48" height="31" rx="4"/><path d="M82 19H97L108 31V41H82Z"/><circle cx="47" cy="45" r="6" fill="#182c3e"/><circle cx="96" cy="45" r="6" fill="#182c3e"/></g>
+ <path d="M128 29H300L290 21M300 29L290 37" fill="none" stroke="#267f77" stroke-width="3" stroke-linecap="round"/>
+ <path d="M326 47V20L348 7L370 20V47Z" fill="#eff7f4" stroke="#7b9ba9" stroke-width="1.5"/><path d="M341 47V29H355V47" fill="white" stroke="#7b9ba9" stroke-width="1.5"/>
+</svg>
+```
+```{=html}
+<svg viewBox="0 0 400 65" style="width:100%;height:65px" role="img" aria-label="Order quantity ranges from zero to six units"><rect x="30" y="8" width="335" height="17" rx="5" fill="#b9d9d0"/><path d="M30 33H365M30 28V38M365 28V38" stroke="#7b9ba9"/><text x="30" y="58" text-anchor="middle" font-size="16">0</text><text x="365" y="58" text-anchor="middle" font-size="16">6</text><text x="198" y="58" text-anchor="middle" font-size="16" fill="#267f77">Order quantity a</text></svg>
+```
+
+</div>
+<div class="inventory-demand-visual fragment" data-fragment-index="1">
+<h3>Uncertainty: demand $G$</h3>
+```{=html}
+<svg viewBox="0 0 400 158" class="inventory-demand-plot" role="img" aria-label="Truncated normal demand distribution between zero and ten"><path d="M30 100 L30.0,82.5 33.4,81.6 36.7,80.7 40.0,79.8 43.4,78.9 46.8,77.9 50.1,76.9 53.5,75.9 56.8,74.8 60.2,73.7 63.5,72.6 66.8,71.5 70.2,70.3 73.6,69.2 76.9,68.0 80.2,66.7 83.6,65.5 87.0,64.3 90.3,63.0 93.7,61.7 97.0,60.4 100.4,59.1 103.7,57.8 107.0,56.5 110.4,55.2 113.8,53.9 117.1,52.6 120.5,51.3 123.8,50.0 127.2,48.7 130.5,47.4 133.9,46.1 137.2,44.8 140.6,43.6 143.9,42.3 147.2,41.1 150.6,39.9 153.9,38.8 157.3,37.6 160.7,36.5 164.0,35.4 167.3,34.4 170.7,33.4 174.1,32.5 177.4,31.5 180.8,30.7 184.1,29.8 187.5,29.1 190.8,28.3 194.2,27.7 197.5,27.0 200.8,26.5 204.2,26.0 207.6,25.5 210.9,25.1 214.2,24.8 217.6,24.5 221.0,24.3 224.3,24.1 227.7,24.0 231.0,24.0 234.3,24.0 237.7,24.1 241.1,24.3 244.4,24.5 247.8,24.8 251.1,25.1 254.5,25.5 257.8,26.0 261.1,26.5 264.5,27.0 267.9,27.7 271.2,28.3 274.6,29.1 277.9,29.8 281.2,30.7 284.6,31.5 287.9,32.5 291.3,33.4 294.7,34.4 298.0,35.4 301.4,36.5 304.7,37.6 308.1,38.8 311.4,39.9 314.8,41.1 318.1,42.3 321.4,43.6 324.8,44.8 328.2,46.1 331.5,47.4 334.9,48.7 338.2,50.0 341.6,51.3 344.9,52.6 348.2,53.9 351.6,55.2 354.9,56.5 358.3,57.8 361.7,59.1 365.0,60.4 L365 100Z" fill="#dcebe7"/><polyline points="30.0,82.5 33.4,81.6 36.7,80.7 40.0,79.8 43.4,78.9 46.8,77.9 50.1,76.9 53.5,75.9 56.8,74.8 60.2,73.7 63.5,72.6 66.8,71.5 70.2,70.3 73.6,69.2 76.9,68.0 80.2,66.7 83.6,65.5 87.0,64.3 90.3,63.0 93.7,61.7 97.0,60.4 100.4,59.1 103.7,57.8 107.0,56.5 110.4,55.2 113.8,53.9 117.1,52.6 120.5,51.3 123.8,50.0 127.2,48.7 130.5,47.4 133.9,46.1 137.2,44.8 140.6,43.6 143.9,42.3 147.2,41.1 150.6,39.9 153.9,38.8 157.3,37.6 160.7,36.5 164.0,35.4 167.3,34.4 170.7,33.4 174.1,32.5 177.4,31.5 180.8,30.7 184.1,29.8 187.5,29.1 190.8,28.3 194.2,27.7 197.5,27.0 200.8,26.5 204.2,26.0 207.6,25.5 210.9,25.1 214.2,24.8 217.6,24.5 221.0,24.3 224.3,24.1 227.7,24.0 231.0,24.0 234.3,24.0 237.7,24.1 241.1,24.3 244.4,24.5 247.8,24.8 251.1,25.1 254.5,25.5 257.8,26.0 261.1,26.5 264.5,27.0 267.9,27.7 271.2,28.3 274.6,29.1 277.9,29.8 281.2,30.7 284.6,31.5 287.9,32.5 291.3,33.4 294.7,34.4 298.0,35.4 301.4,36.5 304.7,37.6 308.1,38.8 311.4,39.9 314.8,41.1 318.1,42.3 321.4,43.6 324.8,44.8 328.2,46.1 331.5,47.4 334.9,48.7 338.2,50.0 341.6,51.3 344.9,52.6 348.2,53.9 351.6,55.2 354.9,56.5 358.3,57.8 361.7,59.1 365.0,60.4" fill="none" stroke="#267f77" stroke-width="3"/><path d="M30 20V100H365" fill="none" stroke="#7b9ba9"/><g font-size="15" text-anchor="middle"><text x="30" y="122">0</text><text x="365" y="122">10</text><text x="198" y="141">Demand · truncated normal</text></g></svg>
+```
+</div>
+
+</div>
+:::
+
+::: {.column width="64%"}
+<div class="equation-box compact-equation fragment" data-fragment-index="2">
+<p class="center"><strong>Transition after demand</strong></p>
+
+
+
+```{=html}
+<svg class="inventory-transition-plot" viewBox="0 0 720 105" role="img" aria-label="Raw inventory X equals state plus order minus demand. Clip to minus four and twelve; below minus four is lost sales and above twelve is disposal.">
+<g font-size="15" text-anchor="middle"><rect x="20" y="35" width="110" height="22" fill="#db9b92"/><rect x="130" y="35" width="110" height="22" fill="#edc19e"/><rect x="240" y="35" width="330" height="22" fill="#b9d9d0"/><rect x="570" y="35" width="130" height="22" fill="#c8c4dc"/><text x="75" y="23">Lost sales</text><text x="185" y="23">Backlog</text><text x="405" y="23">Stock held</text><text x="635" y="23">Disposal</text><text x="130" y="78">−4</text><text x="240" y="78">0</text><text x="570" y="78">12</text></g><path d="M30 98H130V84M690 98H570V84" stroke="#527e80" stroke-width="2" fill="none"/><path d="M124 90L130 84L136 90M564 90L570 84L576 90" fill="none" stroke="#527e80" stroke-width="2"/>
+</svg>
+```
+<div class="fragment" data-fragment-index="3">
+
+$$
+  S'=\min\{\max\{X,-4\},12\}, \qquad X=s+a-G.
+$$
+
+</div>
+
+
+</div>
+
+<div class="equation-box compact-equation fragment" data-fragment-index="4" style="border-left:3px solid var(--teal)">
+<p class="center"><strong>Expected one-period cost</strong></p>
+
+
+
+
+<div class="inventory-cost-key inventory-cost-details"><span style="--cost-color:#db9b92">Lost sales<small>$3000(-4-X)^+$</small></span><span style="--cost-color:#edc19e">Backlog<small>$25(-S\prime)^+$</small></span><span style="--cost-color:#b9d9d0">Stock held<small>$(S\prime)^+$</small></span><span style="--cost-color:#c8c4dc">Disposal<small>$5(X-12)^+$</small></span></div>
+<div class="fragment" data-fragment-index="5">
+
+$$
+\begin{aligned}
+c(s,a)=\mathbb E\big[&\underbrace{20a}_{\text{ordering cost}}+\underbrace{3000(-4-X)^+}_{\text{lost sales}}+\underbrace{25(-S\prime)^+}_{\text{backlog}}+\underbrace{(S\prime)^+}_{\text{holding}}+\underbrace{5(X-12)^+}_{\text{disposal}}\big].
+\end{aligned}
+$$
+
+</div>
+
+
+</div>
+
+
+:::
+:::
+
+
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Use the left-side scale to distinguish backlog from stock and identify the state s. The marked point is illustrative. Then reveal the order arrow and demand distribution, followed by transition and expected cost on successive advances. This is a one-item, periodic-review MDP. The state is the inventory position before ordering. The action is an order placed before demand. Demand then creates raw ending inventory X; the nested maximum and minimum enforce the backlog and storage limits to produce the next state. The cost formula attaches a separate economic meaning to each hinge term. The same four colors connect the transition regions to the cost terms. Purchase cost is incurred when ordering; the other costs depend on the demand outcome. Expected cost averages over demand at a fixed state and action.
+:::
+
+
+<!-- ====================================================================
+SLIDE 30 — Constraint violation function
+Adapted from Site 1; Site 2 template and browser-local Python runtime.
+==================================================================== -->
+
+## Constraint violation function: illustration {#s30 .content-slide .continuous-import-slide .violation-slide}
+
+::: {.slide-body}
+
+<div class="inventory-alp-inputs">
+<div class="equation-box">
+<p class="center"><strong>Basis functions</strong></p>
+
+$$\varphi_1(s)=s,\qquad \varphi_2(s)=s^2.$$
+
+</div>
+<div class="equation-box">
+<p class="center"><strong>Value function approximation</strong></p>
+
+$$V_\beta(s)=\beta_0+\beta_1s+\beta_2s^2.$$
+
+</div>
+</div>
+<div class="equation-box inventory-threshold">
+<p class="center"><strong>Constraint violation function</strong></p>
+
+$$
+f(\beta;s,a)=\frac{c(s,a)-\beta_1\!\left(s-\gamma\mathbb E[S'\mid s,a]\right)-\beta_2\!\left(s^2-\gamma\mathbb E[(S')^2\mid s,a]\right)}{1-\gamma}.
+$$
+
+</div>
+
+```{=html}
+<div class="continuous-python-lab fragment" data-fragment-index="0" data-continuous-python data-demo-id="constraint-violation" data-demo-autorun="true">
+ <label class="demo-editor-label" for="demo-constraint-violation">Edit <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">&#92;beta_1</annotation></semantics></math> or <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>2</mn></msub><annotation encoding="application/x-tex">&#92;beta_2</annotation></semantics></math>, then choose Run Python</label>
+ <textarea id="demo-constraint-violation" data-demo-editor rows="3" spellcheck="false" aria-label="Editable Python for Constraint violation function">beta_1 = 2.0
+beta_2 = -2.0
+plot_violation(beta_1, beta_2, 81, 51)</textarea>
+ <div class="demo-controls">
+  <button type="button" data-demo-run>Run Python</button>
+  <button type="button" data-demo-stop disabled>Stop</button>
+  <button type="button" data-demo-reset>Reset</button>
+  <span data-demo-status role="status"></span>
+ </div>
+ <div class="demo-output" data-demo-output aria-live="polite"><p class="demo-hint">Run Python to generate the plot.</p></div>
+</div>
+```
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Apply the preceding general derivation with phi-one(s)=s and phi-two(s)=s squared. The result shows that each pair imposes an upper threshold f on beta-zero. Darker, smaller values are more restrictive, and a point is violated when beta-zero exceeds that threshold. The orange point is only a grid minimum, not a proof of the continuous global minimum.
+:::
+
+
+<!-- ====================================================================
+SLIDE 31 — Regularized saddle point problem
+Adapted from Site 1; Site 2 template and browser-local Python runtime.
+==================================================================== -->
+
+## Regularized saddle point problem {#s31 .content-slide .continuous-import-slide}
+
+::: {.slide-body}
+
+
+
+<div class="equation-box compact-equation" style="border-left:3px solid var(--teal)">
+<p class="center"><strong>Define the feasible domain and admissible densities first</strong></p>
+
+$$
+D:=\{(s,a):s\in\mathcal{S},\ a\in \mathcal{A}(s)\},
+\qquad
+Y:=\left\{y\ge0:\ y\text{ continuous on }D,\ \int_Dy(s,a)\,d(s,a)=1\right\}.
+$$
+
+<!-- <p class="tiny muted center" style="margin:0">Also write $g(\beta):=\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(S)]$ for the non-intercept part of the ALP objective.</p> -->
+</div>
+
+<div class="saddle-stages">
+<div class="equation-box saddle-stage fragment fade-out" data-fragment-index="0">
+<h3>Start from the ALP</h3>
+
+$$
+\begin{aligned}\max_{\beta_0,\,\beta\in B}\quad &\beta_0+\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(s)]\\\mathrm{s.t.}\quad &\beta_0\le f(\beta;s,a),\qquad\forall(s,a)\in D.\end{aligned}
+$$
+
+
+
+</div>
+<div class="equation-box saddle-stage fragment current-visible" data-fragment-index="0">
+<h3>Replace all constraints by their tightest bound</h3>
+
+$$
+\begin{aligned}\max_{\beta_0,\,\beta\in B}\quad &\beta_0+\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(s)]\\\mathrm{s.t.}\quad &\beta_0\le\min_{(s,a)\in D}f(\beta;s,a).\end{aligned}
+$$
+
+</div>
+<div class="equation-box saddle-stage fragment current-visible" data-fragment-index="1">
+<h3>Eliminate the intercept and define F</h3>
+
+$$
+F=\max_{\beta\in B}\left\{\min_{(s,a)\in D}f(\beta;s,a)+\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(s)]\right\}.
+$$
+
+$$
+\beta_0^*=\min_{(s,a)\in D}f(\beta;s,a).
+$$
+
+</div>
+<div class="equation-box saddle-stage fragment current-visible" data-fragment-index="2">
+<h3>Lift the minimum to a search over densities</h3>
+
+$$
+\min_{(s,a)\in D}f(\beta;s,a)=\inf_{y\in Y}\mathbb E_y[f(\beta;s,a)].
+$$
+
+$$
+F=\max_{\beta\in B}\inf_{y\in Y}\left\{\mathbb E_y[f(\beta;s,a)]+\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(s)]\right\}.
+$$
+
+</div>
+<div class="equation-box saddle-stage fragment current-visible" data-fragment-index="3">
+<h3>Regularize the density</h3>
+
+$$
+\mathbb E_y[f(\beta;s,a)]\;\longrightarrow\;\mathbb E_y[f(\beta;s,a)]+\lambda D_{\mathrm{KL}}(y\Vert p_u).
+$$
+
+$$
+\lambda>0,\qquad p_u\text{ is the uniform density on }D.
+$$
+
+</div>
+<div class="equation-box saddle-stage fragment current-visible" data-fragment-index="4">
+<h3>The regularized saddle point problem</h3>
+
+$$
+F(\lambda)=\max_{\beta\in B}\min_{y\in Y}\left\{\mathbb E_y[f(\beta;s,a)]+\lambda D_{\mathrm{KL}}(y\Vert p_u)+\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(s)]\right\}.
+$$
+
+</div>
+<div class="equation-box saddle-stage density-stage fragment" data-fragment-index="5">
+<h3>Three ways to find restrictive constraints</h3>
+```{=html}
+<div class="constraint-density-demo">
+<span class="fragment density-generation-step" data-fragment-index="6" aria-hidden="true"></span>
+<span class="fragment density-learning-step" data-fragment-index="7" aria-hidden="true"></span>
+<div class="density-methods" role="group" aria-label="Highlight a constraint method"><button type="button" data-density-mode="uniform" aria-pressed="true">Constraint sampling <small>Uniform over the domain</small></button><button type="button" data-density-mode="minimum">Constraint generation <small>Find the minimum of f</small></button><button type="button" data-density-mode="learned" aria-pressed="false">Constraint violation learning <small>Learn where low values occur</small></button></div>
+<svg viewBox="0 0 1100 250" class="constraint-density-svg" role="img" aria-label="Illustrative constraint threshold curve with a global minimum, a uniform density, and a learned density concentrated near low values."><path d="M45 18V210H1070" fill="none" stroke="#8ba1ac"/><path data-density-uniform fill="#397e9133" stroke="#397e91"/><path data-density-learned fill="#d77b7355" stroke="#d77b73" stroke-width="2"/><path data-density-curve fill="none" stroke="#192c7b" stroke-width="4"/><circle data-density-min r="7" fill="#ad3c35"/><text data-density-min-label fill="#ad3c35" font-size="18">min f</text><text x="62" y="35" fill="#192c7b" font-size="18">Constraint threshold f over state-action pairs</text><text x="550" y="242" text-anchor="middle" font-size="18">State-action pairs (s, a) · illustrative domain</text></svg>
+<div class="density-slider"><label for="constraint-density-lambda">Regularization strength</label><input id="constraint-density-lambda" type="range" min="0" max="100" value="35" aria-label="Regularization strength, from concentrated to nearly uniform"><span data-density-value></span></div>
+<p class="density-explanation" data-density-explanation></p>
+</div>
+```
+</div>
+
+</div>
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Define the domain D and density set Y before using either. Step one eliminates the intercept because the ALP objective increases in beta-zero. Step two lifts the nonconvex point search to a linear expectation over densities without changing its value. Step three adds KL regularization relative to the uniform density. This is the construct step of CVL: it builds a sampleable alternative to repeatedly solving the global separation problem.
+:::
+
+
+<!-- ====================================================================
+SLIDE 32 — The optimal density is Gibbs
+Adapted from Site 1; Site 2 template and browser-local Python runtime.
+==================================================================== -->
+
+## The optimal density is Gibbs {#s32 .content-slide .continuous-import-slide .gibbs-combined-slide}
+
+::: {.slide-body}
+::: {.columns}
+::: {.column width="45%"}
+<p class="muted">For fixed $\beta\in B$ and $\lambda>0$</p>
+
+$$
+y^*_{\lambda,\beta}(s,a)=
+\frac{\exp[-f(\beta;s,a)/\lambda]}
+{\displaystyle\int_D\exp[-f(\beta;s',a')/\lambda]\,d(s',a')}.
+$$
+
+::: {.compact-list}
+- Smaller $\lambda$ sharpens mass around minimizers of $f$.
+- Metropolis–Hastings can sample using the unnormalized numerator $\exp[-f(\beta;s,a)/\lambda]$.
+:::
+
+<p class="story-line"><strong>The construct step now has a closed-form target density that can be sampled.</strong></p>
+:::
+::: {.column width="55%" .fragment data-fragment-index="0"}
+<h3>From concentrated to more diffuse</h3>
+
+```{=html}
+<div class="continuous-python-lab" data-continuous-python data-demo-id="gibbs-density" data-demo-autorun="true">
+ <label class="demo-editor-label" for="demo-gibbs-density">Increase the regularization values, then run Python</label>
+ <textarea id="demo-gibbs-density" data-demo-editor rows="4" spellcheck="false" aria-label="Editable Python for Gibbs sampling density">beta_1, beta_2 = 2.0, -2.0
+lambdas = (10, 30, 100, 300, 1000, 3000)
+plot_gibbs_simulation(beta_1, beta_2, lambdas)</textarea>
+ <div class="demo-controls">
+  <button type="button" data-demo-run>Run Python</button>
+  <button type="button" data-demo-stop disabled>Stop</button>
+  <button type="button" data-demo-reset>Reset</button>
+  <span data-demo-status role="status">Ready · runs in your browser</span>
+ </div>
+ <div class="demo-output" data-demo-output aria-live="polite"><p class="demo-hint">Run Python to generate the plot.</p></div>
+</div>
+```
+
+:::
+:::
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+For fixed coefficients and positive lambda the optimal sampling distribution is the normalized Gibbs density. Metropolis–Hastings uses ratios of the unnormalized numerator, so the normalizing integral is not required. Reveal the runnable browser Python comparison on the right. Its three panels use the same coefficients and increase lambda from 10 through 100 to 1000. Small lambda concentrates near low constraint thresholds; increasing lambda spreads probability more broadly. Edit the sequence to explore further; this computes densities on a grid rather than drawing an MCMC trajectory. The open circle identifies the grid minimizer of f, and the star identifies the independently computed grid mode of the Gibbs density. They coincide for fixed coefficients at every positive lambda.
+:::
+
+## Primal-dual updates in PSMD algorithm {#s35 .content-slide .continuous-import-slide}
+
+::: {.slide-body}
+::: {.columns}
+::: {.column width="51%"}
+<div class="psmd-update-row">
+<h3>1 · Initialize and sample</h3>
+
+- Initialize coefficients to zero and the sampling distribution to uniform; draw a state–action pair.
+
+$$\beta^{(0)}=0,\quad y^{(0)}=p_u,\qquad(\widehat s_t,\widehat a_t)\sim y^{(t)}.$$
+
+</div>
+<div class="psmd-update-row fragment" data-fragment-index="0">
+<h3>2 · Estimate the gradient and update coefficients</h3>
+
+$$
+\widehat L_t(\beta)=\frac{c(\widehat s_t,\widehat a_t)-\sum_{n=1}^N\beta_n[\varphi_n(\widehat s_t)-\gamma\varphi_n(\check s_t)]}{1-\gamma}
++\sum_{n=1}^N\beta_n\mathbb E_\nu[\varphi_n(S)].
+$$
+
+$$\widehat g_t=\nabla_\beta\widehat L_t(\beta^{(t)}),\qquad
+\beta^{(t+1)}=\Pi_B(\beta^{(t)}+\eta_t\widehat g_t).$$
+
+<p class="tiny muted">Next-state sample: $\check s_t\sim P(\cdot\mid\widehat s_t,\widehat a_t)$.</p>
+</div>
+<div class="psmd-update-row fragment" data-fragment-index="1">
+<h3>3 · KL mirror descent for $y$</h3>
+
+$$
+y^{(t+1)}(s,a)\propto[y^{(t)}(s,a)]^{\frac{1}{1+\eta_t\lambda_t}}
+\exp\!\left[-\frac{\eta_t\widehat f_t(\beta^{(t)};s,a)}{1+\eta_t\lambda_t}\right].
+$$
+
+</div>
+:::
+::: {.column width="49%" .fragment data-fragment-index="2"}
+```{=html}
+<div class="continuous-python-lab" data-continuous-python data-demo-id="psmd-samples" data-demo-autorun="false">
+ <label class="demo-editor-label" for="demo-psmd-samples">Run Python, then move through the sampled constraints</label>
+ <textarea id="demo-psmd-samples" data-demo-editor rows="5" spellcheck="false" aria-label="Editable Python for PSMD samples focus over time">iterations = 180
+temperature = 35.0
+seed = 777
+psmd_demo = run_psmd_demo(iterations, temperature, seed)
+plot_psmd_sample_sequence(psmd_demo)</textarea>
+ <div class="demo-controls">
+  <button type="button" data-demo-run>Run Python</button>
+  <button type="button" data-demo-stop disabled>Stop</button>
+  <button type="button" data-demo-reset>Reset</button>
+  <span data-demo-status role="status">Ready · runs in your browser</span>
+ </div>
+ <div class="demo-output" data-demo-output aria-live="polite"><p class="demo-hint">Run Python to generate the plot.</p></div>
+</div>
+```
+
+
+:::
+:::
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+Initialize coefficients at zero and a uniform density, then sample state-action pairs from the current density. A next-state sample gives the stochastic gradient estimate. Projected ascent updates the coefficients immediately after gradient estimation; the KL mirror step updates the density. The right panel is a lightweight teaching implementation with persistent Metropolis particles and fixed sampling temperature, rather than an exact numerical reproduction of the displayed decreasing-regularization mirror update. It preserves the run for the following bounds slide. Each frame shows one iteration snapshot, with sampled state and action on the axes, not a density heatmap. Run Python and use Previous and Next to inspect the six snapshots.
+:::
+
+## PSMD upper and lower bound illustration {#s37 .content-slide .continuous-import-slide}
+
+::: {.slide-body}
+```{=html}
+<div class="static-plot-sequence" data-static-sequence><div class="static-plot-frames"><img src="assets/figures/continuous-demos/psmd-bounds-sequence/01.png" alt="Bounds through iteration 300"><img src="assets/figures/continuous-demos/psmd-bounds-sequence/02.png" alt="Bounds through iteration 600" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/03.png" alt="Bounds through iteration 900" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/04.png" alt="Bounds through iteration 1200" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/05.png" alt="Bounds through iteration 1500" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/06.png" alt="Bounds through iteration 1800" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/07.png" alt="Bounds through iteration 2100" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/08.png" alt="Bounds through iteration 2400" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/09.png" alt="Bounds through iteration 2700" hidden><img src="assets/figures/continuous-demos/psmd-bounds-sequence/10.png" alt="Bounds through iteration 3000" hidden></div><div class="static-plot-controls"><button type="button" data-sequence-previous>Previous</button><button type="button" data-sequence-next>Next</button><span data-sequence-status></span></div></div>
+```
+
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+One seed uses the repository notebook configuration, extended to 3000 iterations with evaluation every 300 iterations. The precomputed single-seed 3000-iteration run is bundled as data and ten images for immediate navigation. Run Python redraws these results; the commented fresh-run call can recompute them on the viewer’s device. No values are extrapolated. Previous and Next progressively reveal best historical lower bound and policy-cost estimates from iteration 300 onward. These are stochastic numerical estimates under the tutorial implementation.
+:::
+

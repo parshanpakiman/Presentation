@@ -1,0 +1,310 @@
+/* A quiet entry point to the existing Quarto contents menu. */
+.reveal .slide-menu-button.contents-ready {
+  display:block;left:20px;bottom:10px;font-size:12px;line-height:1;z-index:40;
+}
+.reveal .slide-menu-button.contents-ready a {
+  display:flex;align-items:center;gap:7px;min-height:30px;padding:6px 9px;box-sizing:border-box;
+  color:#657782;background:rgba(255,255,255,.95);border:1px solid transparent;
+  border-radius:5px;text-decoration:none;font:500 12px/1.2 "Avenir Next","Segoe UI",sans-serif;
+}
+.reveal .slide-menu-button.contents-ready a:hover {color:var(--teal);border-color:var(--line);}
+.reveal .slide-menu-button .contents-icon {font-size:15px;line-height:1;}
+/* Extra specificity keeps these styles above the plugin's late-loaded CSS. */
+body .slide-menu-wrapper {font-family:"Avenir Next","Segoe UI",sans-serif;}
+body .slide-menu-wrapper .slide-menu {
+  background:#fff;color:var(--ink);border-right:1px solid var(--line);
+  box-shadow:8px 0 35px #182c3e14;max-width:calc(100vw - 24px);
+}
+body .slide-menu-wrapper .slide-menu-toolbar {
+  display:flex;align-items:center;gap:8px;height:70px;padding:16px 18px;
+  border-bottom:1px solid var(--line);font-size:14px;
+}
+body .slide-menu-wrapper .slide-menu-toolbar > li {display:block;padding:8px 10px;color:var(--muted);border-radius:5px;}
+body .slide-menu-wrapper .slide-menu-toolbar > li.active-toolbar-button {
+  background:var(--tint);color:var(--accent);text-shadow:none;text-decoration:none;
+}
+body .slide-menu-wrapper .slide-menu-toolbar > li:hover {color:var(--teal);background:var(--tint);}
+body .slide-menu-wrapper .slide-menu-toolbar #close {margin-left:auto;}
+body .slide-menu-wrapper .slide-menu-toolbar i,body .slide-menu-wrapper .slide-menu-toolbar br {display:none;}
+body .slide-menu-wrapper .slide-menu-toolbar .slide-menu-toolbar-label {visibility:visible;}
+body .slide-menu-wrapper .slide-menu-panel {top:70px;height:calc(100% - 70px);color:var(--ink);}
+body .slide-menu-wrapper .slide-menu-items {border-color:var(--line);}
+body .slide-menu-wrapper .slide-menu-item,body .slide-menu-wrapper .slide-tool-item {
+  border-top:1px solid #edf1f3;color:var(--ink);padding:13px 22px;font-size:15px;line-height:1.4;
+}
+body .slide-menu-wrapper .slide-menu-item {display:flex;align-items:baseline;gap:9px;}
+body .slide-menu-wrapper .slide-menu-item-number {min-width:23px;flex:none;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;}
+body .slide-menu-wrapper .active-menu-panel li.active {color:var(--teal);font-weight:600;}
+body .slide-menu-wrapper .active-menu-panel li.selected {background:#edf5f3;color:var(--teal);}
+body .slide-menu-wrapper .slide-menu-panel a {color:var(--accent);}
+body .slide-menu-wrapper .slide-menu-panel a:hover {color:var(--teal);}
+body .slide-menu-wrapper .slide-tool-item kbd {border-color:var(--line);}
+body .slide-menu-wrapper [tabindex]:focus-visible {outline:2px solid var(--teal);outline-offset:-3px;}
+body .slide-menu-wrapper .slide-menu-overlay.active {opacity:.16;}
+
+/* Reserve the right side of the title slide for participant access. */
+.reveal .cover .author-grid {width:calc(100% - 290px);gap:20px 35px;}
+.cover-share {text-align:center;}
+.reveal .cover-share {position:absolute;right:35px;top:250px;width:210px;}
+.cover-share strong {display:block;font-size:20px;font-weight:500;color:var(--teal);margin-bottom:12px;}
+.cover-share a {display:block;width:190px;max-width:100%;margin:auto;}
+.cover-share a[aria-disabled="true"] {pointer-events:none;}
+.cover-share img,.reveal .cover-share img {display:block;width:190px;height:190px;margin:0;max-height:none;max-width:100%;border:0;box-shadow:none;}
+.cover-share small {display:block;font-size:13px;line-height:1.45;color:var(--muted);margin-top:12px;overflow-wrap:anywhere;}
+body:not(.reveal-viewport) .cover .slide-body {position:relative;padding-right:250px;}
+body:not(.reveal-viewport) .cover-share {position:absolute;right:0;top:72px;width:210px;}
+@media(max-width:900px) {
+  body:not(.reveal-viewport) .cover .slide-body {padding-right:0;}
+  body:not(.reveal-viewport) .cover-share {position:static;width:210px;margin:28px 0 0;}
+}
+@media print {
+  .slide-menu-wrapper,.slide-menu-button {display:none!important;}
+}
+
+/* Title slide: presenter first, collaborators below. */
+#s01.cover .author-grid.presenter-block {grid-template-columns:1fr;}
+#s01.cover .presenter-block strong {font-size:30px;}
+#s01.cover .presenter-block .joint-work {font-size:20px;line-height:1.5;margin-top:84px;max-width:620px;}
+
+/* Presenter and collaborators on the title slide. */
+#s01.cover .author-grid.presenter-block {width:100%;}
+#s01.cover .presenter-block .joint-work {max-width:920px;}
+#s01.cover .coauthor-andre {color:#70b8ff;}
+#s01.cover .coauthor-selva {color:#64d6bd;}
+#s01.cover .coauthor-negar {color:#ffc477;}
+
+/* Presenter in gold; all collaborators use the original presenter color. */
+#s01.cover .presenter-block strong {color:#ffc477;}
+#s01.cover .coauthor-andre,
+#s01.cover .coauthor-selva,
+#s01.cover .coauthor-negar {color:#ffc477;}
+
+/* Lower the full title-slide presenter block. */
+#s01.cover .author-grid.presenter-block {margin-top:62px;}
+
+/* Team photo and two well-separated paper QR codes. */
+.team-slide-body {display:flex;flex-direction:column;align-items:center;gap:20px;}
+.reveal .team-slide .team-photo {display:block;height:350px;width:auto;max-width:100%;object-fit:contain;margin:0;}
+.team-paper-links {display:flex;justify-content:center;gap:150px;}
+.team-paper-links a {display:flex;flex-direction:column;align-items:center;gap:6px;font-size:20px;text-decoration:none;}
+.team-paper-links img,.reveal .team-paper-links img {display:block;width:150px;height:150px;max-height:none;margin:0;background:#fff;}
+body:not(.reveal-viewport) .team-photo {max-height:420px;max-width:100%;object-fit:contain;}
+@media(max-width:650px) {.team-paper-links {gap:40px;}}
+
+/* Two author groups revealed in sequence with their corresponding papers. */
+.team-reveal-layout {position:relative;width:100%;height:520px;}
+.reveal .team-slide .team-reveal-layout > .team-photo {width:590px;height:500px;object-fit:contain;margin:0;}
+.team-paper-stage,.team-stage-inner {position:absolute;inset:0;}
+.team-paper-stage {pointer-events:none;}
+.team-paper-stage.visible:not(.current-fragment) .team-stage-inner.visible {pointer-events:none;}
+.team-author-markers {position:absolute;left:0;top:440px;width:590px;height:65px;}
+.team-author-markers span {position:absolute;transform:translateX(-50%);text-align:center;color:#ffc477;font-size:18px;line-height:1.2;background:#30353be8;padding:4px 7px;}
+.team-paper-qr {position:absolute;left:410px;top:90px;display:flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;pointer-events:auto;}
+.team-paper-qr strong {font-size:30px;}
+.team-paper-qr span {font-size:20px;}
+.team-paper-qr img,.reveal .team-paper-qr img {width:230px;height:230px;max-height:none;margin:0;background:white;}
+.reveal .team-paper-stage:not(.visible) .team-paper-qr,.reveal .team-stage-inner.fade-out.visible .team-paper-qr {pointer-events:none;}
+body:not(.reveal-viewport) .team-reveal-layout > .team-photo {width:55%;height:500px;object-fit:contain;}
+
+/* Inventory opening: an audience decision followed by its consequences. */
+#s03 .inventory-story-lead {font-size:27px;line-height:1.5;margin:4px 0 28px;}
+#s03 .inventory-story-lead strong {font-size:32px;font-weight:500;color:var(--teal);}
+#s03 .inventory-story-tradeoff {display:flex;gap:90px;margin:22px 0 24px;}
+#s03 .inventory-story-tradeoff > div {flex:1;border-top:2px solid var(--line);padding-top:12px;}
+#s03 .inventory-story-tradeoff h3 {font-size:27px;margin:0 0 8px;color:var(--teal);}
+#s03 .inventory-story-tradeoff > div:last-child h3 {color:#b45c32;}
+#s03 .inventory-story-tradeoff p {font-size:24px;line-height:1.4;margin:0;}
+#s03 .inventory-story-turn {font-size:25px;line-height:1.4;margin:18px 0;max-width:1000px;}
+#s03 .inventory-story-rules {font-size:20px;line-height:1.4;margin:16px 0 5px;}
+#s03 .inventory-story-demand {font-size:18px;color:var(--muted);margin:0;}
+#s03 .inventory-story-question {font-size:29px;color:var(--teal);margin:24px 0 0;font-weight:500;}
+#s03 .inventory-story-question span {font-size:23px;color:var(--muted);font-weight:400;}
+.reveal #s03 .slide-body:has([data-widget="inventory"].visible) .inventory-premise {display:none;}
+
+/* Start directly with the sequential inventory simulation. */
+#s03 .inventory-flow-caption {font-size:24px;font-weight:500;color:var(--teal);line-height:1.4;margin:0 0 8px;}
+#s03 .inventory-flow-caption span {color:var(--muted);padding:0 7px;}
+#s03 .inventory-simulation-parameters {font-size:17px;line-height:1.45;color:var(--muted);margin:0 0 14px;}
+.reveal #s03 .event-heading {font-size:21px;}
+
+/* Consistent cost colors in assumptions and simulation totals. */
+#s03 .inventory-cost-purchase,#s03 .inventory-ledger .cost-purchases {color:#245ea1;font-weight:600;}
+#s03 .inventory-cost-holding,#s03 .inventory-ledger .cost-holding {color:#267f77;font-weight:600;}
+#s03 .inventory-cost-backlog,#s03 .inventory-ledger .cost-stockout {color:#b13b35;font-weight:600;}
+
+/* Each event uses the same aligned inventory, quantity, and cost rows. */
+#s03 .inventory-event-row {display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:19px;line-height:1.35;min-height:28px;}
+#s03 .inventory-event-row span {color:var(--muted);}
+#s03 .inventory-event-quantity {display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:54px;margin:3px 0;padding:5px 0;border-block:1px solid #b9c9d0;box-sizing:border-box;font-size:21px;color:var(--muted);}
+#s03 .inventory-event-cost {display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:19px;line-height:1.4;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;}
+#s03 .inventory-event-cost b {font-size:23px;}
+
+/* Inventory slide typography: one text size, with quantities emphasized. */
+#s03 .inventory-simulation-parameters,
+#s03 .inventory-example-details {font-size:20px;line-height:1.25;}
+#s03 .inventory-simulation-parameters {margin:0;}
+#s03 .inventory-example-details {display:block;margin:0 0 22px;padding:0 0 0 1.25em;}
+#s03 .inventory-example-details li {font-size:inherit;line-height:inherit;margin:0;padding:0;}
+#s03 .widget {font-size:21px;}
+.reveal #s03 .inventory-periods,
+.reveal #s03 .event-heading,
+#s03 .inventory-event-row,
+#s03 .inventory-event-cost,
+#s03 .inventory-event-cost b,
+.reveal #s03 .inventory-ledger,
+.reveal #s03 .inventory-ledger > span:first-child,
+.reveal #s03 .inventory-ledger b,
+.reveal #s03 .inventory-ledger > strong {font-size:21px;line-height:1.4;}
+#s03 .inventory-event-quantity b {font-size:26px;color:var(--teal);}
+#s03 .inventory-event-row b,#s03 .inventory-event-cost b,#s03 .inventory-ledger b {font-variant-numeric:tabular-nums;}
+.reveal #s03 .event-heading > span {font-size:17px;}
+#s03 .inventory-periods span {font-weight:700;border-color:currentColor;}
+#s03 .inventory-periods span:first-child {color:#245e83;}
+#s03 .inventory-periods span:last-child {color:#78508d;}
+#s03 .decision-event:nth-child(n+3) {background:#f3eef8;border-color:#c5b2d4;}
+#s03 .decision-event:nth-child(n+3) .event-heading {color:#78508d;}
+#s03 .decision-event:nth-child(n+3) .event-heading > span {background:#e0d1eb;color:#68437d;}
+#s03 .decision-event:nth-child(n+3):is(.current,.complete) {border-color:#78508d;}
+#s03 .decision-event:nth-child(n+3).complete .event-heading > span {background:#78508d;color:#fff;}
+
+#s03 .toolbar.inventory-controls :is(label,button,output),
+#s03 .toolbar.inventory-controls .inventory-replays button {font-size:16px;line-height:1.25;}
+
+/* Additional inventory dimensions on the computational difficulty slide. */
+#s07 .inventory-complexity-bullets {font-size:22px;line-height:1.35;margin:14px 0 0 24px;}
+#s07 .inventory-complexity-bullets li {margin:0 0 8px;padding-left:4px;}
+#s07 .inventory-complexity-bullets strong {color:var(--teal);font-weight:600;}
+
+/* Product-count clicks precede the three explanatory bullets. */
+#s07 .product-count-step {position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;}
+
+/* Scope: four tutorial papers, focus on first click, working paper on second. */
+#discrete-handoff.scope-slide {
+ --ink:#edf0f2;--muted:#d4d9dd;--accent:#d4d9dd;--teal:#a9dcd4;--line:#ffffff40;
+ color:var(--ink);background:#30353b;
+}
+.reveal #discrete-handoff.scope-slide {color:var(--ink);background:#30353b;}
+.reveal #discrete-handoff.scope-slide > h2 {color:#fff;}
+#discrete-handoff .scope-intro {font-size:25px;font-weight:600;color:#a9dcd4;margin:0 0 8px;}
+#discrete-handoff .scope-working-heading {margin-top:22px;}
+#discrete-handoff .scope-paper {display:grid;grid-template-columns:165px 1fr;gap:18px;padding:10px 0;border-top:1px solid var(--line);color:var(--ink);}
+#discrete-handoff .scope-domain {font-size:21px;line-height:1.3;font-weight:500;}
+#discrete-handoff .scope-domain small {display:block;font-size:17px;font-weight:400;margin-top:4px;}
+#discrete-handoff .scope-paper h3 {font-size:22px;line-height:1.22;margin:0 0 5px;color:inherit;font-weight:500;}
+#discrete-handoff .scope-paper p {font-size:18px;line-height:1.3;margin:0;color:inherit;}
+#discrete-handoff .scope-paper a {color:inherit;text-decoration:underline;}
+#discrete-handoff .scope-focus-step {position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;}
+#discrete-handoff .scope-omitted {opacity:1;transition:opacity .3s ease;}
+#discrete-handoff .scope-alp {transition:color .3s ease;}
+#discrete-handoff .scope-papers:has(.scope-focus-step.visible) .scope-omitted {opacity:.45;}
+#discrete-handoff .scope-papers:has(.scope-focus-step.visible) .scope-alp {color:#ffc477;}
+body:not(.reveal-viewport) .scope-papers {background:#30353b;color:#edf0f2;padding:24px;}
+
+/* Two parallel cycles, with the MDP analogy revealed on demand. */
+#s10.workflow-cycle-slide {--ink:#edf0f2;--muted:#d4d9dd;--accent:#d4d9dd;--teal:#a9dcd4;--line:#ffffff40;background:#30353b;color:var(--ink);}
+.reveal #s10.workflow-cycle-slide > h2 {color:#fff;}
+#s10 .workflow-cycles {display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px;}
+#s10 .workflow-cycle {min-width:0;}
+#s10 .workflow-cycle + .workflow-cycle {border-left:1px solid var(--line);padding-left:28px;}
+#s10 .workflow-cycle h3 {font-size:27px;font-weight:500;text-align:center;color:var(--ink);margin:0 0 6px;}
+#s10 .cycle-diagram {position:relative;height:400px;max-width:540px;margin:auto;}
+#s10 .cycle-arcs {position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:#a9dcd4;}
+#s10 .cycle-arc {fill:none;stroke:currentColor;stroke-width:2.2;opacity:.8;}
+#s10 .cycle-node {position:absolute;width:180px;text-align:center;background:#30353b;padding:7px 0;}
+#s10 .cycle-node-0 {left:50%;top:25px;transform:translateX(-50%);}
+#s10 .cycle-node-1 {left:74%;top:250px;transform:translateX(-50%);}
+#s10 .cycle-node-2 {left:25%;top:250px;transform:translateX(-50%);}
+#s10 .cycle-number-label {font-size:14px;letter-spacing:2px;color:var(--muted);}
+#s10 .cycle-node h4 {font-size:29px;font-weight:500;line-height:1.2;margin:4px 0 10px;color:#86bbef;}
+#s10 .cycle-node-1 h4 {color:#a9dcd4;}
+#s10 .cycle-node-2 h4 {color:#ffc477;}
+#s10 .cycle-node p {font-size:19px;line-height:1.35;margin:0;color:var(--muted);}
+#s10 .cycle-center {position:absolute;top:172px;left:50%;transform:translateX(-50%);text-align:center;font-size:19px;line-height:1.4;color:#c6cdd3;}
+#s10 .workflow-takeaway {border-top:1px solid var(--line);padding-top:16px;margin:6px 0 0;font-size:23px;line-height:1.4;color:var(--ink);}
+#s10 .workflow-takeaway strong {font-weight:500;color:#ffc477;}
+body:not(.reveal-viewport) .workflow-redesign {background:#30353b;padding:24px;}
+
+/* Shared dark palette matches the title page exactly. */
+.reveal .slides > section:is(.cover,.speaker-change,.scope-slide,.workflow-cycle-slide)[data-background-color="#30353b"] {
+ --ink:#edf0f2;--muted:#d4d9dd;--accent:#d4d9dd;--teal:#a9dcd4;--line:#ffffff40;
+ color:var(--ink);background:#30353b;
+}
+.reveal .slides > section[data-background-color="#30353b"] > h2 {color:#fff;}
+#s10 .workflow-cycle h3 {min-height:65px;font-size:27px;line-height:1.3;color:#fff;}
+#s10 .workflow-cycle h3 small {font-size:20px;color:var(--muted);}
+#s10 .cycle-node h4,#s10 .cycle-node-1 h4,#s10 .cycle-node-2 h4 {color:#ffc477;}
+#s10 .cycle-node p,#s10 .cycle-center {color:var(--ink);}
+#s10 .cycle-arcs {color:var(--accent);}
+#s10 .cycle-node .cycle-gurobi {display:block;width:105px;height:28px;object-fit:contain;max-height:none;margin:10px auto 0;}
+#s10 .cycle-diagram {height:400px;}
+
+/* Fixed-size arrow tips avoid SVG marker scaling and clipping. */
+#s10 .cycle-arc,#s10 .cycle-arrow-tip {fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:1;}
+#s10 .cycle-center.cycle-solver {top:183px;width:170px;}
+#s10 .cycle-solver .cycle-gurobi {display:block;width:145px;height:40px;max-height:none;object-fit:contain;margin:0 auto 10px;}
+#s10 .cycle-solver span {display:block;font-size:17px;color:var(--muted);}
+
+/* The Contents button follows every dark slide, including workflow and scope. */
+body:has(.reveal .slides > section.present[data-background-color="#30353b"]) .reveal .slide-menu-button.contents-ready a {
+ background:transparent;
+ color:#e1e5e8;
+}
+body:has(.reveal .slides > section.present[data-background-color="#30353b"]) .reveal .slide-menu-button.contents-ready a:hover {
+ color:#a9dcd4;
+ border-color:#ffffff40;
+}
+
+/* Policy optimization → stochastic DP → exact LP on one slide. */
+#discounted-mdp .bridge-formulation {padding:10px 0 12px;margin:0;}
+#discounted-mdp .bridge-formulation h3 {font-size:25px;line-height:1.25;color:var(--teal);font-weight:500;margin:0 0 10px;}
+#discounted-mdp .bridge-formulation .polished-math {font-size:25px;}
+#discounted-mdp .bridge-formulation mjx-container[display="true"] {margin:0;padding:0;}
+#discounted-mdp .bridge-bellman {border-top:1px solid var(--line);padding-top:16px;margin-top:8px;}
+#discounted-mdp .bridge-derivation {display:flex;justify-content:space-around;gap:30px;margin:5px 0 10px;color:var(--accent);}
+#discounted-mdp .bridge-derivation > div {display:flex;align-items:center;gap:12px;font-size:20px;line-height:1.3;}
+#discounted-mdp .bridge-down-arrow {font-size:36px;line-height:1;color:var(--teal);}
+#discounted-mdp .bridge-lp {border-top:1px solid var(--line);padding-top:14px;}
+#discounted-mdp .bridge-lp .polished-math {font-size:24px;}
+#s25 .lp-model-stage[data-always-plot="true"] {margin-top:45px;}
+
+.discounted-mdp-bridge .bridge-lp-row { padding-inline-start: 2rem; }
+
+.discounted-mdp-bridge .bridge-lp-row,
+.discounted-mdp-bridge .bridge-lp-row .display-math,
+.discounted-mdp-bridge .bridge-lp-row mjx-container[display="true"] {
+  display: block;
+  text-align: left;
+  margin-inline: 0;
+}
+
+body:not(.reveal-viewport) .team-reveal-layout {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;height:auto;
+}
+body:not(.reveal-viewport) .team-reveal-layout > .team-photo {
+  grid-column:1/-1;width:100%;height:420px;
+}
+body:not(.reveal-viewport) :is(.team-paper-stage,.team-stage-inner,.team-author-markers,.team-paper-qr) {
+  position:static;inset:auto;width:auto;height:auto;
+}
+body:not(.reveal-viewport) .team-author-markers {
+  display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:44px;
+}
+body:not(.reveal-viewport) .team-author-markers span {
+  position:static;transform:none;background:none;color:var(--muted);font-size:15px;padding:0;
+}
+body:not(.reveal-viewport) .team-author-markers br {display:none;}
+body:not(.reveal-viewport) .team-paper-qr strong {font-size:22px;text-align:center;}
+body:not(.reveal-viewport) .team-paper-qr span {font-size:16px;text-align:center;}
+body:not(.reveal-viewport) .team-paper-qr img {width:170px;height:170px;}
+@media(max-width:650px) {
+  body:not(.reveal-viewport) .team-reveal-layout {grid-template-columns:1fr;}
+}
+
+#discounted-mdp .discounted-mdp-bridge {position:relative;}
+#discounted-mdp .bridge-elp-stack {display:grid;}
+#discounted-mdp .bridge-elp-stack > div {grid-area:1/1;min-width:0;}
+#discounted-mdp .bridge-constraint-arrow {
+  position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;
+}
+#discounted-mdp .bridge-constraint-label {font:500 20px "Avenir Next","Segoe UI",sans-serif;}
+body:not(.reveal-viewport) #discounted-mdp .bridge-constraint-stage {display:none;}

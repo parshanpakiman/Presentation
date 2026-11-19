@@ -1,0 +1,17 @@
+---
+pagetitle: "INFORMS tutorial · Reading view"
+format:
+  html:
+    theme: none
+    css: [styles/layout.css?v=excel-solver, styles/assortment.css, styles/continuous.css, styles/continuous-decisions.css, styles/functional-clt.css?v=2, styles/continuous-import.css?v=final-summary, styles/closing.css, styles/summary-campus.css?v=2, styles/ac-future.css?v=three-ideas-2, styles/navigation.css?v=elp-constraint-first, styles/paper-results.css?v=purple-final-bound, styles/alp-comparison.css?v=discussion-finale]
+    html-math-method: mathml
+    toc: false
+    title-block-style: none
+    include-before-body: components/reading-start.html
+    include-after-body:
+      - components/reading-end.html
+      - components/scripts.html
+---
+
+{{< include content/slides.qmd >}}
+

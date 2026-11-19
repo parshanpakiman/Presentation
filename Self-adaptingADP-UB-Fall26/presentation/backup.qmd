@@ -1,0 +1,26 @@
+---
+pagetitle: "INFORMS tutorial · Technical backup"
+format:
+  revealjs:
+    theme: [default, styles/theme.scss]
+    css: [styles/layout.css, styles/assortment.css, styles/continuous.css, styles/continuous-decisions.css, styles/continuous-import.css?v=all-tutorial-math, styles/navigation.css, styles/paper-results.css?v=restored-layout-1]
+    html-math-method: mathml
+    width: 1280
+    height: 720
+    margin: 0.05
+    center: false
+    slide-number: c/t
+    controls: true
+    controls-layout: edges
+    menu:
+      side: left
+      numbers: true
+      width: 420px
+    hash: true
+    title-slide: false
+    slide-level: 2
+    include-after-body: components/backup-scripts.html
+---
+
+{{< include content/backup.qmd >}}
+

@@ -1,0 +1,10 @@
+_site/
+.quarto/
+__pycache__/
+qa/*.png
+qa/*.json
+qa/*.log
+
+
+/.quarto/
+**/*.quarto_ipynb

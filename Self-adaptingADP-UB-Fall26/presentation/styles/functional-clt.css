@@ -1,0 +1,41 @@
+/* Linked function-space and normal-marginal simulation. */
+#feature-monte-carlo {--fclt-ink:#edf0f2;--fclt-muted:#c4cdd2;--fclt-axis:#9aa8b1;--fclt-line:#ffffff29;--fclt-target:#ffc477;--fclt-estimate:#8acfc6;--fclt-new:#c5a6eb;}
+.reveal #feature-monte-carlo {color:var(--fclt-ink);background:#30353b;}
+.reveal #feature-monte-carlo > h2 {color:#fff;}
+#feature-monte-carlo .functional-clt {width:100%;max-width:1140px;margin:0 auto;}
+#feature-monte-carlo .fclt-heading {display:flex;justify-content:space-between;align-items:center;font-size:23px;color:var(--fclt-muted);margin:4px 8px 8px;}
+#feature-monte-carlo .fclt-heading .polished-math {font-size:1em;}
+#feature-monte-carlo .fclt-counter {color:var(--fclt-ink);font-size:26px;min-width:120px;text-align:right;}
+#feature-monte-carlo .fclt-counter strong {font-size:34px;font-variant-numeric:tabular-nums;font-weight:500;}
+#feature-monte-carlo .fclt-chart {display:block;width:100%;height:auto;max-height:330px;overflow:visible;touch-action:pan-y;}
+#feature-monte-carlo .fclt-chart text {font-family:inherit;fill:var(--fclt-muted);font-size:18px;}
+#feature-monte-carlo .fclt-chart .fclt-math-label {font-family:"STIX Two Math","Cambria Math",serif;font-style:italic;}
+#feature-monte-carlo .fclt-legend {display:flex;justify-content:center;gap:32px;align-items:center;font-size:18px;color:var(--fclt-muted);margin:2px 0 20px;}
+#feature-monte-carlo .fclt-legend .polished-math {font-size:1em;}
+#feature-monte-carlo .fclt-legend span::before {content:"";display:inline-block;width:26px;border-top:3px solid var(--fclt-estimate);margin-right:9px;vertical-align:middle;}
+#feature-monte-carlo .fclt-legend .polished-math::before {display:none;}
+#feature-monte-carlo .fclt-legend .fclt-key-target::before {border-color:var(--fclt-target);border-top-style:dashed;}
+#feature-monte-carlo .fclt-legend .fclt-key-new::before {border-color:var(--fclt-new);border-top-width:2px;}
+#feature-monte-carlo .fclt-toolbar {display:flex;align-items:center;gap:24px;padding:12px 4px;border-top:1px solid var(--fclt-line);}
+#feature-monte-carlo .fclt-counts {display:flex;gap:22px;font-size:20px;align-items:center;}
+#feature-monte-carlo .fclt-counts span {color:var(--fclt-muted);padding:0 2px 5px;border-bottom:2px solid transparent;min-width:34px;text-align:center;}
+#feature-monte-carlo .fclt-counts [aria-current="step"] {color:var(--fclt-target);border-color:var(--fclt-target);}
+#feature-monte-carlo .fclt-spread {margin-left:auto;font-size:18px;color:var(--fclt-muted);}
+#feature-monte-carlo .fclt-spread strong {color:var(--fclt-ink);font-weight:500;font-variant-numeric:tabular-nums;}
+#feature-monte-carlo .fclt-buttons {display:flex;gap:10px;}
+#feature-monte-carlo button {font:inherit;font-size:17px;border:1px solid #ffffff50;border-radius:5px;padding:7px 13px;background:transparent;color:var(--fclt-ink);cursor:pointer;}
+#feature-monte-carlo button:hover,#feature-monte-carlo button:focus-visible {background:#ffffff15;border-color:var(--fclt-estimate);}
+#feature-monte-carlo .fclt-conclusion {min-height:62px;color:var(--fclt-target);text-align:center;margin:8px 0 0;}
+#feature-monte-carlo .fclt-conclusion .display-math {font-size:27px;margin:0;}
+#feature-monte-carlo .fclt-model-label {font-size:15px;color:var(--fclt-muted);text-align:center;margin:4px 0 0;}
+#feature-monte-carlo .fclt-trigger {position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;}
+body:has(.reveal #feature-monte-carlo.present) .reveal :is(.controls,.slide-number) {color:#d4d9dd;}
+body:has(.reveal #feature-monte-carlo.present) .reveal .slide-menu-button.contents-ready a {color:#e1e5e8;background:transparent;}
+body:not(.reveal-viewport) #feature-monte-carlo + .slide-body,
+body:not(.reveal-viewport) #feature-monte-carlo .slide-body {background:#30353b;color:var(--fclt-ink);padding:24px;}
+@media(max-width:700px) {
+ body:not(.reveal-viewport) #feature-monte-carlo .fclt-heading {font-size:17px;}
+ body:not(.reveal-viewport) #feature-monte-carlo .fclt-legend {flex-wrap:wrap;font-size:14px;gap:12px;}
+ body:not(.reveal-viewport) #feature-monte-carlo .fclt-toolbar {flex-wrap:wrap;gap:12px;}
+ body:not(.reveal-viewport) #feature-monte-carlo .fclt-spread {margin-left:0;}
+}

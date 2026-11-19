@@ -1,0 +1,29 @@
+name: informstutorial
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - quarto=1.9.38
+  - gh=2.103.2 # Authoring: manage the GitHub repository and deployment.
+  - numpy=2.5.4
+  - scipy=1.18.1
+  - matplotlib=3.11.2
+  - networkx=3.7
+  - plotly=7.1.0
+  - fastapi=0.162.0
+  - pydantic=2.14.1
+  - uvicorn=0.54.0
+  - jupyterlab=4.6.4
+  - ipykernel=7.4.0
+  - pytest=9.1.1
+  - pillow
+  - pyyaml
+  - pypdf=6.21.2 # Read supplied tutorial and presentation PDFs during authoring.
+  - httpx
+  - pip:
+      - gurobipy==13.0.1
+      - playwright==1.64.1
+      - pymupdf==2.0 # Inspect supplied PDF slides during authoring.
+      - zxing-cpp==3.1.1 # Verify generated participant QR codes during authoring.

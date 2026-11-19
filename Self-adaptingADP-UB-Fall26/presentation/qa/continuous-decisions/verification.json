@@ -1,0 +1,19 @@
+{
+  "phases": [
+    "intro",
+    "inventory",
+    "complexity",
+    "business"
+  ],
+  "sliderInputsTested": {
+    "order": 6,
+    "power": 5,
+    "rate": 4
+  },
+  "outputsUpdated": true,
+  "pausedOffSlide": true,
+  "backwardNavigation": true,
+  "readingWidth": 390,
+  "readingDocumentWidth": 390,
+  "footerCleared": true
+}

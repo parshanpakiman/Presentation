@@ -1,0 +1,15 @@
+project:
+  type: default
+  output-dir: _site
+  lib-dir: site_libs
+  render: [index.qmd, reading.qmd, backup.qmd]
+  post-render:
+    - scripts/typeset-math.ts
+  resources:
+    - assets/**
+    - components/*.js
+    - styles/*.css
+execute:
+  enabled: false
+lang: en
+
