@@ -154,6 +154,8 @@ replay of known outcomes, not a new unpredictable run. Neither order is claimed 
 <!-- SLIDE CONTENT -->
 
 ::: {.slide-body}
+
+```{=html}
 <table class="mdp-table">
  <thead>
   <tr>
@@ -211,6 +213,8 @@ replay of known outcomes, not a new unpredictable run. Neither order is claimed 
   <div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</mtext><annotation encoding="application/x-tex">\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</annotation></semantics></math></div>
  </div>
 </div>
+```
+
 :::
 
 <!-- FOOTER: shared author names and university logos. -->
@@ -734,10 +738,13 @@ $$
 :::
 :::
 
+```{=html}
 <div class="feature-family-formulas fragment" data-fragment-index="1">
  <div class="feature-fourier"><strong>Fourier</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_\theta(s)=\cos(b+\omega s);\quad\theta=(b,\omega)</mtext><annotation encoding="application/x-tex">\varphi_\theta(s)=\cos(b+\omega s);\quad\theta=(b,\omega)</annotation></semantics></math></div>
  <div class="feature-relu"><strong>ReLU</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_\theta(s)=\max\{0,b+ws\};\quad\theta=(b,w)</mtext><annotation encoding="application/x-tex">\varphi_\theta(s)=\max\{0,b+ws\};\quad\theta=(b,w)</annotation></semantics></math></div>
 </div>
+```
+
 ```{=html}
 <div class="random-feature-visuals">
 <div class="feature-sampling-view fragment current-visible" data-fragment-index="2">
@@ -915,6 +922,8 @@ This is a Gaussian-limit illustration of functional central-limit behavior, not 
 
 ::: {.slide-body}
 <div class="policy-end-stages">
+
+```{=html}
 <div class="policy-opening fragment fade-out" data-fragment-index="1">
  <p>Increasing the feature count from</p>
  <div class="policy-opening-count"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>N\;\longrightarrow\;N+1</mtext><annotation encoding="application/x-tex">N\;\longrightarrow\;N+1</annotation></semantics></math></div>
@@ -922,6 +931,8 @@ This is a Gaussian-limit illustration of functional central-limit behavior, not 
  <div class="policy-opening-error"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>\lVert V^* - N_{N+1}(\beta)\rVert_{1,\nu} &lt; \lVert V^* - N_N(\beta)\rVert_{1,\nu}</mtext><annotation encoding="application/x-tex">\lVert V^* - N_{N+1}(\beta)\rVert_{1,\nu} &lt; \lVert V^* - N_N(\beta)\rVert_{1,\nu}</annotation></semantics></math></div>
  <p class="policy-opening-question fragment" data-fragment-index="0">Must the greedy policy cost improve?</p>
 </div>
+```
+
 <div class="policy-illustration-stage fragment fade-out" data-fragment-index="6">
 <div class="fragment" data-fragment-index="1">
 ```{=html}
@@ -1052,10 +1063,14 @@ $$
 <svg class="inventory-guide-arrow" viewBox="0 0 56 22" aria-hidden="true">
  <path d="M3 11H51M44 4L51 11L44 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
+
+```{=html}
 <div class="inventory-guide-dual">
  <p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>y_N^*(s)</mtext><annotation encoding="application/x-tex">y_N^*(s)</annotation></semantics></math> is the dual variable for<br>
 the guiding constraint <span class="inventory-guide-constraint"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(s)\ge V_{N-1}^{\mathrm{SG}}(s)</mtext><annotation encoding="application/x-tex">V_N(s)\ge V_{N-1}^{\mathrm{SG}}(s)</annotation></semantics></math></span></p>
 </div>
+```
+
 </div>
 </div>
 :::
