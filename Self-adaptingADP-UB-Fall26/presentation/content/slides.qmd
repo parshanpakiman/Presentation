@@ -1258,3 +1258,85 @@ Three future-work ideas from the user-provided AC_ALP_Rewritten synopsis. These 
 ::: {.notes}
 The convergence guarantee is the FALP result in Theorem 1. Sampling replaces hand-designed individual features, while the feature family and sampling distribution still need to be specified. Self-guidance updates effective state relevance through the guiding constraints. Proposition 5 and the discussion that follows connect the sequence to the worst-case greedy-policy bound in Proposition 4. Campus photograph supplied by the presenter.
 :::
+
+## Literature Review (Backup) {#paper-backup-literature .content-slide .paper-backup-slide}
+
+```{=html}
+<div class="slide-body paper-backup-body">
+ <table class="paper-lit-table">
+  <thead>
+   <tr><th scope="col">Modeling choice</th><th scope="col">Prior work</th><th scope="col">This paper</th></tr>
+  </thead>
+  <tbody>
+   <tr>
+    <th scope="row">Basis selection</th>
+    <td>Generate bases by nonlinear optimization or from application structure. Use kernels in the dual of a regularized ALP.
+     <small>Klabjan &amp; Adelman (2007), Adelman &amp; Klabjan (2012), Bhat et al. (2012)</small>
+    </td>
+    <td>Sample the basis parameters directly and fit their weights in the primal ALP.</td>
+   </tr>
+   <tr class="fragment" data-fragment-index="0">
+    <th scope="row">State relevance</th>
+    <td>Update state weights using visitation frequencies from a simulated policy.
+     <small>De Farias &amp; Van Roy (2003, 2006), Sun et al. (2014)</small>
+    </td>
+    <td>Use the previous VFA as a statewise floor. The guiding constraints implicitly reweight states.</td>
+   </tr>
+   <tr class="fragment" data-fragment-index="1">
+    <th scope="row">Random features</th>
+    <td>Use sampled bases in regression and approximate value iteration.
+     <small>Rahimi &amp; Recht (2007, 2008), Haskell et al. (2020)</small>
+    </td>
+    <td>Fit the sampled features under Bellman inequalities to lower bound the optimal value function.</td>
+   </tr>
+  </tbody>
+ </table>
+ <p class="paper-backup-source"><a href="assets/self-guided-alp.pdf#page=3" target="_blank" rel="noopener">Pakiman, Nadarajah, Soheili &amp; Lin (2025), pp. 3385–3386</a></p>
+</div>
+```
+
+::: {.notes}
+Source: Pakiman, Nadarajah, Soheili & Lin (2025), pp. 3385–3386. Klabjan and Adelman (2007) study semi-Markov decision processes and generate bases through nonlinear optimization. Adelman and Klabjan (2012) use joint replenishment structure. Bhat et al. (2012) use a kernel in the dual of a regularized relaxation, with guarantees under an idealized sampling distribution. The policy simulation approach to state relevance also serves as a benchmark in the inventory experiments. Rahimi and Recht study random features in regression. Haskell et al. apply random bases in a value iteration algorithm.
+:::
+
+## Contributions (Backup) {#paper-backup-contributions .content-slide .paper-backup-slide}
+
+```{=html}
+<div class="slide-body paper-backup-body">
+ <div class="paper-method-flow">
+  <div class="paper-method">
+   <h3>One-shot FALP</h3>
+   <p>Sample random features and fit their weights under Bellman inequalities.</p>
+   <p class="paper-method-guarantee">Theorem 1 gives a pointwise lower bound and, under its sampling assumptions, a high-probability <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>O(N^{-1/2})</mtext><annotation encoding="application/x-tex">O(N^{-1/2})</annotation></semantics></math> weighted <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>L_1</mtext><annotation encoding="application/x-tex">L_1</annotation></semantics></math> error bound.</p>
+  </div>
+  <svg class="paper-method-arrow fragment" data-fragment-index="0" viewBox="0 0 56 24" aria-hidden="true">
+   <path d="M4 12H51M42 4L51 12L42 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="paper-method paper-method-guided fragment" data-fragment-index="0">
+   <h3>Self-guided FALP</h3>
+   <p>Add features and use the previous VFA as a floor. Guide duals reweight state relevance.</p>
+   <p class="paper-method-guarantee">With exact constraints, lower bounds cannot fall and the worst-case greedy-policy bound improves (Prop.&nbsp;5).</p>
+  </div>
+ </div>
+ <div class="paper-evidence fragment" data-fragment-index="1">
+  <h3>Mean Policy Optimality Gap <small>Lower is better</small></h3>
+  <div class="paper-evidence-grid">
+   <div class="paper-evidence-case">
+    <h4>Perishable inventory <small>Six 10-dimensional instances</small></h4>
+    <div class="paper-evidence-row"><span>One-shot FALP</span><span class="paper-bar-track" aria-hidden="true"><span class="paper-bar" style="--gap-width:85%"></span></span><strong>10.2%</strong></div>
+    <div class="paper-evidence-row paper-evidence-guided"><span>Self-guided FALP</span><span class="paper-bar-track" aria-hidden="true"><span class="paper-bar" style="--gap-width:54.167%"></span></span><strong>6.5%</strong></div>
+   </div>
+   <div class="paper-evidence-case">
+    <h4>Bermudan options <small>Nine instances, up to 16 assets</small></h4>
+    <div class="paper-evidence-row"><span>Least-squares MC</span><span class="paper-bar-track" aria-hidden="true"><span class="paper-bar" style="--gap-width:43.333%"></span></span><strong>5.2%</strong></div>
+    <div class="paper-evidence-row paper-evidence-guided"><span>Self-guided FALP</span><span class="paper-bar-track" aria-hidden="true"><span class="paper-bar" style="--gap-width:25%"></span></span><strong>3.0%</strong></div>
+   </div>
+  </div>
+  <p class="paper-backup-source"><a href="assets/self-guided-alp.pdf#page=17" target="_blank" rel="noopener">Inventory: Table 4, p. 3399</a><a href="assets/self-guided-alp.pdf#page=20" target="_blank" rel="noopener">Options: Table 5, p. 3402</a></p>
+ </div>
+</div>
+```
+
+::: {.notes}
+Source: Pakiman et al. (2025), p. 3385, Theorem 1 (p. 3389), Proposition 5 and its discussion of Proposition 4 (p. 3393), Theorem 2 (p. 3396), and Tables 4 and 5. Theorem 1 bounds the weighted value error under its assumptions. The exponent is independent of state dimension; the constants can depend on dimension. Theorem 2 gives a separate bound for self-guided FALP that accounts for guiding constraints. The worst-case bound can improve even when realized greedy-policy performance does not improve at every iteration. The inventory bars compare FALP with 600 features to self-guided FALP with a total budget of 600 features and seven rounds. The options bars compare least-squares Monte Carlo to self-guided FALP with a budget of 500 features and six rounds. The bars share a zero baseline and a 12% scale. Each application uses the gap measure reported in its own table.
+:::

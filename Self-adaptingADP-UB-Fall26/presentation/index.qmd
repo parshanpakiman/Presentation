@@ -3,7 +3,7 @@ pagetitle: "Self-Guided Approximation of Markov Decision Processes"
 format:
   revealjs:
     theme: [default, styles/theme.scss]
-    css: [styles/layout.css?v=mdp-notation-column, styles/assortment.css, styles/continuous.css, styles/continuous-decisions.css, styles/functional-clt.css?v=2, styles/continuous-import.css?v=feature-sampling-note-red, styles/closing.css, styles/summary-campus.css?v=takeaways-with-qr, styles/ac-future.css?v=three-ideas-2, styles/projection.css?v=random-feature-coordinates, styles/navigation.css?v=inventory-large-timeline, styles/paper-results.css?v=deck-title-style, styles/alp-comparison.css?v=staged-weights]
+    css: [styles/layout.css?v=mdp-notation-column, styles/assortment.css, styles/continuous.css, styles/continuous-decisions.css, styles/functional-clt.css?v=2, styles/continuous-import.css?v=feature-sampling-note-red, styles/closing.css, styles/summary-campus.css?v=takeaways-with-qr, styles/ac-future.css?v=three-ideas-2, styles/projection.css?v=random-feature-coordinates, styles/navigation.css?v=inventory-large-timeline, styles/paper-results.css?v=paper-backup, styles/alp-comparison.css?v=staged-weights]
     html-math-method: mathml
     width: 1280
     height: 720

@@ -119,9 +119,25 @@
     window.CONTENTS_READY = true;
   }
 
+  function animateTeamEntrance({ previousSlide, currentSlide }) {
+    if (previousSlide?.id !== 's01' || currentSlide?.id !== 'adp-team') return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  
+    const motion = { duration: 720, easing: 'cubic-bezier(0.18, 0.72, 0.26, 1)' };
+    currentSlide.querySelector('h2').animate([
+      { opacity: 0, transform: 'translateY(20px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ], motion);
+    currentSlide.querySelector('.team-photo').animate([
+      { opacity: 0, transform: 'translateX(80px) scale(0.96)' },
+      { opacity: 1, transform: 'translateX(0) scale(1)' },
+    ], motion);
+  }
+
   function start() {
     shareCode();
     if (!document.querySelector('.reveal')) return;
+    window.Reveal?.on('slidechanged', animateTeamEntrance);
     if (window.Reveal?.isReady()) contents();
     else window.Reveal?.on('ready', contents);
   }
