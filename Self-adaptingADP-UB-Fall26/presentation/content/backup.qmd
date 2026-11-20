@@ -390,7 +390,7 @@ BACKUP — Bellman’s equation and the policy objective
 
 ::: {.bellman-equation-native .fragment data-fragment-index="0"}
 $$
-\underbrace{V_t^*(s)}_{\text{optimal cost}}=\underbrace{\min_{a\in \mathcal{A}(s)}}_{\text{feasible action}}\left\{\underbrace{c_t(s,a)}_{\text{cost now}}+\underbrace{\mathbb E[V_{t+1}^*(s')\mid s,a]}_{\text{future cost}}\right\}
+\underbrace{V_t^*(s)}_{\text{optimal cost}}=\underbrace{\min_{a\in \mathcal{A}(s)}}_{\text{feasible action}}\left\{\underbrace{c(s,a)}_{\text{cost now}}+\underbrace{\mathbb E[V_{t+1}^*(s')\mid s,a]}_{\text{future cost}}\right\}
 $$
 :::
 
@@ -434,19 +434,19 @@ matches the opening inventory example.
 
 Define V_t^* as the minimum expected remaining cost. Reveal the equation, then reveal its four underbraces and
 matching labels individually from left to right: optimal remaining cost, feasible action choice, expected
-immediate cost, and expected optimal continuation cost. c_t already averages realized period costs; those
+immediate cost, and expected optimal continuation cost. c already averages realized period costs; those
 costs are not counted twice. P_t is the transition distribution from the MDP formulation slide. The horizon is finite and
 undiscounted, and V_T^* = 0 means no additional terminal cost; final-period holding and stockout costs remain
 in c_{T−1}.
 
 The last reveal connects Bellman’s equation directly to the policy optimization objective, with each
-period cost written as c_t(s_t, π_t(s_t)). The Bellman recursion itself minimizes over a feasible current
+period cost written as c(s_t, π_t(s_t)). The Bellman recursion itself minimizes over a feasible current
 action a. For a fixed initial state s_0, the minimum over feasible policies of the expected sum of costs is
 exactly V_0^*(s_0). The subscript 0 is the initial period; the argument s_0 is the initial state. Starting the
 inventory example with zero stock therefore gives V_0^*(0). This is an optimal expected total, not the
 realized cost of one animation run. Keep the displayed formula in costs to match the inventory formulation. If the model instead
 maximizes profits, its value function is defined using profits and max, and its initial value is the optimal
-expected profit. For the specific reward transformation r_t = −c_t, the optimal reward value is the negative
+expected profit. For the specific reward transformation r_t = −c, the optimal reward value is the negative
 of the cost value; do not equate profit to the displayed minimum-cost value. Do not add a backward-induction
 walkthrough here.
 :::

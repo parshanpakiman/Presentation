@@ -1,5 +1,5 @@
-.cmp-slide-body {--cmp-blue:#285b87;--cmp-green:#196c63;}
-.cmp-slide-body .cmp-columns {display:grid;grid-template-columns:1fr 1.12fr;gap:40px;}
+.cmp-slide-body {--cmp-blue:#285b87;--cmp-green:#196c63;--cmp-gap:40px;--cmp-alp-width:52%;--cmp-cell-padding:10px;}
+.cmp-slide-body .cmp-columns {display:grid;grid-template-columns:minmax(0,1fr) calc(var(--cmp-alp-width) - var(--cmp-cell-padding));gap:var(--cmp-gap);}
 .cmp-slide-body .cmp-column {min-width:0;border-top:3px solid var(--cmp-ink);padding-top:10px;}
 .cmp-slide-body .cmp-ml {--cmp-ink:var(--cmp-blue);}
 .cmp-slide-body .cmp-alp {--cmp-ink:var(--cmp-green);}
@@ -14,7 +14,7 @@
 .cmp-slide-body .cmp-datum {fill:var(--cmp-stroke);stroke:white;stroke-width:1.1;}
 .cmp-slide-body .cmp-fit {stroke:var(--cmp-stroke);stroke-width:3.3;stroke-linecap:round;stroke-linejoin:round;fill:none;stroke-dasharray:1.001;stroke-dashoffset:1.001;transition:opacity .22s,stroke-dashoffset .65s ease;}
 .cmp-slide-body .cmp-residual {fill:none;stroke:var(--cmp-stroke);stroke-width:1.35;stroke-dasharray:3 3;}
-.cmp-slide-body .cmp-infeasible {fill:#eaf2ef;}
+.cmp-slide-body .cmp-feasible {fill:#eaf2ef;}
 .cmp-slide-body .cmp-threshold {fill:none;stroke:#63877f;stroke-width:1.9;stroke-dasharray:4 3;}
 .cmp-slide-body .cmp-limit-label {font:15px "Avenir Next","Segoe UI",sans-serif;fill:#42685f;}
 .cmp-slide-body .cmp-touch {stroke:var(--cmp-stroke);stroke-width:2.3;fill:white;}
@@ -44,8 +44,11 @@
   font-size:19px;line-height:1.2;border-top:1px solid var(--line);
 }
 .cmp-slide-body .cmp-comparison-table .cmp-row-label {width:140px;}
+.cmp-slide-body .cmp-comparison-table .cmp-alp-col {
+  width:var(--cmp-alp-width);
+}
 .cmp-slide-body .cmp-comparison-table :is(th,td) {
-  text-align:left;vertical-align:middle;padding:4px 10px;
+  text-align:left;vertical-align:middle;padding:4px var(--cmp-cell-padding);
   border-bottom:1px solid var(--line);
 }
 .cmp-slide-body .cmp-comparison-table thead th {
@@ -57,8 +60,19 @@
 .cmp-slide-body .cmp-comparison-table .cmp-ml {background:#f1f6fb;color:var(--cmp-ink);}
 .cmp-slide-body .cmp-comparison-table .cmp-alp {background:#edf6f2;color:var(--cmp-ink);}
 .cmp-slide-body .cmp-comparison-table .polished-math {font-size:20px;color:inherit;}
-.cmp-slide-body .cmp-comparison-table .cmp-optimization-row :is(th,td) {vertical-align:top;padding-top:7px;}
-.cmp-slide-body .cmp-comparison-table .cmp-optimization-row td > div + div {margin-top:3px;}
+.cmp-slide-body .cmp-comparison-table .cmp-optimization-row :is(th,td) {vertical-align:top;padding-top:13px;padding-bottom:14px;}
+.cmp-slide-body .cmp-comparison-table .cmp-optimization-row td > div + div {margin-top:7px;}
+.cmp-slide-body:not([data-step="3"]) .cmp-weights-row {display:none;}
+.cmp-slide-body[data-step="2"] .cmp-feature-quadratic .cmp-change-label,
+.cmp-slide-body .cmp-weights-row .cmp-change-label {
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:4px;
+  background:#ffe0ae;
+  color:#743b15;
+}
+.cmp-slide-body .cmp-weighted svg g:is([data-latex="w_i"],[data-latex="\\boldsymbol{\\nu}"]) {fill:#984500;}
+.cmp-slide-body > .cmp-main-content {align-self:start;}
 @media(max-width:700px) {
  body:not(.reveal-viewport) .cmp-slide-body {overflow-x:auto;}
  body:not(.reveal-viewport) .cmp-slide-body .cmp-comparison-table {min-width:900px;}
@@ -75,3 +89,14 @@
 .cmp-slide-body .cmp-discussion p {margin:0;}
 body:not(.reveal-viewport) .cmp-slide-body {display:block;}
 body:not(.reveal-viewport) .cmp-slide-body .cmp-discussion {margin:28px auto;}
+
+.cmp-slide-body .cmp-limit-label .cmp-value-symbol {font-family:'STIX Two Math','Cambria Math',serif;font-style:italic;}
+
+/* Define the two approximation choices immediately below the discussion. */
+.cmp-slide-body > .cmp-discussion-stage {grid-area:1/1;min-width:0;width:min(100%,1000px);justify-self:center;margin-inline:auto;}
+.cmp-slide-body .cmp-choice-definitions {display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;}
+.cmp-slide-body .cmp-choice-definitions .alp-input {background:var(--tint,#f2f7f9);border-radius:10px;padding:18px 16px;text-align:center;color:var(--ink);}
+.cmp-slide-body .cmp-choice-definitions p {font-size:24px;margin:0 0 12px;line-height:1.25;}
+.cmp-slide-body .cmp-choice-definitions strong {font-weight:600;}
+.cmp-slide-body .cmp-choice-definitions .polished-math {font-size:27px;}
+@media(max-width:700px) {body:not(.reveal-viewport) .cmp-slide-body .cmp-choice-definitions {grid-template-columns:1fr;}}

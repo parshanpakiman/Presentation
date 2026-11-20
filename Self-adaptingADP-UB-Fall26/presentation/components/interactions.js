@@ -32,6 +32,24 @@
   function output(root,name,value) {const el=$(root,`[data-output="${name}"]`);if(el)el.textContent=value;}
   function cubes(value) {return `<div class="cubes" aria-hidden="true">${Array.from({length:Math.min(12,Math.abs(value))},()=>`<i class="cube ${value<0?'debt':''}"></i>`).join('')}</div>`;}
   function inventory(root) {
+    // The common display scale covers all attainable levels in this two-day demo.
+    const inventoryMovement = (before, after) => {
+      const x = value => 120 + value * (110 / 12);
+      const start = before == null ? '' : `<circle cx="${x(before)}" cy="22" r="5" fill="#fff" stroke="#245e83" stroke-width="1.5"/>`;
+      const end = after == null ? '' : `<circle cx="${x(after)}" cy="22" r="6" fill="#245e83" stroke="#fff" stroke-width="1.5"/>`;
+      let movement = '';
+      if (before != null && after != null && before !== after) {
+        const tip = x(after), tail = tip - Math.sign(after - before) * 4;
+        movement = `<path d="M${x(before)} 9H${tip}M${tail} 5L${tip} 9L${tail} 13" fill="none" stroke="#245e83" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      }
+      return `<svg class="inventory-event-scale" viewBox="0 0 240 48" aria-hidden="true">
+        <path d="M10 16H120V28H10L4 22Z" fill="#edc19e"/>
+        <path d="M120 16H230L236 22L230 28H120Z" fill="#b9d9d0"/>
+        <path d="M120 15V33" stroke="#778f98" stroke-width="1"/>
+        ${movement}${start}${end}
+        <text x="120" y="45" text-anchor="middle" fill="#536974" font-size="13">0</text>
+      </svg>`;
+    };
     const initialStock=0;
     let firstOrder=2,nextOrder=1,phase=0,lastPhase=0;
     let demands=[null,null],replayDemands=null;
@@ -40,7 +58,7 @@
     const periodCosts=(s,a,d)=>{const result=M.inventoryCosts(s,a,d,false);return {...result,next:Math.round(result.next*10)/10};};
     const inventoryLabel=v=>v>0?`${num(v)} unit${v===1?'':'s'} left in stock`:v<0?`${num(-v)} unit${v===-1?'':'s'} of unmet demand`:'No stock or unmet demand';
     const outcome=r=>`<div class="inventory-outcome ${r.next<0?'shortage':'leftover'}"><strong>${inventoryLabel(r.next)}</strong>${cubes(r.next)}<span>${r.next<0?'Stockout':r.next>0?'Holding':'Holding / stockout'} cost: <b>${money(r.holding+r.stockout)}</b></span></div>`;
-    const html=`<div class="toolbar inventory-controls">${range('First order','order',2,0,6,1)}<div class="next-order-control" hidden>${range('Next order','next-order',1,0,6,1)}</div>${button('Place first order','advance','class="primary"')}<div class="inventory-replays" hidden>${button('Replay same demands','replay','title="Repeat the previous demand values to compare different orders."')}</div>${button('Rerun · new demands','reset','class="reset" title="Start a fresh run with new independent random demand draws."')}</div><div class="inventory-periods"><span>Period 1</span><span>Period 2</span></div><div class="decision-timeline" aria-label="Order, demand, next order, next demand"></div><div class="inventory-ledger" aria-live="polite"></div>`;
+    const html=`<div class="toolbar inventory-controls">${range('First order','order',2,0,6,1)}<div class="next-order-control" hidden>${range('Next order','next-order',1,0,6,1)}</div>${button('Place first order','advance','class="primary"')}<div class="inventory-replays" hidden>${button('Replay same demands','replay','title="Repeat the previous demand values to compare different orders."')}</div>${button('Rerun · new demands','reset','class="reset" title="Start a fresh run with new independent random demand draws."')}</div><div class="inventory-periods"><span>Day 1</span><span>Day 2</span></div><div class="decision-timeline" aria-label="Order, demand, next order, next demand"></div><div class="inventory-ledger" aria-live="polite"></div>`;
     function render(){
       const first=periodCosts(initialStock,firstOrder,demands[0]??0);
       const second=periodCosts(first.next,nextOrder,demands[1]??0);
@@ -51,6 +69,7 @@ const eventBody = (before, demand, after, cost, costLabel) => `
   <div class="inventory-event-row"><span>Inventory before</span><b>${level(before)}</b></div>
   <div class="inventory-event-quantity">${demand === undefined ? '' : `<span>Realized demand</span><b>${level(demand)}</b>`}</div>
   <div class="inventory-event-row"><span>Inventory after</span><b>${level(after)}</b></div>
+  ${inventoryMovement(before,after)}
   <div class="inventory-event-cost ${costLabel==='Purchase'?'inventory-cost-purchase':after<0?'inventory-cost-backlog':'inventory-cost-holding'}"><span>${costLabel}</span><b>${cost == null?'—':money(cost)}</b></div>`;
 const firstBody=eventBody(initialStock,undefined,phase>=1?initialStock+firstOrder:null,phase>=1?first.purchase:null,'Purchase');
 const demandBody=eventBody(phase>=1?initialStock+firstOrder:null,demands[0],phase>=2?first.next:null,phase>=2?first.holding+first.stockout:null,phase>=2?(first.next<0?'Backlog':'Holding'):'Holding / backlog');
@@ -60,7 +79,7 @@ const finalBody=eventBody(phase>=3?Math.round((first.next+nextOrder)*10)/10:null
       const purchase=(phase>=1?first.purchase:0)+(phase>=3?second.purchase:0);
       const holding=(phase>=2?first.holding:0)+(phase>=4?second.holding:0);
       const stockout=(phase>=2?first.stockout:0)+(phase>=4?second.stockout:0);
-      $(root,'.inventory-ledger').innerHTML=`<span class="cost-heading">Costs ${phase===4?'over both periods':'so far'}</span><span class="cost-purchases">Purchases <b>${money(purchase)}</b></span><span class="cost-holding">Holding <b>${money(holding)}</b></span><span class="cost-stockout">Stockout <b>${money(stockout)}</b></span><strong>Total ${money(purchase+holding+stockout)}</strong>`;
+      $(root,'.inventory-ledger').innerHTML=`<span class="cost-heading">Costs ${phase===4?'over both days':'so far'}</span><span class="cost-purchases">Purchases <b>${money(purchase)}</b></span><span class="cost-holding">Holding <b>${money(holding)}</b></span><span class="cost-stockout">Backlog <b>${money(stockout)}</b></span><strong>Total ${money(purchase+holding+stockout)}</strong>`;
       const firstInput=$(root,'[data-input="order"]'),nextInput=$(root,'[data-input="next-order"]');
       firstInput.value=firstOrder;firstInput.disabled=phase>0;output(root,'order',firstOrder);
       nextInput.value=nextOrder;nextInput.disabled=phase!==2;output(root,'next-order',nextOrder);

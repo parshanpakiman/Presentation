@@ -35,6 +35,13 @@
     const underlineY = (row.bottom - bounds.top) * scale + 5;
     root.querySelector('.bridge-universal-underline').setAttribute('d',
       'M' + underlineX + ' ' + underlineY + ' H' + underlineEnd);
+    const variable = root.querySelector('.bridge-constraint-stage [data-mml-node="munder"] [data-c="1D449"]').getBoundingClientRect();
+    const variableX = (variable.left - bounds.left) * scale - 1.5;
+    const variableEnd = (variable.right - bounds.left) * scale + 1.5;
+    const variableY = (variable.bottom - bounds.top) * scale + 4;
+    root.querySelector('.bridge-variable-underline').setAttribute('d',
+      'M' + variableX + ' ' + variableY + ' H' + variableEnd);
+
 
   }
   const schedule = () => requestAnimationFrame(draw);

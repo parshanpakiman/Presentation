@@ -8,21 +8,32 @@
 .reveal #s27 .slide-body>.equation-box {font-size:26px;}
 .reveal #s27 .badge {display:none;}
 .reveal #s27 .slide-body>h3 {display:none;}
-.reveal #s29 .inventory-model-visual h3 {font-size:24px!important;}
-.reveal #s29 .equation-box {font-size:24px;padding:12px 16px;}
-.reveal #s29 .equation-box :is(math,.polished-math) {font-size:25px;}
+.reveal #s29 {
+  --inventory-type-size:22px;
+  --state-scale-height:138;
+  --demand-plot-height:118;
+  --transition-plot-height:90;
+}
+.reveal #s29 .inventory-model-visual h3 {font-size:var(--inventory-type-size)!important;}
+.reveal #s29 .equation-box {font-size:var(--inventory-type-size);padding:12px 16px;}
+.reveal #s29 .slide-body :is(math,.polished-math) {font-size:var(--inventory-type-size);}
 .reveal #s29 .inventory-cost-key {grid-template-columns:repeat(4,1fr);margin:12px 0;}
-.reveal #s29 .inventory-cost-key span {font-size:20px;padding:10px 3px;}
-.reveal #s29 .inventory-cost-details small:last-child {font-size:22px;}
-.reveal #s29 .inventory-model-visual svg text {font-size:22px;}
-.reveal #s29 .inventory-transition-plot text {font-size:22px;}
-.reveal #s29 .inventory-transition-plot {height:90px;}
-.reveal #s29 .inventory-demand-plot {height:95px;}
+.reveal #s29 .inventory-cost-key > span {font-size:var(--inventory-type-size);padding:10px 3px;}
+.reveal #s29 .inventory-cost-key .polished-math {padding:0;}
+.reveal #s29 .inventory-state-scale {height:calc(var(--state-scale-height) * 1px);max-height:none;}
+.reveal #s29 .inventory-order-scale {display:block;width:384px!important;max-width:100%;}
+.reveal #s29 .inventory-demand-plot {height:calc(var(--demand-plot-height) * 1px);}
+.reveal #s29 .inventory-transition-plot {height:calc(var(--transition-plot-height) * 1px);}
+/* Convert the shared font size into each chart's viewBox units. */
+.reveal #s29 .inventory-state-scale text {font-size:calc(var(--inventory-type-size) * 145 / var(--state-scale-height));}
+.reveal #s29 .inventory-order-scale text {font-size:calc(var(--inventory-type-size) * 400 / 384);}
+.reveal #s29 .inventory-demand-plot text {font-size:calc(var(--inventory-type-size) * 158 / var(--demand-plot-height));}
+.reveal #s29 .inventory-transition-plot text {font-size:calc(var(--inventory-type-size) * 105 / var(--transition-plot-height));}
 .reveal #vfa-adaptation-transition .adaptation-headings {font-size:23px;letter-spacing:.02em;}
 .reveal #vfa-adaptation-transition .adaptation-choice h3 {font-size:27px!important;}
 .reveal #vfa-adaptation-transition .adaptation-choice p {font-size:24px;}
 .reveal #s38 .vfa-transition {font-size:26px;margin-bottom:12px;}
-.reveal #s38 .slide-body>.columns>.column>.equation-box {padding:10px 14px;min-height:130px;}
+.reveal #s38 .slide-body>.columns>.column>.equation-box {padding:16px 14px;min-height:205px;}
 .reveal #s38 .slide-body>.columns>.column>.equation-box .center {font-size:22px;}
 .reveal #s38 .equation-box :is(math,.polished-math) {font-size:24px;}
 .reveal #s38 .slide-body>.columns>.column>.equation-box .display-math {font-size:24px;}
@@ -104,7 +115,16 @@
 .reveal .display-exercise .python-output small {font-size:21px;}
 
 /* A consistent heading baseline and a clear margin above the shared footer. */
-.reveal .slides>section.slide:not(.cover)>h2 {margin:20px 0 18px!important;}
+.reveal .slides > section.slide:not(.cover) > h2 {
+  margin:20px 0 18px!important;
+  font-family:"Avenir Next","Segoe UI",sans-serif;
+  font-size:42px;
+  font-weight:500;
+  font-style:normal;
+  letter-spacing:-1.4px;
+  line-height:1.13;
+  text-transform:none;
+}
 .reveal .cover h2 {text-wrap:balance;}
 .reveal .cover .source {bottom:32px;}
 .reveal #s03 .decision-event {min-height:196px;}

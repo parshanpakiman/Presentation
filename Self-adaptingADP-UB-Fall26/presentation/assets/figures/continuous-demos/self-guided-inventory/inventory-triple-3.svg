@@ -229,6 +229,7 @@ L 371.904021 136.537734
 L 371.904021 136.537734 
 " clip-path="url(#pc6be16bb40)" style="fill: none; stroke: #a8b5bd; stroke-opacity: 0.6; stroke-width: 1.5; stroke-linecap: square"/>
    </g>
+   <path class="sg-dip-region" d="M 170.667279 131.336175 L 171.539241 131.362161 L 179.784705 131.607884 L 187.205623 131.829035 L 194.626541 132.050186 L 201.222912 132.246765 L 207.819284 132.443343 L 214.415655 132.639922 L 221.012026 132.836501 L 227.608398 133.033079 L 231.73113 133.155941 L 234.204769 133.220822 L 240.80114 133.393837 L 248.222058 133.588479 L 255.642976 133.783121 L 263.88844 133.99939 L 272.958451 134.237286 L 284.502101 134.540062 L 294.396658 134.799585 L 322.431236 135.437743 L 331.501246 135.644206 L 339.746711 135.831899 L 347.167628 136.000823 L 353.764 136.150978 L 358.711278 136.263594 L 359.535825 136.280728 L 365.307649 136.400664 L 371.079474 136.5206 L 371.904021 136.537734 L 371.904021 159.145623 L 371.079474 158.928556 L 365.307649 157.566809 L 359.535825 156.455324 L 358.711278 156.327749 L 353.764 155.562297 L 347.167628 154.774022 L 339.746711 154.140615 L 331.501246 153.698321 L 322.431236 153.46452 L 294.396658 153.744904 L 284.502101 153.843863 L 272.958451 153.890136 L 263.88844 153.737677 L 255.642976 153.393928 L 248.222058 152.877592 L 240.80114 152.133358 L 234.204769 151.259131 L 231.73113 150.850362 L 227.608398 150.169079 L 221.012026 148.852159 L 214.415655 147.30156 L 207.819284 145.514886 L 201.222912 143.494128 L 194.626541 141.245436 L 187.205623 138.45566 L 179.784705 135.408883 L 171.539241 131.749972 L 170.667279 131.336175 Z" fill="#efaa63" fill-opacity=".36" clip-path="url(#pc6be16bb40)"/>
    <g id="line2d_19">
     <path d="M 42.91 126.841202 
 L 107.224621 129.219568 
@@ -292,10 +293,11 @@ L 42.91 33.13
 L 371.904021 327.654062 
 " style="fill: none; stroke: #bacbd2; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
+   <rect class="sg-dip-axis-band" x="170.667279" y="323.654062" width="201.236742" height="8" rx="1.5" fill="#d77624"/>
    <g id="text_13">
     <text style="font-weight: 500; font-size: 22px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #226a85" x="207.40701" y="27.13" transform="rotate(-0 207.40701 27.13)">FALP</text>
    </g>
-   <g id="legend_1">
+   <g id="legend_1" transform="translate(-12 0)">
     <g id="line2d_22">
      <path d="M 225.744021 279.879062 
 L 241.744021 279.879062 
@@ -303,7 +305,7 @@ L 257.744021 279.879062
 " style="fill: none; stroke-dasharray: 6.66,2.88; stroke-dashoffset: 0; stroke: #a8b5bd; stroke-width: 1.8"/>
     </g>
     <g id="text_14">
-     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="270.544021" y="285.479062" transform="rotate(-0 270.544021 285.479062)">Previous fit</text>
+     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="270.544021" y="285.479062" transform="rotate(-0 270.544021 285.479062)">Previous VFA</text>
     </g>
     <g id="line2d_23">
      <path d="M 225.744021 303.814062 
@@ -312,7 +314,7 @@ L 257.744021 303.814062
 " style="fill: none; stroke: #226a85; stroke-width: 3; stroke-linecap: square"/>
     </g>
     <g id="text_15">
-     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="270.544021" y="309.414062" transform="rotate(-0 270.544021 309.414062)">Current fit</text>
+     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="270.544021" y="309.414062" transform="rotate(-0 270.544021 309.414062)">Current VFA</text>
     </g>
    </g>
   </g>
@@ -562,7 +564,7 @@ L 756.624042 327.654062
    <g id="text_27">
     <text style="font-weight: 500; font-size: 22px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #78508d" x="592.127031" y="27.13" transform="rotate(-0 592.127031 27.13)">Self-guided FALP</text>
    </g>
-   <g id="legend_2">
+   <g id="legend_2" transform="translate(-12 0)">
     <g id="line2d_45">
      <path d="M 610.464042 279.879062 
 L 626.464042 279.879062 
@@ -570,7 +572,7 @@ L 642.464042 279.879062
 " style="fill: none; stroke-dasharray: 6.66,2.88; stroke-dashoffset: 0; stroke: #a8b5bd; stroke-width: 1.8"/>
     </g>
     <g id="text_28">
-     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="655.264042" y="285.479062" transform="rotate(-0 655.264042 285.479062)">Previous fit</text>
+     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="655.264042" y="285.479062" transform="rotate(-0 655.264042 285.479062)">Previous VFA</text>
     </g>
     <g id="line2d_46">
      <path d="M 610.464042 303.814062 
@@ -579,7 +581,7 @@ L 642.464042 303.814062
 " style="fill: none; stroke: #78508d; stroke-width: 3; stroke-linecap: square"/>
     </g>
     <g id="text_29">
-     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="655.264042" y="309.414062" transform="rotate(-0 655.264042 309.414062)">Current fit</text>
+     <text style="font-size: 16px; font-family: 'Avenir Next', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182c3e" x="655.264042" y="309.414062" transform="rotate(-0 655.264042 309.414062)">Current VFA</text>
     </g>
    </g>
    <g id="PathCollection_1">

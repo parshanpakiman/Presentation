@@ -47,19 +47,71 @@ This talk retains the tutorial introduction and focuses on self-guided ALPs for 
 </div>
 ```
 
-## What is Sequential Decision Making? {#s03 .content-slide}
+## Sequential Inventory Decisions {#s03 .content-slide}
 
 <!-- SLIDE CONTENT -->
 
 ```{=html}
 <div class="slide-body">
- <p class="inventory-simulation-parameters"><strong>Inventory example:</strong></p>
- <ul class="inventory-example-details">
-  <li><strong>Cost</strong> — <span class="inventory-cost-purchase">Purchase $20/unit</span> · <span class="inventory-cost-holding">Holding $1/unit/period</span> · <span class="inventory-cost-backlog">Backlog $25/unit/period</span>.</li>
-  <li><strong>Demand</strong> — Discrete uniform on {1, 2, 3, 4, 5} units in each period.</li>
- </ul>
- <div class="interactive fragment" data-widget="inventory" data-fragment-index="0">
-  <div class="fallback">Order 2 → demand 5 → backlog 3. Order 1 → demand 3 → backlog 5. Purchase cost: $60; backlog cost: $200; total: $260.</div>
+ <div class="inventory-exploration">
+  <div class="inventory-overview fragment fade-out" data-fragment-index="0">
+   <div class="inventory-overview-card">
+    <h3>Inventory level</h3>
+    <svg viewBox="0 0 330 85" role="img" aria-label="Inventory starts at zero. Negative values indicate backlog and positive values indicate stock.">
+     <path d="M18 32H165V49H18L6 40.5Z" fill="#edc19e"/>
+     <path d="M165 32H312L324 40.5L312 49H165Z" fill="#b9d9d0"/>
+     <path d="M165 25V56" stroke="#254b63" stroke-width="2"/>
+     <circle cx="165" cy="40.5" r="6" fill="#245e83" stroke="#fff" stroke-width="2"/>
+     <g text-anchor="middle" font-size="18">
+      <text x="85" y="21" fill="#8c4a30">Backlog</text>
+      <text x="246" y="21" fill="#266459">Stock</text>
+      <text x="165" y="76" fill="#254b63">0</text>
+     </g>
+    </svg>
+    <p>Start with zero units.</p>
+   </div>
+   <div class="inventory-overview-card">
+    <h3>Place an order</h3>
+    <svg viewBox="0 0 330 85" aria-hidden="true">
+     <g stroke="#245e83" stroke-width="2" fill="#e0ecf6">
+      <rect x="24" y="23" width="48" height="33" rx="4"/>
+      <path d="M72 32H87L99 44V56H72Z"/>
+      <circle cx="39" cy="59" r="6" fill="#245e83"/>
+      <circle cx="84" cy="59" r="6" fill="#245e83"/>
+     </g>
+     <path d="M119 45H226M216 37L226 45L216 53" fill="none" stroke="#267f77" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+     <path d="M248 64V29L277 12L306 29V64Z" fill="#d9ede6" stroke="#267f77" stroke-width="2"/>
+     <path d="M266 64V40H288V64" fill="#fff" stroke="#267f77" stroke-width="2"/>
+    </svg>
+    <p>The order arrives before demand.</p>
+   </div>
+   <div class="inventory-overview-card inventory-overview-demand">
+    <div class="inventory-demand-heading"><h3>Daily demand</h3><span>Discrete uniform · 20% each</span></div>
+    <div class="inventory-demand-bars" role="img" aria-label="Daily demand is 1, 2, 3, 4, or 5 units, each with 20 percent probability.">
+     <div aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+    </div>
+   </div>
+  </div>
+  <div class="inventory-assumptions inventory-cost-transition fragment current-visible" data-fragment-index="0">
+   <div class="inventory-assumption-panel">
+    <h3>Cost</h3>
+    <div class="inventory-rate-grid">
+     <div class="inventory-rate inventory-cost-purchase"><span>Purchase</span><div><strong>$20</strong><small>/unit</small></div></div>
+     <div class="inventory-rate inventory-cost-holding"><span>Holding</span><div><strong>$1</strong><small>/unit/day</small></div></div>
+     <div class="inventory-rate inventory-cost-backlog"><span>Backlog</span><div><strong>$25</strong><small>/unit/day</small></div></div>
+    </div>
+   </div>
+   <div class="inventory-overview-card">
+    <h3>Inventory after demand</h3>
+    <div class="inventory-overview-transition" aria-label="Opening inventory plus order minus demand">
+     <span>Opening inventory</span><span aria-hidden="true">+</span><span>Order</span><span aria-hidden="true">−</span><span>Demand</span>
+    </div>
+    <p>Carry the result into the next day.</p>
+   </div>
+  </div>
+  <div class="interactive fragment" data-widget="inventory" data-fragment-index="1">
+   <div class="fallback">Order 2 → demand 5 → backlog 3. Order 1 → demand 3 → backlog 5. Purchase cost: $60; backlog cost: $200; total: $260.</div>
+  </div>
  </div>
 </div>
 ```
@@ -70,7 +122,7 @@ This talk retains the tutorial introduction and focuses on self-guided ALPs for 
 <!-- NOTES: presenter guidance and reading-view explanations. -->
 
 ::: {.notes}
-Source: [Tutorial §4, inventory example](assets/tutorial.pdf). Illustrative two-period path.
+Source: [Tutorial §4, inventory example](assets/tutorial.pdf). Illustrative two-day path. Start with the inventory scale, ordering, and the demand distribution. The first click shows costs and the inventory update. The second starts the two-day simulation. Follow the inventory marker through each event.
 
 Allow about two minutes for audience participation. Ask for a show of hands: order 2, 4, or 6 units?
 Invite one brief explanation, set the chosen quantity, and place the order. Pause at the prediction
@@ -84,71 +136,66 @@ Close by asking what information the next decision needs: the stock or backlog c
 This example introduces sequential decisions and feedback. Adapting a decision to a state is distinct
 from the adaptation of an approximation that the tutorial develops later.
 
-Begin with zero units in stock. Choose each order before revealing its demand. Each period independently draws an integer from 1 through 5, each with probability 1/5. This teaching distribution differs from the truncated-normal distribution used later in the full inventory model. Default orders are 2 and 1. One possible demand path, 5 then 3, gives 3 units of unmet demand and then
+Begin with zero units in stock. Choose each order before revealing its demand. Each day independently draws an integer from 1 through 5, each with probability 1/5. This teaching distribution differs from the truncated-normal distribution used later in the full inventory model. Default orders are 2 and 1. One possible demand path, 5 then 3, gives 3 units of unmet demand and then
 5, as in the static fallback. Ordering 6 units initially instead gives 1 unit left over after demand 5. Other
 runs can have different outcomes. A stockout here means demand that cannot be filled immediately; it waits as
 backlog and is filled by a later order. Show how carried stock or backlog changes the supply available from
-the second order. Purchases cost $20 per unit, holding costs $1 per unit per period, and backlogged demand
+the second order. Purchases cost $20 per unit, holding costs $1 per unit per day, and backlogged demand
 costs
-$25 per unit per period. Displayed costs are realized and undiscounted, not the infinite-horizon objective or expected costs. This introductory model carries all unmet demand forward at the displayed $25/unit/period rate;
+$25 per unit per day. Displayed costs are realized and undiscounted, not the infinite-horizon objective or expected costs. This introductory model carries all unmet demand forward at the displayed $25/unit/day rate;
 it does not apply backlog limits or lost-sales penalties. The later inventory model introduces the
 manuscript's bounds and additional costs. New run clears the old demands; Replay same demands retains the
 completed path so participants can compare different order choices fairly. The latter is a counterfactual
 replay of known outcomes, not a new unpredictable run. Neither order is claimed optimal.
 :::
 
-## The inventory problem as an MDP {#s05 .content-slide .mdp-formulation}
+## The Inventory Problem as an MDP {#s05 .content-slide .mdp-formulation}
 
 <!-- SLIDE CONTENT -->
 
 ::: {.slide-body}
-<p class="mdp-premise">
- <strong>Markov property:</strong> the current state and action determine the next state distribution.
-</p>
 <table class="mdp-table">
  <thead>
   <tr>
    <th scope="col">
    MDP model
    </th>
-   <th scope="col">
+   <th scope="col">Notation</th>
+  <th scope="col">
    Inventory example
    </th>
   </tr>
  </thead>
  <tbody>
-  <tr>
-   <td>
-   <strong>State, action and policy</strong>
-   <div class="mdp-formula">
-   <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_t&#92;in&#92;mathcal{S},&#92;quad a_t=&#92;pi_t(s_t)&#92;in &#92;mathcal{A}(s_t)</mtext><annotation encoding="application/x-tex">s_t&#92;in&#92;mathcal{S},&#92;quad a_t=&#92;pi_t(s_t)&#92;in &#92;mathcal{A}(s_t)</annotation></semantics></math>
-   </div>
-   </td>
-   <td>
-   State <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_t</mtext><annotation encoding="application/x-tex">s_t</annotation></semantics></math>: inventory, including backlog<br>Action <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>a_t</mtext><annotation encoding="application/x-tex">a_t</annotation></semantics></math>: order any quantity from 0 to 6 units<br>Policy <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>&#92;pi_t</mtext><annotation encoding="application/x-tex">&#92;pi_t</annotation></semantics></math>: a rule for choosing the order
-   </td>
-  </tr>
-  <tr class="fragment" data-fragment-index="0">
-   <td>
-   <strong>Transition</strong>
-   <div class="mdp-formula">
+<tr>
+ <td><strong>State</strong></td>
+  <td><div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_t\in\mathcal{S}</mtext><annotation encoding="application/x-tex">s_t\in\mathcal{S}</annotation></semantics></math></div></td>
+ <td>Inventory level, with negative values indicating backlog</td>
+</tr>
+<tr class="fragment" data-fragment-index="0">
+ <td><strong>Action</strong></td>
+  <td><div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>a_t\in\mathcal{A}(s_t)</mtext><annotation encoding="application/x-tex">a_t\in\mathcal{A}(s_t)</annotation></semantics></math></div></td>
+ <td>Order quantity</td>
+</tr>
+<tr class="fragment" data-fragment-index="1">
+ <td><strong>Policy</strong></td>
+  <td><div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>a_t=\pi_t(s_t)</mtext><annotation encoding="application/x-tex">a_t=\pi_t(s_t)</annotation></semantics></math></div></td>
+ <td>Decision rule describing the order quantity given the inventory level</td>
+</tr>
+  <tr class="fragment" data-fragment-index="2">
+   <td><strong>Transition</strong></td>
+  <td><div class="mdp-formula">
    <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_{t+1}&#92;sim P_t(&#92;cdot&#92;mid s_t,a_t)</mtext><annotation encoding="application/x-tex">s_{t+1}&#92;sim P_t(&#92;cdot&#92;mid s_t,a_t)</annotation></semantics></math>
-   </div>
-   </td>
+   </div></td>
    <td>
-   <div class="mdp-formula">
-   <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_{t+1}=s_t+a_t-G_t</mtext><annotation encoding="application/x-tex">s_{t+1}=s_t+a_t-G_t</annotation></semantics></math>
-   </div>
-   <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>G_t</mtext><annotation encoding="application/x-tex">G_t</annotation></semantics></math>: random demand
+   Next state: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>s_{t+1}=s_t+a_t-G_t</mtext><annotation encoding="application/x-tex">s_{t+1}=s_t+a_t-G_t</annotation></semantics></math>; <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>G_t</mtext><annotation encoding="application/x-tex">G_t</annotation></semantics></math> is random demand.
    </td>
   </tr>
-  <tr class="fragment" data-fragment-index="1">
-   <td>
-   <strong>Expected period cost</strong>
-   <div class="mdp-formula">
-   <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>c_t(s,a)</mtext><annotation encoding="application/x-tex">c_t(s,a)</annotation></semantics></math>
-   </div>
-   </td>
+  <tr class="fragment" data-fragment-index="3">
+   <td><strong>Cost function</strong></td>
+  <td><div class="mdp-formula">
+   <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>c(s,a)</mtext><annotation encoding="application/x-tex">c(s,a)</annotation></semantics></math>
+   </div></td>
    <td>
    <div class="mdp-formula mdp-cost-formula">
    <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>20a+&#92;mathbb{E}[&#92;max&#92;{s′,0&#92;}+25&#92;max&#92;{-s′,0&#92;}]</mtext><annotation encoding="application/x-tex">20a+&#92;mathbb{E}[&#92;max&#92;{s′,0&#92;}+25&#92;max&#92;{-s′,0&#92;}]</annotation></semantics></math>
@@ -158,10 +205,10 @@ replay of known outcomes, not a new unpredictable run. Neither order is claimed 
   </tr>
  </tbody>
 </table>
-<div class="mdp-objective fragment" data-fragment-index="2">
+<div class="mdp-objective fragment" data-fragment-index="4">
  <div>
   <strong>Policy optimization</strong>
-  <div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c_t(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</mtext><annotation encoding="application/x-tex">\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c_t(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</annotation></semantics></math></div>
+  <div class="mdp-formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</mtext><annotation encoding="application/x-tex">\min_{\pi}\;\mathbb E^\pi\!\left[\sum_{t=0}^{\infty}\gamma^t c(s_t,\pi_t(s_t))\,\middle|\,s_0\right]</annotation></semantics></math></div>
  </div>
 </div>
 :::
@@ -172,43 +219,54 @@ replay of known outcomes, not a new unpredictable run. Neither order is claimed 
 <!-- NOTES: presenter guidance and reading-view explanations. -->
 
 ::: {.notes}
-The current state and action determine the next-state distribution. An action is one order, and a policy specifies the order to place at each observed state. Reveal the transition, the expected period cost, and then the policy optimization problem. The opening simulation illustrates two decisions. For this objective, continue the inventory system over an infinite horizon and discount period t by gamma to the power t, with 0 < gamma < 1. The cost c_t averages the period expense over demand conditional on the state and action. The outer expectation averages the trajectory induced by the policy, given the initial inventory. The state includes backlog, and all unmet demand carries forward in this introductory model. The table permits time-dependent policies, costs, and transitions. The later discounted-MDP formulation specializes to stationary dynamics and costs.
+The current state and action determine the next-state distribution. An action is one order, and a policy specifies the order to place at each observed state. Reveal the transition, the expected period cost, and then the policy optimization problem. The opening simulation illustrates two decisions. For this objective, continue the inventory system over an infinite horizon and discount period t by gamma to the power t, with 0 < gamma < 1. The cost c averages the period expense over demand conditional on the state and action. The outer expectation averages the trajectory induced by the policy, given the initial inventory. The state includes backlog, and all unmet demand carries forward in this introductory model. The cost function is stationary. The table permits time-dependent policies and transitions; the later discounted-MDP formulation also uses stationary dynamics.
 :::
 
-## Why solving the MDP becomes difficult {#s07 .content-slide .bellman-growth}
+## Why Solving the MDP Becomes Difficult {#s07 .content-slide .bellman-growth}
 
 <!-- SLIDE CONTENT -->
 
 ::: {.slide-body}
-The value $V_t^*(s)$ is the minimum expected remaining cost from state $s$ at period $t$.
-
 ::: {.growth-bellman-equation}
+<h3>Bellman optimality equation</h3>
+
 $$
-V_t^*(s)=\min_{a\in \mathcal{A}(s)}\bigl\{\underbrace{c_t(s,a)}_{\text{cost now}}+\underbrace{\mathbb E[V_{t+1}^*(s')\mid s,a]}_{\text{future cost}}\bigr\}
+\underbrace{V^*(s)}_{\text{optimal value function}}=\min_{a\in\mathcal A(s)}\left\{\underbrace{c(s,a)}_{\text{immediate cost}}+\underbrace{\gamma\int_{\mathcal S}V^*(s')\,P(ds'\mid s,a)}_{\text{discounted expected future cost}}\right\},\qquad s\in\mathcal S.
 $$
 :::
 
-::: {.growth-experiment .fragment data-fragment-index="0"}
-<p class="scale-prompt">
- If we add one more product, how do the numbers of states and candidate actions change?
-</p>
-<div class="interactive" data-widget="scale" >
- <div class="fallback">
-  One product with 15 inventory levels has 15 states. Four order choices give 4 candidate actions.
+```{=html}
+<div class="complexity-grid">
+ <div class="complexity-card growth-experiment fragment" data-fragment-index="0">
+  <h3>More products</h3>
+  <p>Each product multiplies the joint counts.</p>
+  <div class="interactive" data-widget="scale">
+   <div class="fallback">With 15 inventory levels and 4 order choices per product, the joint counts are 15<sup>n</sup> and 4<sup>n</sup> for <i>n</i> products.</div>
+  </div>
+ </div>
+ <div class="complexity-card fragment" data-fragment-index="7">
+  <h3>Continuous states or actions</h3>
+  <div class="complexity-infinity" aria-hidden="true">∞</div>
+  <p>Even one continuous variable can give infinitely many states or actions.</p>
+ </div>
+ <div class="complexity-card fragment" data-fragment-index="8">
+  <h3>Lead times</h3>
+  <p>Track on-hand inventory and orders in transit by time to arrival.</p>
+  <div class="complexity-vector" aria-label="State vector components"><span>On hand</span><span>Due next period</span><span>Due in 2 periods</span><span>…</span></div>
+ </div>
+ <div class="complexity-card fragment" data-fragment-index="9">
+  <h3>Perishability</h3>
+  <p>Split on-hand inventory into buckets by remaining lifetime.</p>
+  <div class="complexity-vector" aria-label="On-hand inventory buckets"><span>1 period left</span><span>2 periods left</span><span>3 periods left</span><span>…</span></div>
  </div>
 </div>
-:::
 <span class="fragment product-count-step" data-fragment-index="1" data-product-count="6" aria-hidden="true"></span>
 <span class="fragment product-count-step" data-fragment-index="2" data-product-count="11" aria-hidden="true"></span>
 <span class="fragment product-count-step" data-fragment-index="3" data-product-count="16" aria-hidden="true"></span>
 <span class="fragment product-count-step" data-fragment-index="4" data-product-count="21" aria-hidden="true"></span>
 <span class="fragment product-count-step" data-fragment-index="5" data-product-count="26" aria-hidden="true"></span>
 <span class="fragment product-count-step" data-fragment-index="6" data-product-count="30" aria-hidden="true"></span>
-<ul class="inventory-complexity-bullets">
- <li class="fragment" data-fragment-index="7"><strong>Continuous states or actions</strong> can make these sets infinite.</li>
- <li class="fragment" data-fragment-index="8"><strong>Lead times:</strong> the state vector includes on-hand inventory and pipeline inventory by time to arrival.</li>
- <li class="fragment" data-fragment-index="9"><strong>Perishable products:</strong> also track inventory by remaining lifetime.</li>
-</ul>
+```
 :::
 
 <!-- FOOTER: shared author names and university logos. -->
@@ -219,24 +277,19 @@ $$
 ::: {.notes}
 Source: [Tutorial introduction and §2.1](assets/tutorial.pdf) · Bellman equation in costs; illustrative counts
 
-Allow about one minute. Define V_t^*(s) as the minimum expected cost from period t onward. The equation is
-visible on arrival: compare feasible actions using cost now and expected future cost. Explain verbally that
-the optimal objective on the preceding slide is V_0^*(s_0), so the equation computes the same objective.
-The horizon is finite and undiscounted, with V_T^*(s) = 0. The terminal period has no additional cost;
-holding and backlog costs in the final decision period are still included. The expectation uses P_t and
-c_t already averages immediate costs. The fuller derivation remains in technical backup.
+The equation is stationary and discounted. At a fixed state, compare feasible actions using cost now plus discounted expected future cost. The optimal value function is V*, with no time index.
 
-First advance reveals the scaling illustration and audience question. Say that a tabular calculation must
+First advance reveals the product-count card. Say that a tabular calculation must
 represent values for states and compare feasible actions. The number of candidate joint actions shown is
 before shared constraints are applied. The counter is a separate scaling illustration with 15 inventory
 levels and four order choices per product; it does not enumerate reachable states in the two period demo,
 whose order choices were 0 to 6.
 
-Start with one product and ask the displayed question. Pause for answers before moving the slider to two
+Start with one product and ask how adding a second product changes the two counts. Pause for answers before moving the slider to two
 products. States increase from 15 to 225, while candidate actions increase from 4 to 16. Each additional
 product multiplies the counts by 15 and 4, respectively. Then move the slider further to show how quickly
-this growth compounds. Reset returns the counter to one product. Second advance introduces the continuous
-case. This motivates approximations that exploit structure; it does not claim that all exact methods
+this growth compounds. Reset returns the counter to one product. After reaching 30 products, the next three clicks reveal continuity, lead times, and perishability. The continuous
+case motivates approximations that exploit structure, and it does not claim that all exact methods
 enumerate every state and action.
 
 These are Cartesian-product counts, not counts of all reachable states in the manuscript instance. The slider
@@ -247,7 +300,7 @@ toy counter never enumerates the state space. The continuous case refers to stat
 nontrivial intervals.
 :::
 
-## Adapt and self-adaptive {#adaptation-definitions .dictionary}
+## Adapt and Self-Adaptive {#adaptation-definitions .dictionary}
 
 <!-- SLIDE CONTENT -->
 
@@ -292,105 +345,7 @@ after the inventory example and COR introduction.
 :::
 
 
-## Motivation {#s09 .content-slide .motivation-slide}
-
-<!-- SLIDE CONTENT -->
-
-::: {.slide-body}
-<p class="motivation-question">
- How can we better formulate and represent sequential decision problems?
-</p>
-<p class="motivation-context fragment" data-fragment-index="0">
- Turning an MDP model into a useful policy requires choices about representation and solution methods.
-</p>
-<h3 class="motivation-inspiration fragment" data-fragment-index="1">
- Our inspiration: mathematical optimization
-</h3>
-<div class="diagram-row motivation-workflow">
- <div class="fragment" data-fragment-index="2">
-  <strong>Model</strong>
-  <img
-   class="optimization-model"
-   src="assets/figures/optimization-model.svg"
-   alt="Example linear program: minimize 3x₁ + 2x₂, subject to x₁ + x₂ ≥ 5, 2x₁ + x₂ ≤ 8, and x₁, x₂ ≥ 0. Objective and constraints are labeled."
-  >
- </div>
- <span class="arrow fragment" data-fragment-index="3" aria-hidden="true">→</span>
- <div class="fragment" data-fragment-index="3">
-  <strong>Solve</strong>
-  <div class="solver-brands" aria-label="Examples of optimization solvers">
-   <img class="solver-gurobi" src="assets/logos/gurobi.svg" alt="Gurobi">
-   <img class="solver-hexaly" src="assets/logos/hexaly.svg" alt="Hexaly">
-   <div class="solver-scip">
-   <img src="assets/logos/scip.png" alt="SCIP Optimization Suite mascot">
-   </div>
-   <img class="solver-excel" src="assets/logos/excel.svg" alt="Microsoft Excel">
-  </div>
- </div>
- <span class="arrow fragment" data-fragment-index="4" aria-hidden="true">→</span>
- <div class="fragment" data-fragment-index="4">
-  <strong>Refine</strong>
-  <img
-   class="optimization-solution"
-   src="assets/figures/optimization-solution.svg"
-   alt="Optimal solution of the displayed program: x₁ = 0, x₂ = 5, objective value 10. Feasible, with zero optimality gap."
-  >
-  
- </div>
-</div>
-<div class="motivation-connection fragment" data-fragment-index="5">
- <h3>
-  Bringing this workflow to MDPs
- </h3>
- <p>
-  Aim: make it easier to <b>model</b> sequential problems and leverage <b>optimization tools</b> to obtain
-  better policies.
- </p>
-</div>
-:::
-
-<!-- FOOTER: shared author names and university logos. -->
-{{< include /components/logos.qmd >}}
-
-<!-- NOTES: presenter guidance and reading-view explanations. -->
-
-::: {.notes}
-Source: [Tutorial introduction, modeling-to-solution gap and mathematical-programming analogy](assets/tutorial.pdf).
-
-Solver logo sources:
-[Gurobi logo on the official SCIP site](https://scipopt.org/images/GurobiLogo_Black-1-1-1.svg),
-[Hexaly](https://www.hexaly.com/wp-content/themes/hexaly/assets/images/hexaly-logo-orange.svg), and
-[SCIP](https://scipopt.org/images/newscippy.png). These are examples of solvers, not a claim about identical
-capabilities. The result illustration corresponds to the displayed mathematical program: x₁ = 0, x₂ = 5 gives
-objective 10. Since 3x₁ + 2x₂ = 2(x₁ + x₂) + x₁ ≥ 10 for every feasible solution, it is optimal with zero gap.
-This is an illustrative result, not a live solver run.
-
-Transition from the opening motivation: we want to reduce the work of choosing an approximation and configuring
-its solution method, while retaining the model features that matter for decisions. This tutorial focuses on
-approximations built with mathematical optimization. Start with the question at the top, then explain why
-mathematical optimization is our inspiration. The broader method survey is available in technical backup.
-
-The workflow is to model a problem, solve it, and use the solution to refine the formulation. Evaluate the
-solution and its quality, then add cuts or revise the model when useful. In mixed-integer programming, the
-user specifies variables, an objective, and constraints; the solver manages much of the search and reports
-feasible solutions and bounds when available. The small program illustrates the output available for
-evaluation; its exact optimum does not itself require further refinement. This does not imply that all
-formulations are easy or that all runs find an optimum. This introductory analogy groups formulation
-improvements broadly; the next slide distinguishes refinement across solves from solver operations such as cut
-generation within a solve.
-
-Return to the lower question: how can we offer a comparable modeling and solution workflow for MDPs, where the
-output is a policy? We need representations and approximation methods that do more of the work currently left
-to the user. This motivates the next slide's construct–optimize–refine framework. The analogy is an aspiration
-for accessibility and useful performance, not a promise that arbitrary MDPs become easy to solve. The opening
-question is visible on arrival. Advance to reveal the context, inspiration, Model, Solve, Refine, and closing
-question in that order. Each arrow appears with its destination. The model illustration is an illustrative
-two-variable linear program; “s.t.” means “subject to.” There are no numerical controls or automatic animations.
-:::
-
-
-
-## An optimization workflow for MDPs {#s10 .content-slide .workflow-cycle-slide data-background-color="#30353b"}
+## An Optimization Workflow for MDPs {#s10 .content-slide .workflow-cycle-slide data-background-color="#30353b"}
 
 ```{=html}
 <div class="slide-body workflow-redesign"><div class="workflow-cycles">
@@ -406,7 +361,7 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
   <div class="cycle-node cycle-node-0"><span class="cycle-number-label">01</span><h4>Construct</h4><p>Variables, objective,<br>constraints</p></div>
 <div class="cycle-node cycle-node-1 fragment" data-fragment-index="0"><span class="cycle-number-label">02</span><h4>Optimize</h4><p>Solve the<br>current model</p></div>
 <div class="cycle-node cycle-node-2 fragment" data-fragment-index="1"><span class="cycle-number-label">03</span><h4>Refine</h4><p>Assess the solution;<br>revise the model</p></div>
-  <div class="cycle-center cycle-solver fragment" data-fragment-index="0"><img class="cycle-gurobi" src="assets/logos/gurobi-dark.svg" alt="Gurobi optimization solver"></div>
+  <div class="cycle-center cycle-solver fragment" data-fragment-index="0"><img class="cycle-excel" src="assets/logos/excel.svg" alt="Microsoft Excel"><img class="cycle-gurobi" src="assets/logos/gurobi-dark.svg" alt="Gurobi optimization solver"></div>
  </div>
 </div>
 <div class="workflow-cycle fragment" data-fragment-index="3">
@@ -421,14 +376,14 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
   <div class="cycle-node cycle-node-0"><span class="cycle-number-label">01</span><h4>Construct</h4><p>Representation,<br>features, constraints</p></div>
 <div class="cycle-node cycle-node-1 fragment" data-fragment-index="4"><span class="cycle-number-label">02</span><h4>Optimize</h4><p>Fit a value function;<br>derive a policy</p></div>
 <div class="cycle-node cycle-node-2 fragment" data-fragment-index="5"><span class="cycle-number-label">03</span><h4>Refine</h4><p>Evaluate performance;<br>update the approximation</p></div>
-  <div class="cycle-center fragment" data-fragment-index="6">Update the<br>approximation</div>
+  <div class="cycle-center cycle-research fragment" data-fragment-index="6">This Research</div>
  </div>
 </div>
 </div></div>
-<aside class="notes"><p>Source: tutorial introduction and §2.3. Construct is visible on the left initially. Clicks 1–3 reveal Optimize with Gurobi at the center, Refine, and the return arrow to Construct. The central solver adapts its search through techniques such as cuts and heuristics. Click 4 reveals the MDP approach; clicks 5–7 repeat Optimize, Refine, and the return to Construct. Gurobi is an illustrative solver, not a claim that it automatically changes the formulation. Refine updates across solves; within-solve adaptation belongs to Optimize.</p></aside>
+<aside class="notes"><p>Source: tutorial introduction and §2.3. Construct is visible on the left initially. Clicks 1–3 reveal Optimize with Excel and Gurobi together at the center, Refine, and the return arrow to Construct. The central solver adapts its search through techniques such as cuts and heuristics. Click 4 reveals the MDP approach; clicks 5–7 repeat Optimize, Refine, and the return to Construct. Gurobi is an illustrative solver, not a claim that it automatically changes the formulation. Refine updates across solves; within-solve adaptation belongs to Optimize.</p></aside>
 ```
 
-## Scope of this talk {#discrete-handoff .content-slide .scope-slide data-background-color="#30353b"}
+## Scope of This Talk {#discrete-handoff .content-slide .scope-slide data-background-color="#30353b"}
 
 ```{=html}
 <div class="slide-body scope-papers">
@@ -460,7 +415,7 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
 <aside class="notes"><p>Four focal papers in the supplied tutorial: §3, network relaxations and delayed allocation; §4.2, constraint-violation learning; §4.3, self-guided ALPs. References [14], [17], [18], [22] in assets/tutorial.pdf. Only the self-guided ALP paper is developed in this talk. Back to the Future: rejected by Operations Research; authors are working on a revision. The audience-facing slide labels it as a working paper, revision in progress.</p></aside>
 ```
 
-## Infinite-horizon discounted-cost MDP {#discounted-mdp .content-slide .discounted-mdp-slide}
+## Infinite-Horizon Discounted-Cost MDP {#discounted-mdp .content-slide .discounted-mdp-slide}
 
 ```{=html}
 <div class="slide-body discounted-mdp-bridge">
@@ -487,6 +442,7 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
     <svg class="bridge-constraint-arrow" aria-label="Replace equals with less than or equal to" role="img">
      <defs><marker id="elp-constraint-arrowhead" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#b83232"/></marker></defs>
      <path class="bridge-constraint-path" fill="none" stroke="#b83232" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#elp-constraint-arrowhead)"/>
+     <path class="bridge-variable-underline" fill="none" stroke="#b83232" stroke-width="2" stroke-linecap="round"/>
      <path class="bridge-universal-underline" fill="none" stroke="#b83232" stroke-width="2" stroke-linecap="round"/>
       <text class="bridge-constraint-label" fill="#b83232">Drop <tspan font-family="STIX Two Text, Cambria Math, serif">min</tspan> and replace = with ≤</text>
     </svg>
@@ -507,7 +463,7 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
 <aside class="notes"><p>Source: tutorial §4.1 and self-guided ALP paper §2. Recall the infinite-horizon discounted policy objective on page 4. Time-homogeneous costs and transitions, 0 &lt; gamma &lt; 1, and standard discounted-MDP boundedness/integrability and regularity assumptions are understood. An optimal stationary policy exists under the assumptions used here. Initially show only policy optimization. First click reveals the stochastic dynamic program. Second click reveals the variable domain and Bellman inequalities, with a red arrow replacing equality by less than or equal to. The third click reveals the state-relevance-weighted objective. The hidden objective keeps its space, preserving the alignment of V across the two LP rows. At V star the Bellman minimum implies an inequality for every feasible action. For a candidate V impose all such inequalities simultaneously: V ≤ TV. Monotonicity and discounted contraction imply that a feasible V lies below V star; V star is feasible and pointwise maximal. Maximizing the state-relevance-weighted integral recovers the largest feasible lower bound. Replacing the Bellman equation by inequalities alone is not sufficient; maximization is essential. Nu is a state relevance distribution, not necessarily the initial state distribution. Pointwise recovery from this particular weighted objective needs appropriate support and regularity. The following slide illustrates the maximization with a schematic feasible family, not a numerical solver.</p></aside>
 ```
 
-## Why maximize the value function? {#s25 .content-slide .continuous-import-slide .exact-lp-slide}
+## Why Maximize the Value Function? {#s25 .content-slide .continuous-import-slide .exact-lp-slide}
 
 ```{=html}
 <div class="slide-body">
@@ -551,7 +507,7 @@ two-variable linear program; “s.t.” means “subject to.” There are no num
 <aside class="notes"><p>The curves are schematic. The target is piecewise linear, with a steeper shortage side and kinks at two inventory levels. They are not outputs from the numerical inventory model. The displayed family consists of constant downward shifts V_delta = V star minus delta, with delta at least zero. In a discounted cost MDP, the Bellman operator obeys T(V star minus delta) = V star minus gamma delta. Thus every such shift satisfies the Bellman inequalities. Maximization raises the moving feasible function and its state-relevance-weighted objective toward V star. The shaded gap shrinks as it rises. Faint curves remain as reference feasible functions. After the animation finishes, the next click rewrites the objective as an expectation under nu, the state relevance distribution. The marked states then receive illustrative masses 10%, 15%, 40%, 25%, and 10%. These normalized discrete weights illustrate nu, and do not alter the simulated family of value functions. Early Next clicks are ignored until animation completion. Use Replay animation to repeat.</p></aside>
 ```
 
-## Approximate linear program {#s27 .content-slide .continuous-import-slide}
+## Approximate Linear Program {#s27 .content-slide .continuous-import-slide}
 
 ::: {.slide-body}
 
@@ -609,7 +565,7 @@ $$
 Introduce the two top boxes: fixed features or basis functions on the left and optimized weights on the right. Advance to combine them into the finite-dimensional VFA, then advance to the semi-infinite ALP below it. The coefficient vector is finite, but feasibility must hold for every continuous state and every feasible action in the set A. That is the tension driving Section 4: the representation is compact, while finding the important constraints remains difficult.
 :::
 
-## ML versus ALP {#regression-and-alp .content-slide .cmp-slide}
+## ML Versus ALP {#regression-and-alp .content-slide .cmp-slide}
 
 ```{=html}
 <div class="slide-body cmp-slide-body" data-step="0"><div class="cmp-main-content fragment fade-out" data-fragment-index="3">
@@ -644,11 +600,11 @@ Introduce the two top boxes: fixed features or basis functions on the left and o
   <div class="cmp-column cmp-alp">
    <h3>ALP</h3>
    
-   <svg class="cmp-chart cmp-alp-plot" viewBox="0 0 500 225" role="img" aria-label="A line and then a quadratic are fitted beneath a fixed Bellman feasibility boundary. The initial state relevance measure is uniform on zero to one. The updated measure assigns 25, 5 and 70 percent to states zero, 0.3 and 0.9; the quadratic tightens near the higher state.">
+   <svg class="cmp-chart cmp-alp-plot" viewBox="0 0 500 225" role="img" aria-label="The shaded region below the boundary shows value functions V feasible to ALP. The initial state relevance measure is uniform on zero to one. The updated measure assigns 25, 5 and 70 percent to states zero, 0.3 and 0.9; the quadratic tightens near the higher state.">
  <path class="cmp-axes" d="M 42 8.0 V 171.5 H 466"></path>
- <path class="cmp-infeasible" d="M 44.0 88.4 L 49.15 88.4 L 54.3 88.4 L 59.45 88.4 L 64.6 88.385 L 69.75 88.385 L 74.9 88.37 L 80.05 88.355 L 85.2 88.34 L 90.35 88.31 L 95.5 88.265 L 100.65 88.235 L 105.8 88.175 L 110.95 88.115 L 116.1 88.04 L 121.25 87.965 L 126.4 87.875 L 131.55 87.77 L 136.7 87.65 L 141.85 87.515 L 147.0 87.365 L 152.15 87.2 L 157.3 87.02 L 162.45 86.825 L 167.6 86.615 L 172.75 86.375 L 177.9 86.135 L 183.05 85.85 L 188.2 85.565 L 193.35 85.25 L 198.5 84.905 L 203.65 84.545 L 208.8 84.17 L 213.95 83.75 L 219.1 83.315 L 224.25 82.865 L 229.4 82.37 L 234.55 81.86 L 239.7 81.305 L 244.85 80.735 L 250.0 80.135 L 255.15 79.49 L 260.3 78.83 L 265.45 78.125 L 270.6 77.39 L 275.75 76.625 L 280.9 75.83 L 286.05 74.99 L 291.2 74.105 L 296.35 73.205 L 301.5 72.245 L 306.65 71.255 L 311.8 70.235 L 316.95 69.17 L 322.1 68.06 L 327.25 66.905 L 332.4 65.705 L 337.55 64.475 L 342.7 63.185 L 347.85 61.865 L 353.0 60.5 L 358.15 59.075 L 363.3 57.605 L 368.45 56.09 L 373.6 54.53 L 378.75 52.925 L 383.9 51.26 L 389.05 49.535 L 394.2 47.78 L 399.35 45.95 L 404.5 44.09 L 409.65 42.155 L 414.8 40.175 L 419.95 38.135 L 425.1 36.05 L 430.25 33.89 L 435.4 31.685 L 440.55 29.42 L 445.7 27.095 L 450.85 24.695 L 456.0 22.25 L 456 9.5 H 44 Z"></path>
+ <path class="cmp-feasible" d="M 44.0 88.4 L 49.15 88.4 L 54.3 88.4 L 59.45 88.4 L 64.6 88.385 L 69.75 88.385 L 74.9 88.37 L 80.05 88.355 L 85.2 88.34 L 90.35 88.31 L 95.5 88.265 L 100.65 88.235 L 105.8 88.175 L 110.95 88.115 L 116.1 88.04 L 121.25 87.965 L 126.4 87.875 L 131.55 87.77 L 136.7 87.65 L 141.85 87.515 L 147.0 87.365 L 152.15 87.2 L 157.3 87.02 L 162.45 86.825 L 167.6 86.615 L 172.75 86.375 L 177.9 86.135 L 183.05 85.85 L 188.2 85.565 L 193.35 85.25 L 198.5 84.905 L 203.65 84.545 L 208.8 84.17 L 213.95 83.75 L 219.1 83.315 L 224.25 82.865 L 229.4 82.37 L 234.55 81.86 L 239.7 81.305 L 244.85 80.735 L 250.0 80.135 L 255.15 79.49 L 260.3 78.83 L 265.45 78.125 L 270.6 77.39 L 275.75 76.625 L 280.9 75.83 L 286.05 74.99 L 291.2 74.105 L 296.35 73.205 L 301.5 72.245 L 306.65 71.255 L 311.8 70.235 L 316.95 69.17 L 322.1 68.06 L 327.25 66.905 L 332.4 65.705 L 337.55 64.475 L 342.7 63.185 L 347.85 61.865 L 353.0 60.5 L 358.15 59.075 L 363.3 57.605 L 368.45 56.09 L 373.6 54.53 L 378.75 52.925 L 383.9 51.26 L 389.05 49.535 L 394.2 47.78 L 399.35 45.95 L 404.5 44.09 L 409.65 42.155 L 414.8 40.175 L 419.95 38.135 L 425.1 36.05 L 430.25 33.89 L 435.4 31.685 L 440.55 29.42 L 445.7 27.095 L 450.85 24.695 L 456.0 22.25 L 456 171.5 H 44 Z"></path>
  <path class="cmp-threshold" d="M 44.0 88.4 L 49.15 88.4 L 54.3 88.4 L 59.45 88.4 L 64.6 88.385 L 69.75 88.385 L 74.9 88.37 L 80.05 88.355 L 85.2 88.34 L 90.35 88.31 L 95.5 88.265 L 100.65 88.235 L 105.8 88.175 L 110.95 88.115 L 116.1 88.04 L 121.25 87.965 L 126.4 87.875 L 131.55 87.77 L 136.7 87.65 L 141.85 87.515 L 147.0 87.365 L 152.15 87.2 L 157.3 87.02 L 162.45 86.825 L 167.6 86.615 L 172.75 86.375 L 177.9 86.135 L 183.05 85.85 L 188.2 85.565 L 193.35 85.25 L 198.5 84.905 L 203.65 84.545 L 208.8 84.17 L 213.95 83.75 L 219.1 83.315 L 224.25 82.865 L 229.4 82.37 L 234.55 81.86 L 239.7 81.305 L 244.85 80.735 L 250.0 80.135 L 255.15 79.49 L 260.3 78.83 L 265.45 78.125 L 270.6 77.39 L 275.75 76.625 L 280.9 75.83 L 286.05 74.99 L 291.2 74.105 L 296.35 73.205 L 301.5 72.245 L 306.65 71.255 L 311.8 70.235 L 316.95 69.17 L 322.1 68.06 L 327.25 66.905 L 332.4 65.705 L 337.55 64.475 L 342.7 63.185 L 347.85 61.865 L 353.0 60.5 L 358.15 59.075 L 363.3 57.605 L 368.45 56.09 L 373.6 54.53 L 378.75 52.925 L 383.9 51.26 L 389.05 49.535 L 394.2 47.78 L 399.35 45.95 L 404.5 44.09 L 409.65 42.155 L 414.8 40.175 L 419.95 38.135 L 425.1 36.05 L 430.25 33.89 L 435.4 31.685 L 440.55 29.42 L 445.7 27.095 L 450.85 24.695 L 456.0 22.25"></path>
- <text class="cmp-limit-label" x="53" y="35.0">Bellman feasibility boundary</text>
+ <text class="cmp-limit-label" x="53" y="126"><tspan class="cmp-value-symbol">V</tspan><tspan> feasible to ALP</tspan></text>
  <path class="cmp-fit cmp-affine" pathLength="1" d="M 44.0 104.945 L 49.15 104.315 L 54.3 103.7 L 59.45 103.07 L 64.6 102.455 L 69.75 101.84 L 74.9 101.21 L 80.05 100.595 L 85.2 99.98 L 90.35 99.35 L 95.5 98.735 L 100.65 98.12 L 105.8 97.49 L 110.95 96.875 L 116.1 96.26 L 121.25 95.63 L 126.4 95.015 L 131.55 94.4 L 136.7 93.77 L 141.85 93.155 L 147.0 92.54 L 152.15 91.91 L 157.3 91.295 L 162.45 90.68 L 167.6 90.05 L 172.75 89.435 L 177.9 88.82 L 183.05 88.19 L 188.2 87.575 L 193.35 86.96 L 198.5 86.33 L 203.65 85.715 L 208.8 85.1 L 213.95 84.47 L 219.1 83.855 L 224.25 83.225 L 229.4 82.61 L 234.55 81.995 L 239.7 81.365 L 244.85 80.75 L 250.0 80.135 L 255.15 79.505 L 260.3 78.89 L 265.45 78.275 L 270.6 77.645 L 275.75 77.03 L 280.9 76.415 L 286.05 75.785 L 291.2 75.17 L 296.35 74.555 L 301.5 73.925 L 306.65 73.31 L 311.8 72.695 L 316.95 72.065 L 322.1 71.45 L 327.25 70.835 L 332.4 70.205 L 337.55 69.59 L 342.7 68.975 L 347.85 68.345 L 353.0 67.73 L 358.15 67.115 L 363.3 66.485 L 368.45 65.87 L 373.6 65.255 L 378.75 64.625 L 383.9 64.01 L 389.05 63.38 L 394.2 62.765 L 399.35 62.15 L 404.5 61.52 L 409.65 60.905 L 414.8 60.29 L 419.95 59.66 L 425.1 59.045 L 430.25 58.43 L 435.4 57.8 L 440.55 57.185 L 445.7 56.57 L 450.85 55.94 L 456.0 55.325"></path>
 <path class="cmp-fit cmp-quadratic" pathLength="1" d="M 44.0 88.4 L 49.15 88.76 L 54.3 89.075 L 59.45 89.375 L 64.6 89.645 L 69.75 89.9 L 74.9 90.11 L 80.05 90.29 L 85.2 90.455 L 90.35 90.59 L 95.5 90.695 L 100.65 90.77 L 105.8 90.83 L 110.95 90.845 L 116.1 90.845 L 121.25 90.815 L 126.4 90.755 L 131.55 90.665 L 136.7 90.545 L 141.85 90.41 L 147.0 90.245 L 152.15 90.035 L 157.3 89.81 L 162.45 89.555 L 167.6 89.285 L 172.75 88.97 L 177.9 88.64 L 183.05 88.28 L 188.2 87.89 L 193.35 87.47 L 198.5 87.02 L 203.65 86.555 L 208.8 86.045 L 213.95 85.52 L 219.1 84.965 L 224.25 84.38 L 229.4 83.765 L 234.55 83.135 L 239.7 82.46 L 244.85 81.77 L 250.0 81.05 L 255.15 80.3 L 260.3 79.52 L 265.45 78.725 L 270.6 77.885 L 275.75 77.03 L 280.9 76.145 L 286.05 75.23 L 291.2 74.285 L 296.35 73.325 L 301.5 72.32 L 306.65 71.3 L 311.8 70.25 L 316.95 69.17 L 322.1 68.06 L 327.25 66.92 L 332.4 65.765 L 337.55 64.565 L 342.7 63.35 L 347.85 62.105 L 353.0 60.845 L 358.15 59.54 L 363.3 58.205 L 368.45 56.855 L 373.6 55.475 L 378.75 54.065 L 383.9 52.625 L 389.05 51.155 L 394.2 49.67 L 399.35 48.14 L 404.5 46.595 L 409.65 45.02 L 414.8 43.415 L 419.95 41.78 L 425.1 40.13 L 430.25 38.45 L 435.4 36.725 L 440.55 34.985 L 445.7 33.215 L 450.85 31.43 L 456.0 29.6"></path>
 <path class="cmp-fit cmp-shifted" pathLength="1" d="M 44.0 88.4 L 49.15 89.03 L 54.3 89.63 L 59.45 90.185 L 64.6 90.71 L 69.75 91.19 L 74.9 91.64 L 80.05 92.045 L 85.2 92.42 L 90.35 92.765 L 95.5 93.065 L 100.65 93.32 L 105.8 93.545 L 110.95 93.74 L 116.1 93.905 L 121.25 94.01 L 126.4 94.1 L 131.55 94.145 L 136.7 94.145 L 141.85 94.115 L 147.0 94.055 L 152.15 93.95 L 157.3 93.815 L 162.45 93.635 L 167.6 93.425 L 172.75 93.185 L 177.9 92.9 L 183.05 92.57 L 188.2 92.21 L 193.35 91.82 L 198.5 91.385 L 203.65 90.92 L 208.8 90.41 L 213.95 89.87 L 219.1 89.3 L 224.25 88.685 L 229.4 88.025 L 234.55 87.35 L 239.7 86.615 L 244.85 85.865 L 250.0 85.055 L 255.15 84.23 L 260.3 83.36 L 265.45 82.445 L 270.6 81.5 L 275.75 80.525 L 280.9 79.505 L 286.05 78.455 L 291.2 77.36 L 296.35 76.235 L 301.5 75.065 L 306.65 73.865 L 311.8 72.635 L 316.95 71.36 L 322.1 70.04 L 327.25 68.69 L 332.4 67.31 L 337.55 65.9 L 342.7 64.43 L 347.85 62.945 L 353.0 61.415 L 358.15 59.84 L 363.3 58.235 L 368.45 56.6 L 373.6 54.92 L 378.75 53.21 L 383.9 51.455 L 389.05 49.67 L 394.2 47.855 L 399.35 45.995 L 404.5 44.09 L 409.65 42.155 L 414.8 40.19 L 419.95 38.18 L 425.1 36.14 L 430.25 34.055 L 435.4 31.94 L 440.55 29.795 L 445.7 27.605 L 450.85 25.37 L 456.0 23.105"></path>
@@ -665,20 +621,14 @@ Introduce the two top boxes: fixed features or basis functions on the left and o
   </div>
  </div>
 <table class="cmp-comparison-table fragment" data-cmp-step="1" data-fragment-index="0" aria-label="ML and ALP comparison">
- <colgroup><col class="cmp-row-label"><col><col></colgroup>
+ <colgroup><col class="cmp-row-label"><col><col class="cmp-alp-col"></colgroup>
  <thead><tr><th scope="col" aria-label="Aspect"></th><th scope="col" class="cmp-ml">ML</th><th scope="col" class="cmp-alp">ALP</th></tr></thead>
  <tbody>
   <tr>
    <th scope="row">Features</th>
-   <td class="cmp-ml"><div class="cmp-feature-linear">Linear · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_1(x)=x</mtext><annotation encoding="application/x-tex">\varphi_1(x)=x</annotation></semantics></math></div><div class="cmp-feature-quadratic">Quadratic · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_i(x)=x^i</mtext><annotation encoding="application/x-tex">\varphi_i(x)=x^i</annotation></semantics></math></div></td>
-   <td class="cmp-alp"><div class="cmp-feature-linear">Linear · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_1(s)=s</mtext><annotation encoding="application/x-tex">\varphi_1(s)=s</annotation></semantics></math></div><div class="cmp-feature-quadratic">Quadratic · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_i(s)=s^i</mtext><annotation encoding="application/x-tex">\varphi_i(s)=s^i</annotation></semantics></math></div></td>
+   <td class="cmp-ml"><div class="cmp-feature-linear">Linear · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_1(x)=x</mtext><annotation encoding="application/x-tex">\varphi_1(x)=x</annotation></semantics></math></div><div class="cmp-feature-quadratic"><strong class="cmp-change-label">Quadratic</strong> · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_i(x)=x^i</mtext><annotation encoding="application/x-tex">\varphi_i(x)=x^i</annotation></semantics></math></div></td>
+   <td class="cmp-alp"><div class="cmp-feature-linear">Linear · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_1(s)=s</mtext><annotation encoding="application/x-tex">\varphi_1(s)=s</annotation></semantics></math></div><div class="cmp-feature-quadratic"><strong class="cmp-change-label">Quadratic</strong> · <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_i(s)=s^i</mtext><annotation encoding="application/x-tex">\varphi_i(s)=s^i</annotation></semantics></math></div></td>
   </tr>
-  <tr>
-   <th scope="row">Weights</th>
-   <td class="cmp-ml"><div class="cmp-unweighted">Uniform</div><div class="cmp-weighted">Updated</div></td>
-   <td class="cmp-alp"><div class="cmp-unweighted">Uniform</div><div class="cmp-weighted">Updated</div></td>
-  </tr>
-  
   <tr>
    <th scope="row">Approximation</th>
    <td class="cmp-ml"><div class="cmp-approximation"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\widehat y_\beta(x)=\beta_0+\sum_{i=1}^{N}\beta_i\varphi_i(x)</mtext><annotation encoding="application/x-tex">\widehat y_\beta(x)=\beta_0+\sum_{i=1}^{N}\beta_i\varphi_i(x)</annotation></semantics></math></div></td>
@@ -696,15 +646,20 @@ Introduce the two top boxes: fixed features or basis functions on the left and o
     <div><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\text{s.t.}\quad V_\beta(s)\le c(s,a)+\gamma\,\mathbb E[V_\beta(S\prime)\mid s,a],\quad\forall\,(s,a)</mtext><annotation encoding="application/x-tex">\text{s.t.}\quad V_\beta(s)\le c(s,a)+\gamma\,\mathbb E[V_\beta(S\prime)\mid s,a],\quad\forall\,(s,a)</annotation></semantics></math></div>
    </td>
   </tr>
+<tr class="cmp-weights-row">
+ <th scope="row">Weights</th>
+ <td class="cmp-ml"><strong class="cmp-change-label">Observation weights updated</strong></td>
+ <td class="cmp-alp"><strong class="cmp-change-label">State relevance updated</strong></td>
+</tr>
  </tbody>
 </table>
 <span class="cmp-step-trigger fragment" data-cmp-step="2" data-fragment-index="1" aria-hidden="true"></span>
 <span class="cmp-step-trigger fragment" data-cmp-step="3" data-fragment-index="2" aria-hidden="true"></span>
-</div><div class="cmp-discussion fragment" data-fragment-index="3"><p>Please see the discussions in de Farias and Van Roy (2003) and Proposition 4 of the paper for why both the choice of <strong>features</strong> and the <strong>state-relevance weights</strong> directly affect policy quality.</p></div></div>
-<aside class="notes"><p>On entry, compare the labeled regression observations with the ALP feasibility boundary. First advance shows a comparison table with feature, weight, feature-count, approximation, and optimization rows and fits an affine model on both sides. Second advance expands each feature set to include the squared input. Point out the remaining regression residuals and the gaps between the ALP curve and its ceiling. The table keeps the ML and ALP choices parallel after the first click. Both models begin with uniform weights. Third advance changes the importance of observations through wᵢ and the importance of states through ν. The feature sets stay quadratic for both refits. In cost minimization, full Bellman feasibility implies Vβ ≤ V*, so minimizing the ν-weighted absolute error is equivalent to maximizing the ν-weighted value. Optimal value labels are unnecessary for the ALP solve. The next slide asks how to refine these feature and relevance choices.</p><p>The nine ML inputs are equally spaced from 0 to 1; the responses in that order are 1.05, .77, .99, .58, .77, .89, .52, 1.00, 1.48. Absolute-deviation regression gives the affine fit .74 + .24x. Adding x² yields 1.05 − 1.55x + 1.98x². The unweighted sum of absolute errors falls from 1.790 to 1.214375; six observations still have nonzero residuals. On the final advance, assign weights 4, 4, 4 to the three rightmost observations and weight 1 to each remaining observation. The weighted refit is approximately 1.173333 − 3.731429x + 4.038095x². Under the new weights the total weighted absolute error falls from 3.287188 for the old curve to 2.287619 for the refit.</p><p>The ALP illustration is a one-action discounted self-loop on [0,1], with c(s)=(1−γ)(.6+.9s³). Each Bellman inequality reduces to Vβ(s)≤f(s)=.6+.9s³. Initially ν is continuous Uniform[0,1], so its density is one and the objective is the unweighted integral against ds. The optimal affine lower bound is the tangent to f at the uniform mean .5, namely .375+.675s, with uniform objective .7125. Adding s² gives the optimal quadratic .6−.4s+1.2s², with uniform objective .8. Its Bellman gap is .9s(s−2/3)². The probability measure with mass 1/4 at zero and 3/4 at 2/3 has the same first two moments as Uniform[0,1]; evaluating the binding constraints at those nodes proves optimality among feasible quadratics. The final weights replace the uniform distribution by atomic masses (.25,.05,.70) at states (0,.3,.9). The resulting m=Eν[S²]/Eν[S] is about .886, giving q(s)=.6+.9(2ms²−m²s). Its new weighted objective is 1.055738, compared with 1.0278 for the previous quadratic under those same updated weights. Bellman constraints and features are unchanged by the weight update. Circle area represents probability.</p></aside>
+</div><div class="cmp-discussion-stage fragment" data-fragment-index="3"><div class="cmp-discussion"><p>Please see the discussions in de Farias and Van Roy (2003) and Proposition 4 of the paper for why both the choice of <strong>features</strong> and the <strong>state-relevance weights</strong> directly affect policy quality.</p></div><div class="alp-inputs cmp-choice-definitions"><div class="equation-box alp-input"><p><strong>Features</strong></p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_1,\ldots,\varphi_N</mtext><annotation encoding="application/x-tex">\varphi_1,\ldots,\varphi_N</annotation></semantics></math></div><div class="equation-box alp-input"><p><strong>State relevance distribution</strong></p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\nu:\mathcal S\to\mathbb R</mtext><annotation encoding="application/x-tex">\nu:\mathcal S\to\mathbb R</annotation></semantics></math></div></div></div></div>
+<aside class="notes"><p>On entry, compare the labeled regression observations with the shaded ALP-feasible region below its boundary. The shading denotes candidate value functions V feasible to ALP; the boundary curve is unchanged. First advance shows a comparison table with feature, approximation, and optimization rows and fits an affine model on both sides. Second advance expands each feature set to include the squared input. Point out the remaining regression residuals and the gaps between the ALP curve and its ceiling. The table keeps the ML and ALP choices parallel after the first click. Both models begin with uniform weights. Third advance reveals the weights row and changes the importance of observations through wᵢ and the importance of states through ν. The feature sets stay quadratic for both refits. In cost minimization, full Bellman feasibility implies Vβ ≤ V*, so minimizing the ν-weighted absolute error is equivalent to maximizing the ν-weighted value. Optimal value labels are unnecessary for the ALP solve. The next slide asks how to refine these feature and relevance choices.</p><p>The nine ML inputs are equally spaced from 0 to 1; the responses in that order are 1.05, .77, .99, .58, .77, .89, .52, 1.00, 1.48. Absolute-deviation regression gives the affine fit .74 + .24x. Adding x² yields 1.05 − 1.55x + 1.98x². The unweighted sum of absolute errors falls from 1.790 to 1.214375; six observations still have nonzero residuals. On the final advance, assign weights 4, 4, 4 to the three rightmost observations and weight 1 to each remaining observation. The weighted refit is approximately 1.173333 − 3.731429x + 4.038095x². Under the new weights the total weighted absolute error falls from 3.287188 for the old curve to 2.287619 for the refit.</p><p>The ALP illustration is a one-action discounted self-loop on [0,1], with c(s)=(1−γ)(.6+.9s³). Each Bellman inequality reduces to Vβ(s)≤f(s)=.6+.9s³. Initially ν is continuous Uniform[0,1], so its density is one and the objective is the unweighted integral against ds. The optimal affine lower bound is the tangent to f at the uniform mean .5, namely .375+.675s, with uniform objective .7125. Adding s² gives the optimal quadratic .6−.4s+1.2s², with uniform objective .8. Its Bellman gap is .9s(s−2/3)². The probability measure with mass 1/4 at zero and 3/4 at 2/3 has the same first two moments as Uniform[0,1]; evaluating the binding constraints at those nodes proves optimality among feasible quadratics. The final weights replace the uniform distribution by atomic masses (.25,.05,.70) at states (0,.3,.9). The resulting m=Eν[S²]/Eν[S] is about .886, giving q(s)=.6+.9(2ms²−m²s). Its new weighted objective is 1.055738, compared with 1.0278 for the previous quadratic under those same updated weights. Bellman constraints and features are unchanged by the weight update. Circle area represents probability.</p></aside>
 ```
 
-## Adaptive basis functions and state relevance {#vfa-adaptation-transition .content-slide .continuous-import-slide .adaptation-transition-slide .speaker-change data-background-color="#30353b"}
+## Adaptive Basis Functions and State Relevance {#vfa-adaptation-transition .content-slide .continuous-import-slide .adaptation-transition-slide .speaker-change data-background-color="#30353b"}
 
 ::: {.slide-body}
 <div class="adaptation-headings"><span>Common choices</span><span></span><span>Refinement</span></div>
@@ -748,110 +703,7 @@ Introduce the two top boxes: fixed features or basis functions on the left and o
 Source: Tutorial §4.3. Introduce two approximation choices: the basis family representing the value function and the state relevance distribution nu defining the ALP objective. First reveal random features as a way to enrich the representation. Then reveal self guidance as a way to adapt effective state relevance through guiding constraints. The density sketches are conceptual illustrations of weighting states. The quadratic is an example of an initial representation; it has not been optimized in an earlier continuous method in this main talk. Fixed basis functions do not mean fixed coefficients.
 :::
 
-## Inventory control example {#s29 .content-slide .continuous-import-slide .inventory-slide}
-
-::: {.slide-body}
-
-
-::: {.columns}
-::: {.column width="36%"}
-<div class="inventory-model-visual">
-<div class="inventory-state-box"><h3>State: inventory level</h3>
-```{=html}
-<svg class="inventory-state-scale" viewBox="0 0 400 145" role="img" aria-label="Inventory state ranges from minus four units of backlog to twelve units of stock.">
- <rect x="30" y="45" width="85" height="24" rx="5" fill="#edc19e"/>
- <path d="M115 45H365V69H115Z" fill="#b9d9d0"/>
- <path d="M30 78H365M30 73V85M115 73V85M365 73V85" stroke="#7b9ba9" stroke-width="1.5"/>
- <circle cx="183" cy="57" r="6" fill="#226a85" stroke="white" stroke-width="2"/>
- <path d="M183 32V47" stroke="#226a85" stroke-width="1.5"/>
- <g font-family="Avenir Next,Segoe UI,sans-serif" text-anchor="middle" fill="#182c3e" font-size="16"><text x="30" y="105">−4</text><text x="115" y="105">0</text><text x="365" y="105">12</text><text x="72" y="34" fill="#a46e38">Backlog</text><text x="264" y="34" fill="#527f6b">Stock</text><text x="72" y="133" font-size="13" font-weight="700">Max backlog: 4</text><text x="302" y="133" font-size="13" font-weight="700">Max inventory: 12</text></g>
- <text x="183" y="24" font-family="Georgia,serif" font-style="italic" font-size="20" text-anchor="middle" fill="#226a85">s</text>
-</svg>
-```
-
-</div><div class="inventory-action-visual fragment" data-fragment-index="0">
-<h3>Action: order quantity</h3>
-```{=html}
-<svg class="inventory-order-arrow" viewBox="0 0 400 58" role="img" aria-label="An order adds inventory, up to six units before demand.">
- <g fill="white" stroke="#7b9ba9" stroke-width="1.5"><rect x="34" y="10" width="48" height="31" rx="4"/><path d="M82 19H97L108 31V41H82Z"/><circle cx="47" cy="45" r="6" fill="#182c3e"/><circle cx="96" cy="45" r="6" fill="#182c3e"/></g>
- <path d="M128 29H300L290 21M300 29L290 37" fill="none" stroke="#267f77" stroke-width="3" stroke-linecap="round"/>
- <path d="M326 47V20L348 7L370 20V47Z" fill="#eff7f4" stroke="#7b9ba9" stroke-width="1.5"/><path d="M341 47V29H355V47" fill="white" stroke="#7b9ba9" stroke-width="1.5"/>
-</svg>
-```
-```{=html}
-<svg viewBox="0 0 400 65" style="width:100%;height:65px" role="img" aria-label="Order quantity ranges from zero to six units"><rect x="30" y="8" width="335" height="17" rx="5" fill="#b9d9d0"/><path d="M30 33H365M30 28V38M365 28V38" stroke="#7b9ba9"/><text x="30" y="58" text-anchor="middle" font-size="16">0</text><text x="365" y="58" text-anchor="middle" font-size="16">6</text><text x="198" y="58" text-anchor="middle" font-size="16" fill="#267f77">Order quantity a</text></svg>
-```
-
-</div>
-<div class="inventory-demand-visual fragment" data-fragment-index="1">
-<h3>Uncertainty: demand $G$</h3>
-```{=html}
-<svg viewBox="0 0 400 158" class="inventory-demand-plot" role="img" aria-label="Truncated normal demand distribution between zero and ten"><path d="M30 100 L30.0,82.5 33.4,81.6 36.7,80.7 40.0,79.8 43.4,78.9 46.8,77.9 50.1,76.9 53.5,75.9 56.8,74.8 60.2,73.7 63.5,72.6 66.8,71.5 70.2,70.3 73.6,69.2 76.9,68.0 80.2,66.7 83.6,65.5 87.0,64.3 90.3,63.0 93.7,61.7 97.0,60.4 100.4,59.1 103.7,57.8 107.0,56.5 110.4,55.2 113.8,53.9 117.1,52.6 120.5,51.3 123.8,50.0 127.2,48.7 130.5,47.4 133.9,46.1 137.2,44.8 140.6,43.6 143.9,42.3 147.2,41.1 150.6,39.9 153.9,38.8 157.3,37.6 160.7,36.5 164.0,35.4 167.3,34.4 170.7,33.4 174.1,32.5 177.4,31.5 180.8,30.7 184.1,29.8 187.5,29.1 190.8,28.3 194.2,27.7 197.5,27.0 200.8,26.5 204.2,26.0 207.6,25.5 210.9,25.1 214.2,24.8 217.6,24.5 221.0,24.3 224.3,24.1 227.7,24.0 231.0,24.0 234.3,24.0 237.7,24.1 241.1,24.3 244.4,24.5 247.8,24.8 251.1,25.1 254.5,25.5 257.8,26.0 261.1,26.5 264.5,27.0 267.9,27.7 271.2,28.3 274.6,29.1 277.9,29.8 281.2,30.7 284.6,31.5 287.9,32.5 291.3,33.4 294.7,34.4 298.0,35.4 301.4,36.5 304.7,37.6 308.1,38.8 311.4,39.9 314.8,41.1 318.1,42.3 321.4,43.6 324.8,44.8 328.2,46.1 331.5,47.4 334.9,48.7 338.2,50.0 341.6,51.3 344.9,52.6 348.2,53.9 351.6,55.2 354.9,56.5 358.3,57.8 361.7,59.1 365.0,60.4 L365 100Z" fill="#dcebe7"/><polyline points="30.0,82.5 33.4,81.6 36.7,80.7 40.0,79.8 43.4,78.9 46.8,77.9 50.1,76.9 53.5,75.9 56.8,74.8 60.2,73.7 63.5,72.6 66.8,71.5 70.2,70.3 73.6,69.2 76.9,68.0 80.2,66.7 83.6,65.5 87.0,64.3 90.3,63.0 93.7,61.7 97.0,60.4 100.4,59.1 103.7,57.8 107.0,56.5 110.4,55.2 113.8,53.9 117.1,52.6 120.5,51.3 123.8,50.0 127.2,48.7 130.5,47.4 133.9,46.1 137.2,44.8 140.6,43.6 143.9,42.3 147.2,41.1 150.6,39.9 153.9,38.8 157.3,37.6 160.7,36.5 164.0,35.4 167.3,34.4 170.7,33.4 174.1,32.5 177.4,31.5 180.8,30.7 184.1,29.8 187.5,29.1 190.8,28.3 194.2,27.7 197.5,27.0 200.8,26.5 204.2,26.0 207.6,25.5 210.9,25.1 214.2,24.8 217.6,24.5 221.0,24.3 224.3,24.1 227.7,24.0 231.0,24.0 234.3,24.0 237.7,24.1 241.1,24.3 244.4,24.5 247.8,24.8 251.1,25.1 254.5,25.5 257.8,26.0 261.1,26.5 264.5,27.0 267.9,27.7 271.2,28.3 274.6,29.1 277.9,29.8 281.2,30.7 284.6,31.5 287.9,32.5 291.3,33.4 294.7,34.4 298.0,35.4 301.4,36.5 304.7,37.6 308.1,38.8 311.4,39.9 314.8,41.1 318.1,42.3 321.4,43.6 324.8,44.8 328.2,46.1 331.5,47.4 334.9,48.7 338.2,50.0 341.6,51.3 344.9,52.6 348.2,53.9 351.6,55.2 354.9,56.5 358.3,57.8 361.7,59.1 365.0,60.4" fill="none" stroke="#267f77" stroke-width="3"/><path d="M30 20V100H365" fill="none" stroke="#7b9ba9"/><g font-size="15" text-anchor="middle"><text x="30" y="122">0</text><text x="365" y="122">10</text><text x="198" y="141">Demand · truncated normal</text></g></svg>
-```
-</div>
-
-</div>
-:::
-
-::: {.column width="64%"}
-<div class="equation-box compact-equation fragment" data-fragment-index="2">
-<p class="center"><strong>Transition after demand</strong></p>
-
-
-
-```{=html}
-<svg class="inventory-transition-plot" viewBox="0 0 720 105" role="img" aria-label="Raw inventory X equals state plus order minus demand. Clip to minus four and twelve; below minus four is lost sales and above twelve is disposal.">
-<g font-size="15" text-anchor="middle"><rect x="20" y="35" width="110" height="22" fill="#db9b92"/><rect x="130" y="35" width="110" height="22" fill="#edc19e"/><rect x="240" y="35" width="330" height="22" fill="#b9d9d0"/><rect x="570" y="35" width="130" height="22" fill="#c8c4dc"/><text x="75" y="23">Lost sales</text><text x="185" y="23">Backlog</text><text x="405" y="23">Stock held</text><text x="635" y="23">Disposal</text><text x="130" y="78">−4</text><text x="240" y="78">0</text><text x="570" y="78">12</text></g><path d="M30 98H130V84M690 98H570V84" stroke="#527e80" stroke-width="2" fill="none"/><path d="M124 90L130 84L136 90M564 90L570 84L576 90" fill="none" stroke="#527e80" stroke-width="2"/>
-</svg>
-```
-<div class="fragment" data-fragment-index="3">
-
-$$
-  S'=\min\{\max\{X,-4\},12\}, \qquad X=s+a-G.
-$$
-
-</div>
-
-
-</div>
-
-<div class="equation-box compact-equation fragment" data-fragment-index="4" style="border-left:3px solid var(--teal)">
-<p class="center"><strong>Expected one-period cost</strong></p>
-
-
-
-
-<div class="inventory-cost-key inventory-cost-details"><span style="--cost-color:#db9b92">Lost sales<small>$3000(-4-X)^+$</small></span><span style="--cost-color:#edc19e">Backlog<small>$25(-S\prime)^+$</small></span><span style="--cost-color:#b9d9d0">Stock held<small>$(S\prime)^+$</small></span><span style="--cost-color:#c8c4dc">Disposal<small>$5(X-12)^+$</small></span></div>
-<div class="fragment" data-fragment-index="5">
-
-$$
-\begin{aligned}
-c(s,a)=\mathbb E\big[&20a+3000(-4-X)^++25(-S\prime)^+\\
-&+(S\prime)^++5(X-12)^+\big].
-\end{aligned}
-$$
-
-</div>
-
-
-</div>
-
-
-:::
-:::
-
-
-
-:::
-
-{{< include /components/logos.qmd >}}
-
-::: {.notes}
-Use the left-side scale to distinguish backlog from stock and identify the state s. The marked point is illustrative. Then reveal the order arrow and demand distribution, followed by transition and expected cost on successive advances. This is a one-item, periodic-review MDP. The state is the inventory position before ordering. The action is an order placed before demand. Demand then creates raw ending inventory X; the nested maximum and minimum enforce the backlog and storage limits to produce the next state. The cost formula attaches a separate economic meaning to each hinge term. The same four colors connect the transition regions to the cost terms. Purchase cost is incurred when ordering; the other costs depend on the demand outcome. Expected cost averages over demand at a fixed state and action.
-:::
-
-
-## Random features {#s38 .content-slide .continuous-import-slide .random-feature-slide}
+## Random Features {#s38 .content-slide .continuous-import-slide .random-feature-slide}
 
 ::: {.slide-body}
 
@@ -873,8 +725,8 @@ $$
 
 $$
 \begin{gathered}
-\theta_n\overset{iid}{\sim}\vartheta,\quad
-\varphi_n(s)=\phi\!\left(\theta_n^\top(1,s)\right),\\
+\theta_n\overset{iid}{\sim}\vartheta,\\
+\varphi_n(s)=\phi\!\left(\theta_{n0}+\sum_{i=1}^{d}\theta_{ni}s_i\right),\\
 V_N(s;\beta)=\beta_0+\sum_{n=1}^N\beta_n\varphi_n(s).
 \end{gathered}
 $$
@@ -883,16 +735,85 @@ $$
 :::
 
 <div class="feature-family-formulas fragment" data-fragment-index="1">
- <div class="feature-fourier"><strong>Fourier</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_\theta(s)=\cos(b+ws);\quad\theta=(b,w)</mtext><annotation encoding="application/x-tex">\varphi_\theta(s)=\cos(b+ws);\quad\theta=(b,w)</annotation></semantics></math></div>
+ <div class="feature-fourier"><strong>Fourier</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_\theta(s)=\cos(b+\omega s);\quad\theta=(b,\omega)</mtext><annotation encoding="application/x-tex">\varphi_\theta(s)=\cos(b+\omega s);\quad\theta=(b,\omega)</annotation></semantics></math></div>
  <div class="feature-relu"><strong>ReLU</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\varphi_\theta(s)=\max\{0,b+ws\};\quad\theta=(b,w)</mtext><annotation encoding="application/x-tex">\varphi_\theta(s)=\max\{0,b+ws\};\quad\theta=(b,w)</annotation></semantics></math></div>
 </div>
 ```{=html}
+<div class="random-feature-visuals">
+<div class="feature-sampling-view fragment current-visible" data-fragment-index="2">
+ <div class="feature-sampling-pair">
+  <div class="feature-sampling-card feature-fourier">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx3.81,\quad \omega\approx0.82</mtext><annotation encoding="application/x-tex">b\approx3.81,\quad \omega\approx0.82</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/fourier-sampling-1.svg" alt="Fourier parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(0,2\pi)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(0,2\pi)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\omega\sim\mathcal N(0,5^2)</mtext><annotation encoding="application/x-tex">\omega\sim\mathcal N(0,5^2)</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\pi</mtext><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>2\pi</mtext><annotation encoding="application/x-tex">2\pi</annotation></semantics></math></span>
+   </div>
+  </div>
+  <div class="feature-sampling-card feature-relu">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx0.34,\quad w\approx1.41</mtext><annotation encoding="application/x-tex">b\approx0.34,\quad w\approx1.41</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/relu-sampling-1.svg" alt="ReLU parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(-1,1)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(-1,1)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>w\sim\mathrm{Uniform}(0.5,1.5)</mtext><annotation encoding="application/x-tex">w\sim\mathrm{Uniform}(0.5,1.5)</annotation></semantics></math></span>
+   </div>
+  </div>
+ </div>
+</div>
+<div class="feature-sampling-view fragment current-visible" data-fragment-index="3">
+ <div class="feature-sampling-pair">
+  <div class="feature-sampling-card feature-fourier">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx0.61,\quad \omega\approx10.12</mtext><annotation encoding="application/x-tex">b\approx0.61,\quad \omega\approx10.12</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/fourier-sampling-2.svg" alt="Fourier parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(0,2\pi)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(0,2\pi)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\omega\sim\mathcal N(0,5^2)</mtext><annotation encoding="application/x-tex">\omega\sim\mathcal N(0,5^2)</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\pi</mtext><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>2\pi</mtext><annotation encoding="application/x-tex">2\pi</annotation></semantics></math></span>
+   </div>
+  </div>
+  <div class="feature-sampling-card feature-relu">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx-0.20,\quad w\approx0.61</mtext><annotation encoding="application/x-tex">b\approx-0.20,\quad w\approx0.61</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/relu-sampling-2.svg" alt="ReLU parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(-1,1)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(-1,1)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>w\sim\mathrm{Uniform}(0.5,1.5)</mtext><annotation encoding="application/x-tex">w\sim\mathrm{Uniform}(0.5,1.5)</annotation></semantics></math></span>
+   </div>
+  </div>
+ </div>
+</div>
+<div class="feature-sampling-view fragment current-visible" data-fragment-index="4">
+ <div class="feature-sampling-pair">
+  <div class="feature-sampling-card feature-fourier">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx5.38,\quad \omega\approx-2.31</mtext><annotation encoding="application/x-tex">b\approx5.38,\quad \omega\approx-2.31</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/fourier-sampling-3.svg" alt="Fourier parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(0,2\pi)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(0,2\pi)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\omega\sim\mathcal N(0,5^2)</mtext><annotation encoding="application/x-tex">\omega\sim\mathcal N(0,5^2)</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\pi</mtext><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span>
+    <span class="feature-sampling-tick feature-sampling-tick-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>2\pi</mtext><annotation encoding="application/x-tex">2\pi</annotation></semantics></math></span>
+   </div>
+  </div>
+  <div class="feature-sampling-card feature-relu">
+   <div class="feature-sampling-draw"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\approx0.62,\quad w\approx0.75</mtext><annotation encoding="application/x-tex">b\approx0.62,\quad w\approx0.75</annotation></semantics></math></div>
+   <div class="feature-sampling-plot">
+    <img src="assets/figures/continuous-demos/random-feature-sequence/relu-sampling-3.svg" alt="ReLU parameter distributions showing the selected pair and the feature curve it produces.">
+    <span class="feature-sampling-label feature-sampling-label-1"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>b\sim\mathrm{Uniform}(-1,1)</mtext><annotation encoding="application/x-tex">b\sim\mathrm{Uniform}(-1,1)</annotation></semantics></math></span>
+    <span class="feature-sampling-label feature-sampling-label-2"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>w\sim\mathrm{Uniform}(0.5,1.5)</mtext><annotation encoding="application/x-tex">w\sim\mathrm{Uniform}(0.5,1.5)</annotation></semantics></math></span>
+   </div>
+  </div>
+ </div>
+ <p class="feature-sampling-dimension">For higher-dimensional states, <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>\boldsymbol{\omega}</mtext><annotation encoding="application/x-tex">\boldsymbol{\omega}</annotation></semantics></math> is sampled from a multivariate distribution.</p>
+</div>
 <div class="r-stack random-feature-sequence" role="region" aria-label="Fourier and ReLU fits with 1, 3, 5, 12, and 24 random features">
-  <img class="fragment current-visible" data-fragment-index="2" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-1.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 1 random feature">
-  <img class="fragment current-visible" data-fragment-index="3" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-3.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 3 random features">
-  <img class="fragment current-visible" data-fragment-index="4" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-5.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 5 random features">
-  <img class="fragment current-visible" data-fragment-index="5" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-12.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 12 random features">
-  <img class="fragment" data-fragment-index="6" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-24.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 24 random features">
+  <img class="fragment current-visible" data-fragment-index="5" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-1.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 1 random feature">
+  <img class="fragment current-visible" data-fragment-index="6" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-3.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 3 random features">
+  <img class="fragment current-visible" data-fragment-index="7" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-5.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 5 random features">
+  <img class="fragment current-visible" data-fragment-index="8" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-12.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 12 random features">
+  <img class="fragment" data-fragment-index="9" src="assets/figures/continuous-demos/random-feature-sequence/fourier-relu-24.svg" alt="Fourier (left) and ReLU (right) least-squares fits with 24 random features">
+</div>
 </div>
 ```
 
@@ -903,10 +824,10 @@ $$
 {{< include /components/logos.qmd >}}
 
 ::: {.notes}
-This slide contrasts a fixed quadratic approximation with nested random features. Fourier is on the left in blue and ReLU is on the right in purple. Use seed 17 and a fixed pool of 48 features, displaying only 1, 3, 5, 12, and 24 features. Each plot refits least-squares coefficients to the same illustrative target, so grid RMSE decreases along the sequence. The target illustrates approximation capacity and is not the optimal inventory value function. The two families use the same state grid, target function, vertical scale, and quadratic reference.
+This slide contrasts a fixed quadratic approximation with nested random features. Fourier is on the left in blue and ReLU is on the right in purple. After the formulas, reveal one sampled pair and its feature curve in each panel. The next two clicks replace both samples and curves. The samples are illustrative. The later ReLU fits use unit slopes and sampled hinge locations. Use seed 17 and a fixed pool of 48 features, displaying only 1, 3, 5, 12, and 24 features. Each plot refits least-squares coefficients to the same illustrative target, so grid RMSE decreases along the sequence. The target illustrates approximation capacity and is not the optimal inventory value function. The two families use the same state grid, target function, vertical scale, and quadratic reference.
 :::
 
-## Feature-based ALP with continuous constraints {#s39 .content-slide .continuous-import-slide}
+## Feature-Based ALP (FALP): Theoretical Guarantees {#s39 .content-slide .continuous-import-slide}
 
 ::: {.slide-body}
 <div class="falp-stages">
@@ -946,7 +867,7 @@ V_N(s)\le V^*(s),\quad \forall s\in\mathcal S
 $$
 
 </div>
-<div class="falp-theorem-part">
+<div class="falp-theorem-part fragment" data-fragment-index="2">
 <h4><span>(b)</span> High-probability VFA guarantee</h4>
 <p>Suppose the feature-sampling density satisfies $\rho(\theta)\ge\underline\rho>0$ for all $\theta\in\Theta$. For any $\delta\in(0,1]$, with probability at least $1-\delta$ over the sampled features,</p>
 
@@ -990,50 +911,47 @@ $$
 This is a Gaussian-limit illustration of functional central-limit behavior, not an additional theorem about the optimized FALP solution. The orange curve represents the unknown optimal value function solely as a schematic reference. The simulation uses independent smooth random-function contributions F_i(s)=V*(s)+sum_k Z_ik psi_k(s), where the Z_ik are independent standard normal coefficients and the six smooth basis functions are fixed. Each displayed estimate averages N such contributions; the different teal curves are independent repetitions with nested draws. Thus the means have pointwise variance sigma(s)^2/N and are exactly Gaussian in this illustrative model for every N. At a selected state, the right plot is that exact normal marginal, centered at V*(s0); its density axis rescales and is labeled with its current peak. For more general function-valued summands, a functional CLT requires appropriate moment and tightness conditions: the centered, sqrt(N)-scaled average can converge in distribution to a Gaussian process. The unscaled estimates concentrate at their mean, not at a nondegenerate normal distribution. Actual FALP coefficients are optimized under Bellman constraints and are not sample-mean coefficients; Theorem 1 on the previous page establishes a high-probability approximation bound, not a Gaussian limit. This simulation does not use V* as available training data or claim that the illustration solves an MDP. Advance through N=1,4,16,64,256, then reveal the functional CLT. Animate runs the same sequence automatically; New draws starts independent repetitions. Selecting a different state updates both the probe and the normal marginal.
 :::
 
-## Value function accuracy and policy cost {#s40 .content-slide .continuous-import-slide .policy-ranking-slide}
+## Value Function Accuracy and Policy Cost {#s40 .content-slide .continuous-import-slide .policy-ranking-slide}
 
 ::: {.slide-body}
 <div class="policy-end-stages">
-::: {.policy-opening .fragment .fade-out data-fragment-index="0"}
-Increasing the feature count from $N$ to $N+B$ reduces the VFA error:
-
-$$
-\lVert V^* - N_{N+B}(\beta)\rVert_{1,\nu} < \lVert V^* - N_N(\beta)\rVert_{1,\nu}
-$$
-
-Must the greedy policy cost less?
-:::
-<div class="policy-illustration-stage fragment fade-out" data-fragment-index="5">
-<div class="fragment" data-fragment-index="0">
-<p class="warehouse-question">Which warehouse should ship the order?</p>
+<div class="policy-opening fragment fade-out" data-fragment-index="1">
+ <p>Increasing the feature count from</p>
+ <div class="policy-opening-count"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>N\;\longrightarrow\;N+1</mtext><annotation encoding="application/x-tex">N\;\longrightarrow\;N+1</annotation></semantics></math></div>
+ <p>reduces the VFA error</p>
+ <div class="policy-opening-error"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtext>\lVert V^* - N_{N+1}(\beta)\rVert_{1,\nu} &lt; \lVert V^* - N_N(\beta)\rVert_{1,\nu}</mtext><annotation encoding="application/x-tex">\lVert V^* - N_{N+1}(\beta)\rVert_{1,\nu} &lt; \lVert V^* - N_N(\beta)\rVert_{1,\nu}</annotation></semantics></math></div>
+ <p class="policy-opening-question fragment" data-fragment-index="0">Must the greedy policy cost improve?</p>
+</div>
+<div class="policy-illustration-stage fragment fade-out" data-fragment-index="6">
+<div class="fragment" data-fragment-index="1">
 ```{=html}
 <div class="warehouse-choice-demo" data-warehouse-choice>
-<span class="warehouse-show-estimates fragment" data-fragment-index="1" aria-hidden="true"></span>
-<span class="warehouse-pick-trigger fragment" data-fragment-index="2" aria-hidden="true"></span>
-<span class="warehouse-fit-trigger fragment" data-fragment-index="3" aria-hidden="true"></span>
-<span class="warehouse-ranking-trigger fragment" data-fragment-index="4" aria-hidden="true"></span>
+<span class="warehouse-show-estimates fragment" data-fragment-index="2" aria-hidden="true"></span>
+<span class="warehouse-pick-trigger fragment" data-fragment-index="3" aria-hidden="true"></span>
+<span class="warehouse-fit-trigger fragment" data-fragment-index="4" aria-hidden="true"></span>
+<span class="warehouse-ranking-trigger fragment" data-fragment-index="5" aria-hidden="true"></span>
 <p class="warehouse-phase" data-warehouse-phase>The true values are shown for comparison; the policy does not know them.</p>
-<div class="warehouse-feature-count fragment" data-fragment-index="3">Increase random features: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>N&#92;;&#92;longrightarrow&#92;;N+B</mtext><annotation encoding="application/x-tex">N&#92;;&#92;longrightarrow&#92;;N+B</annotation></semantics></math></div>
+<div class="warehouse-feature-count fragment" data-fragment-index="4">Increase random features: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>N&#92;;&#92;longrightarrow&#92;;N+B</mtext><annotation encoding="application/x-tex">N&#92;;&#92;longrightarrow&#92;;N+B</annotation></semantics></math></div>
 <div class="warehouse-options">
 <div class="warehouse-option" data-warehouse="north"><div class="warehouse-card-title"><svg viewBox="0 0 96 70" aria-hidden="true"><path d="M12 60V23L48 6L84 23V60Z" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="2"/><path d="M36 60V37H60V60M22 29H30M66 29H74" fill="none" stroke="currentColor" stroke-width="2"/></svg><h3>North warehouse</h3></div>
 <div class="warehouse-true-cost"><span>True total cost</span><strong><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V&#94;*(&#92;mathrm{North})=&#92;$9</mtext><annotation encoding="application/x-tex">V&#94;*(&#92;mathrm{North})=&#92;$9</annotation></semantics></math></strong></div>
-<div class="warehouse-approximation fragment" data-fragment-index="1"><div class="warehouse-estimate-label">Approximation <span data-warehouse-before-label><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(&#92;mathrm{North})</mtext><annotation encoding="application/x-tex">V_N(&#92;mathrm{North})</annotation></semantics></math></span><span data-warehouse-after-label hidden><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_{N+B}(&#92;mathrm{North})</mtext><annotation encoding="application/x-tex">V_{N+B}(&#92;mathrm{North})</annotation></semantics></math></span></div>
+<div class="warehouse-approximation fragment" data-fragment-index="2"><div class="warehouse-estimate-label">Approximation <span data-warehouse-before-label><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(&#92;mathrm{North})</mtext><annotation encoding="application/x-tex">V_N(&#92;mathrm{North})</annotation></semantics></math></span><span data-warehouse-after-label hidden><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_{N+B}(&#92;mathrm{North})</mtext><annotation encoding="application/x-tex">V_{N+B}(&#92;mathrm{North})</annotation></semantics></math></span></div>
 <div class="warehouse-estimate" data-warehouse-estimate="north">$3</div>
 <div class="warehouse-old-estimate" data-warehouse-old="north"></div></div>
 <div class="warehouse-selection" data-warehouse-selection="north"></div></div>
 <div class="warehouse-option" data-warehouse="south"><div class="warehouse-card-title"><svg viewBox="0 0 96 70" aria-hidden="true"><path d="M12 60V23L48 6L84 23V60Z" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="2"/><path d="M36 60V37H60V60M22 29H30M66 29H74" fill="none" stroke="currentColor" stroke-width="2"/></svg><h3>South warehouse</h3></div>
 <div class="warehouse-true-cost"><span>True total cost</span><strong><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V&#94;*(&#92;mathrm{South})=&#92;$10</mtext><annotation encoding="application/x-tex">V&#94;*(&#92;mathrm{South})=&#92;$10</annotation></semantics></math></strong></div>
-<div class="warehouse-approximation fragment" data-fragment-index="1"><div class="warehouse-estimate-label">Approximation <span data-warehouse-before-label><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(&#92;mathrm{South})</mtext><annotation encoding="application/x-tex">V_N(&#92;mathrm{South})</annotation></semantics></math></span><span data-warehouse-after-label hidden><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_{N+B}(&#92;mathrm{South})</mtext><annotation encoding="application/x-tex">V_{N+B}(&#92;mathrm{South})</annotation></semantics></math></span></div>
+<div class="warehouse-approximation fragment" data-fragment-index="2"><div class="warehouse-estimate-label">Approximation <span data-warehouse-before-label><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(&#92;mathrm{South})</mtext><annotation encoding="application/x-tex">V_N(&#92;mathrm{South})</annotation></semantics></math></span><span data-warehouse-after-label hidden><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_{N+B}(&#92;mathrm{South})</mtext><annotation encoding="application/x-tex">V_{N+B}(&#92;mathrm{South})</annotation></semantics></math></span></div>
 <div class="warehouse-estimate" data-warehouse-estimate="south">$4</div>
 <div class="warehouse-old-estimate" data-warehouse-old="south"></div></div>
 <div class="warehouse-selection" data-warehouse-selection="south"></div></div>
 </div>
-<div class="warehouse-logical-takeaway"><span class="fragment" data-fragment-index="3">Both estimates move closer to the true costs</span><span class="fragment" data-fragment-index="4">; the greedy policy switches from North to <strong class="warehouse-worse-choice">South</strong>.</span></div>
+<div class="warehouse-logical-takeaway"><span class="fragment" data-fragment-index="4">Both estimates move closer to the true costs</span><span class="fragment" data-fragment-index="5">; the greedy policy switches from North to <strong class="warehouse-worse-choice">South</strong>.</span></div>
 </div>
 ```
 </div>
 </div>
-<div class="policy-norm-summary fragment" data-fragment-index="5">
+<div class="policy-norm-summary fragment" data-fragment-index="6">
 <div class="equation-box">
 <h3>Better value approximation</h3>
 
@@ -1063,33 +981,33 @@ $$
 Ask the opening question before showing the warehouses. Reveal the true costs, then the first estimates and the choice of North. Add features, show the improved estimates, and reveal the switch to South. V-star(North)=9 and V-star(South)=10 are audience references, unknown to the policy. Before, V_N=(3,4); after, V_(N+B)=(9,8). Both approximations are no greater than truth and improve pointwise. The policy compares approximate continuation costs with equal immediate costs, so it first selects North and then South. The selected continuation cost increases from 9 to 10. These values illustrate a possible local ranking reversal; they are not outputs of an asserted particular random-feature draw or a full FALP solve. A discounted absorbing-future model with gamma=0.9 and per-period costs 0.9 and 1 realizes the displayed true future values. Both approximations satisfy the absorbing-state Bellman inequalities. Add a decision state with zero-cost transitions to the futures and set its approximation to gamma times the smaller approximate future value to extend feasibility. Thus better approximation, even pointwise, does not alone imply a monotonically better greedy policy. Do not interpret the example as denying convergence under additional assumptions. A final click replaces the illustration with the norm comparison: decreasing weighted L1 approximation error from N to N+B does not imply decreasing PC_chi of the greedy policy. PC_chi denotes discounted policy cost from initial-state distribution chi. The statement concerns the absence of a monotonicity guarantee; it does not assert that every feature addition worsens policy performance.
 :::
 
-## Self-guided ALP {#s41 .content-slide .continuous-import-slide}
+## Self-Guided ALP {#s41 .content-slide .continuous-import-slide}
 
 ::: {.slide-body}
 ::: {.sg-comparison data-sg-guide="" data-stage="0"}
-<div class="sg-counts"><span>Feature count</span><ol><li>$N$</li><li>$N+B$</li><li>$N+2B$</li><li>$N+3B$</li></ol></div>
+<div class="sg-counts"><span>Feature count</span><ol><li>$N$</li><li>$N+1$</li><li>$N+2$</li><li>$N+3$</li></ol></div>
 
 <div class="sg-plots">
 <div class="sg-plot">
 <h3>FALP</h3>
 <p class="sg-start">Fit the first $N$ features.</p>
-<p class="sg-later">The new fit can fall below its previous value.</p>
+<p class="sg-later">The current VFA can fall below the previous VFA.</p>
 ```{=html}
 <svg data-sg-unguided viewBox="0 0 550 310" role="img" aria-label="FALP value approximation across states"></svg>
 ```
 </div>
 <div class="sg-plot sg-plot-guided">
 <h3>Self-guided FALP</h3>
-<p class="sg-start">Start from the same fitted value function.</p>
-<p class="sg-later">Use the previous fit as a floor at every state.</p>
+<p class="sg-start">Start from the same VFA.</p>
+<p class="sg-later">Use the previous VFA as a floor at every state.</p>
 ```{=html}
-<svg data-sg-guided viewBox="0 0 550 310" role="img" aria-label="Self-guided value approximation across states, with the previous fit as a floor after the first round"></svg>
+<svg data-sg-guided viewBox="0 0 550 310" role="img" aria-label="Self-guided value approximation across states, with the previous VFA as a floor after the first round"></svg>
 ```
 </div>
 </div>
 
-<div class="sg-chart-key"><span class="sg-key-current">Current VFA</span><span class="sg-key-previous sg-later">Previous VFA</span></div>
-<div class="sg-guide-rule"><strong>Guiding constraint</strong><span class="sg-start">Begins with the next batch of features.</span><span class="sg-later">$V_k(s;\beta)\ge V_{k-B}^{\mathrm{SG}}(s),\quad \forall s\in\mathcal S$</span></div>
+<div class="sg-chart-key"><span class="sg-key-current">Current VFA</span><span class="sg-key-previous sg-later">Previous VFA</span><span class="sg-key-optimal">Optimal value $V^*$</span><span class="sg-key-dip sg-later">FALP dips below previous VFA</span></div>
+<div class="sg-guide-rule"><strong>Guiding constraint</strong><span class="sg-start">Begins when the next feature is added.</span><span class="sg-later">$V_{N+1}(s;\beta)\ge V_N^{\mathrm{SG}}(s),\quad \forall s\in\mathcal S$</span></div>
 
 <span class="sg-round-step fragment" data-round="1" data-fragment-index="0" aria-hidden="true"></span>
 <span class="sg-round-step fragment" data-round="2" data-fragment-index="1" aria-hidden="true"></span>
@@ -1100,37 +1018,58 @@ Ask the opening question before showing the warehouses. Reveal the true costs, t
 {{< include /components/logos.qmd >}}
 
 ::: {.notes}
-Both columns initially solve the same FALP with N features and have identical VFAs. There is no guide constraint on the initial self-guided solve. Each click adds B features to both models. FALP retains Bellman inequalities only; self-guided FALP also keeps its own previous solution as a statewise floor. The plots share a fixed vertical scale. Curves illustrate the distinction rather than report numerical LP solves: FALP may cross its predecessor, whereas the self-guided VFA stays above its previous guide. This does not imply monotonically improving greedy-policy costs.
+Both columns initially solve the same FALP with N features and have identical VFAs. There is no guide constraint on the initial self-guided solve. Each click adds one feature to both models. FALP retains Bellman inequalities only; self-guided FALP also keeps its own previous solution as a statewise floor. The plots share a fixed vertical scale and the same illustrative optimal value function. Orange bands on the FALP state axis identify where the current approximation dips below its previous value. Curves illustrate the distinction rather than report numerical LP solves: FALP may cross its predecessor, whereas the self-guided VFA stays above its previous guide. This does not imply monotonically improving greedy-policy costs.
 :::
 
-## <span class="sg-example-title">Self-guided ALP progression: inventory example</span><span class="sg-theory-title">Self-guided ALP: theoretical results</span> {#s42 .content-slide .continuous-import-slide .sg-live-progression-slide data-menu-title="Self-guided ALP progression: inventory example"}
+## Self-Guided ALP Progression: Inventory Example {#s42 .content-slide .continuous-import-slide .sg-live-progression-slide}
 
 ::: {.slide-body}
-<div class="sg-inventory-theory-stages">
-<div class="inventory-triple fragment fade-out" data-fragment-index="3">
+<div class="inventory-triple">
 <div class="inventory-triple-counts"><span>Feature count</span><span class="inventory-count-stage">
 <span class="fragment fade-out" data-fragment-index="0">$N=0$</span><span class="fragment current-visible" data-fragment-index="0">$N=1$</span><span class="fragment current-visible" data-fragment-index="1">$N=2$</span><span class="fragment" data-fragment-index="2">$N=3$</span>
 </span></div>
 ```{=html}
 <div class="r-stack inventory-progression inventory-triple-plots">
-  <img class="fragment fade-out" data-fragment-index="0" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-0.svg" alt="N=0: constant FALP and self-guided FALP value functions, with uniform state relevance">
-  <img class="fragment current-visible" data-fragment-index="0" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-1.svg" alt="N=1: both value functions improve; effective relevance remains uniform with zero guide shadow prices">
-  <img class="fragment current-visible" data-fragment-index="1" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-2.svg" alt="N=2: both value functions update, and effective relevance remains uniform while guide shadow prices are zero">
-  <img class="fragment" data-fragment-index="2" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-3.svg" alt="N=3: amber marks locate guide constraints with positive shadow prices; the red effective state relevance shifts toward those same states">
+  <img class="fragment fade-out" data-fragment-index="0" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-0.svg?v=vfa-axis-band" alt="N=0: constant FALP and self-guided FALP value functions, with uniform state relevance">
+  <img class="fragment current-visible" data-fragment-index="0" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-1.svg?v=vfa-axis-band" alt="N=1: both value functions improve; effective relevance remains uniform with zero guide shadow prices">
+  <img class="fragment current-visible" data-fragment-index="1" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-2.svg?v=vfa-axis-band" alt="N=2: both value functions update, and effective relevance remains uniform while guide shadow prices are zero">
+  <img class="fragment" data-fragment-index="2" src="assets/figures/continuous-demos/self-guided-inventory/inventory-triple-3.svg?v=vfa-axis-band" alt="N=3: the orange band marks states where FALP’s current VFA falls below its previous VFA. Amber marks locate guide constraints with positive shadow prices; the red effective state relevance shifts toward those same states">
 </div>
 ```
-<div class="inventory-guide-connection fragment" data-fragment-index="2">Guiding constraints adaptively update the state-relevance weights.</div>
-<div class="inventory-guide-update fragment" data-fragment-index="2">
+<div class="inventory-guide-connection fragment" data-fragment-index="3">Guiding constraints adaptively update the state-relevance weights.</div>
+<div class="inventory-guide-update fragment" data-fragment-index="3">
+<div class="inventory-guide-equation">
+
 
 $$
 \nu'_N(s)=
 \frac{\nu(s)+y_N^*(s)}
-{1+\int_{\mathcal{S}}y_N^*(u)\,du}.
+{1+\int_{\mathcal{S}}y_N^*(u)\,du}
 $$
 
+
+</div>
+<svg class="inventory-guide-arrow" viewBox="0 0 56 22" aria-hidden="true">
+ <path d="M3 11H51M44 4L51 11L44 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div class="inventory-guide-dual">
+ <p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>y_N^*(s)</mtext><annotation encoding="application/x-tex">y_N^*(s)</annotation></semantics></math> is the dual variable for<br>
+the guiding constraint <span class="inventory-guide-constraint"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext>V_N(s)\ge V_{N-1}^{\mathrm{SG}}(s)</mtext><annotation encoding="application/x-tex">V_N(s)\ge V_{N-1}^{\mathrm{SG}}(s)</annotation></semantics></math></span></p>
 </div>
 </div>
-<div class="sg-inventory-theory fragment" data-fragment-index="3">
+</div>
+:::
+
+{{< include /components/logos.qmd >}}
+
+::: {.notes}
+All three panels come from the same sequence of inventory solves, initialized at N=0 and advanced through N=1,2,3. Settings: MDP seed 12345, feature seed 111, 3,000 sampled Bellman constraints, 3,000 guide states, 1,000 demand samples, and one new Fourier feature per stage. The first two plots show the logarithm of positive value-function approximations on identical fixed vertical scales. State relevance starts uniform on [-4,12]. The third panel uses the actual nonnegative HiGHS shadow prices of each stage's guiding constraints. The effective finite-sample measure is (nu + sum_j lambda_j delta_sj)/(1+sum_j lambda_j). The displayed curve smooths only the atomic component with boundary-normalized Gaussian kernels of bandwidth .65; this does not change the solver. There is no update when all guide multipliers are zero, even if some guide constraints happen to be tight. Amber marks on the guided VFA and under the density identify exactly the same states with positive guide shadow prices. The density panel is synchronized with the two VFA panels on each click. At N=3, the next click shows the reweighting formula and identifies the dual variable. The base objective distribution stays uniform. The effective relevance is its dual interpretation. The estimates are precomputed; no audience-side Python is required.
+:::
+
+## Self-Guided ALP: Theoretical Results {#sg-theory .content-slide .continuous-import-slide .speaker-change .sg-theory-slide data-background-color="#30353b"}
+
+::: {.slide-body}
+<div class="sg-inventory-theory">
 <h3>Proposition 5</h3>
 <p class="sg-theory-setup">For self-guided FALP with exact constraints, let $V_N^{\mathrm{SG}}$ denote a finite optimal VFA with $N=qB$ features, $q\ge1$.</p>
 
@@ -1140,7 +1079,7 @@ V_0^{\mathrm{FA}}(s)=V_0^{\mathrm{SG}}(s)
 \qquad \forall s\in\mathcal S.
 $$
 
-<p class="sg-theory-norm-label">Hence, for every fixed state-relevance distribution $\nu$,</p>
+<p class="sg-theory-norm-label">Hence, for <u>every</u> fixed state-relevance distribution $\nu$,</p>
 
 $$
 \bigl\lVert V^*-V_N^{\mathrm{SG}}\bigr\rVert_{1,\nu}
@@ -1148,18 +1087,15 @@ $$
 \bigl\lVert V^*-V_{N-B}^{\mathrm{SG}}\bigr\rVert_{1,\nu}.
 $$
 
-<p class="sg-theory-policy">The <strong>worst-case greedy-policy performance bound</strong> also improves.</p>
-</div>
+<p class="sg-theory-policy fragment" data-fragment-index="0">The <strong>worst-case greedy-policy performance bound</strong> in Proposition 4 also improves.</p>
 </div>
 :::
-
-{{< include /components/logos.qmd >}}
 
 ::: {.notes}
-All three panels come from the same sequence of inventory solves, initialized at N=0 and advanced through N=1,2,3. Settings: MDP seed 12345, feature seed 111, 3,000 sampled Bellman constraints, 3,000 guide states, 1,000 demand samples, and one new Fourier feature per stage. The first two plots show the logarithm of positive value-function approximations on identical fixed vertical scales. State relevance starts uniform on [-4,12]. The third panel uses the actual nonnegative HiGHS shadow prices of each stage's guiding constraints. The effective finite-sample measure is (nu + sum_j lambda_j delta_sj)/(1+sum_j lambda_j). The displayed curve smooths only the atomic component with boundary-normalized Gaussian kernels of bandwidth .65; this does not change the solver. There is no update when all guide multipliers are zero, even if some guide constraints happen to be tight. Amber marks on the guided VFA and under the density identify exactly the same states with positive guide shadow prices. The density panel is synchronized with the two VFA panels on each click. The reweighting formula appears with the N=3 update. In the continuum formula, y_N^*(s) is the optimal shadow price of the guide constraint at state s. The base objective distribution remains uniform; effective relevance is its dual interpretation, not a manually changed sampler. The caption and reweighting formula are both withheld until the N=3 update. The next click replaces the plots with a dark theory panel. Proposition 5 (Pakiman et al., 2025, printed p. 3393) gives a pointwise nondecreasing sequence of finite-optimal self-guided VFAs bounded above by V*. Consequently the weighted L1 error cannot increase for any fixed proper state distribution. The subsequent policy statement is the worst-case greedy-policy performance bound discussed immediately after Proposition 5, via Proposition 4 (printed p. 3391). It uses a fixed iteration’s state-visitation weighting, not a sequence of changing policy visitation distributions. It does not guarantee monotone actual greedy-policy costs. The pointwise theorem requires exact all-state Bellman and guide constraints; the numerical panels above enforce sampled constraints and illustrate the mechanism. The estimates are precomputed; no audience-side Python is required.
+Proposition 5 (Pakiman et al., 2025, printed p. 3393) gives a pointwise nondecreasing sequence of finite-optimal self-guided VFAs bounded above by the optimal value. Integrating the pointwise error gives the inequality for every fixed state-relevance distribution. On the next click, cite Proposition 4 (printed p. 3391) for the worst-case greedy-policy performance bound discussed after Proposition 5. The theorem uses exact Bellman and guiding constraints. The inventory example on the preceding slide illustrates the mechanism with sampled constraints.
 :::
 
-## Perishable inventory with lead time {#sg-inventory-model .content-slide .continuous-import-slide}
+## Perishable Inventory with Lead Time {#sg-inventory-model .content-slide .continuous-import-slide}
 
 ::: {.slide-body}
 <div class="inv-state-cost-stages">
@@ -1212,7 +1148,7 @@ All three panels come from the same sequence of inventory solves, initialized at
 Source: Pakiman et al. (2025), Self-Guided Approximate Linear Programs, §6.1, pp. 3397–3398 (assets/self-guided-alp.pdf). Start with only the scalar inventory-level graphic from page 15. First click replaces it with the five expiry coordinates for lifetime L=5. The next adds five pipeline coordinates for lead time J=6 and the ten-dimensional-state count L+(J−1). The final click adds the familiar five-part expected cost decomposition. There is no action, demand-distribution, or transition section. Capital L replaces the paper's lifetime symbol throughout this slide. At the decision epoch, s0 expires this period and si has i periods until expiry; uj arrives in j periods. For nonnegative age coordinates these describe physical stock. In backlogged states s0 may be negative and the coordinates are notional, with signed sum representing total inventory/backlog. The cost matches the paper: ordering is paid on receipt, giving gamma^J c_o a in this equivalent formulation. Holding is assessed on stock after demand and expiration, backlog is unmet demand, and lost sales exceed the backlog capacity. The symbol underline s is the negative backlog bound. Disposal is c_d(s0−D)^+ for expired units. It is not salvage revenue and is not an additional sixth cost category. The scalar model on page 15 disposes of capacity overflow; here the paper's disposal term concerns expired stock. Generic cost coefficients distinguish this paper instance from page 15's illustrative numeric costs. Expectations are over demand D; this retains the cost's economic decomposition without repeating the full transition equations.
 :::
 
-## Self-guided updates close the reported optimality gap {#sg-paper-figure2 .content-slide .continuous-import-slide .paper-slide}
+## Self-Guided Updates Close the Reported Optimality Gap {#sg-paper-figure2 .content-slide .continuous-import-slide .paper-slide}
 
 ::: {.slide-body}
 ```{=html}
@@ -1246,7 +1182,7 @@ Source: Pakiman et al. (2025), Self-Guided Approximate Linear Programs, §6.1, p
 Paper Figure2, printed p.3400. The plots are reproduced from the supplied article so the violin samples, bounds and axis geometry are not invented. Ten trials on each of two representative10D inventory instances. The six displayed q values are0–5, with exact gap labels left1837,372,218,18,10,7% and right1921,364,165,10,7,5%. These are not all solves implied by the600,7 method notation. The vertical axis is transformed/nonuniform; do not interpret equal visual distances as equal monetary amounts. The gap labels use averages of the upper and lower bounds. Center markers are not explicitly identified as means in the caption. Click forward to reveal each next iteration, or use the figure controls. Final labels are rounded and therefore differ from the one-decimal Table4 values.
 :::
 
-## Self-guidance improves the 10-dimensional inventory policies {#sg-inventory-table .content-slide .continuous-import-slide .paper-slide}
+## Self-Guidance Improves the 10-Dimensional Inventory Policies {#sg-inventory-table .content-slide .continuous-import-slide .paper-slide}
 
 ::: {.slide-body}
 <div data-paper-table="inventory" data-paper-reveal-columns="" data-paper-hide-caption=""><div class="paper-table-controls"><button data-paper-metric="policy">Policy gaps (%)</button><button data-paper-metric="bound">Lower-bound gaps (%)</button></div><div class="paper-table-output"></div><span class="paper-column-step fragment" data-paper-column-step="0" data-fragment-index="0" aria-hidden="true"></span><span class="paper-column-step fragment" data-paper-column-step="1" data-fragment-index="1" aria-hidden="true"></span><span class="paper-column-step fragment" data-paper-column-step="2" data-fragment-index="2" aria-hidden="true"></span><span class="paper-column-step fragment" data-paper-column-step="3" data-fragment-index="3" aria-hidden="true"></span><span class="paper-column-step fragment" data-paper-bound-step="" data-fragment-index="4" aria-hidden="true"></span></div>
@@ -1258,7 +1194,7 @@ Paper Figure2, printed p.3400. The plots are reproduced from the supplied articl
 Paper Table4, printed p.3399. Each forward click reveals one method column, left to right: application-specific ALP, FALP600, FALP1000, then self-guided FALP600,7. Instance parameters stay visible throughout. The final click switches the full table to lower-bound gaps. The metric buttons preserve the current reveal stage. The reading view shows all method columns. All rows and reported averages are reproduced exactly. The six10D instances share gamma.95 and lost-sale cost1000. Policy gaps use each method's simulated policy cost UB and the best lower bound across methods. Lower-bound gaps compare each method with that same bestLB; zero means best among these methods, not exact optimality. Using more features need not improve the policy: FALP1000 has an average23.7% policy gap. The application-specific ALP_LNS average is50.0%. These are published computational estimates, not new runs.
 :::
 
-## Future work {#sg-future-features .content-slide .continuous-import-slide .paper-slide .ac-future-slide background-color="#30353b"}
+## Future Work {#sg-future-features .content-slide .continuous-import-slide .paper-slide .ac-future-slide background-color="#30353b"}
 
 ::: {.slide-body}
 <div class="ac-future" data-ac-future>
@@ -1304,21 +1240,21 @@ Three future-work ideas from the user-provided AC_ALP_Rewritten synopsis. These 
 
 ::: {.slide-body}
 <div class="summary-takeaways">
-<div class="summary-takeaway summary-features">
-<h3>Random features:</h3>
-<del class="summary-before">Feature-engineering burden</del>
-<p class="summary-after">Cheap sampling</p>
+ <div class="summary-takeaway summary-features">
+  <h3>Random features:</h3>
+  <p>Eliminate heuristic feature engineering while guaranteeing convergence.</p>
+ </div>
+ <div class="summary-takeaway summary-guidance">
+  <h3>Self-guidance:</h3>
+  <p>Eliminates hand-tuning of state-relevance weights and guarantees improvement in the worst-case greedy-policy performance bound.</p>
+ </div>
 </div>
-<div class="summary-takeaway summary-guidance">
-<h3>Self-guidance:</h3>
-<del class="summary-before">Hand-tuned state importance</del>
-<p class="summary-after">Automatic updates<br>from past solutions</p>
+<div class="summary-links">
+ <a href="https://pubsonline.informs.org/doi/abs/10.1287/educ.2026.0308" target="_blank" rel="noopener"><img src="assets/figures/team-qr-tutorial.svg" alt=""><span>Tutorial</span></a>
+ <a href="https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2020.00038" target="_blank" rel="noopener"><img src="assets/figures/team-qr-ms-paper.svg" alt=""><span>Paper</span></a>
 </div>
-</div>
-<span class="summary-final-step fragment" data-summary-for="features" data-fragment-index="0" aria-hidden="true"></span>
-<span class="summary-final-step fragment" data-summary-for="guidance" data-fragment-index="1" aria-hidden="true"></span>
 :::
 
 ::: {.notes}
-Closing takeaways based on Pakiman et al. (2025), abstract and introduction pp. 3384–3385; self-guiding interpretation §4.2, p. 3394; conclusion pp. 3402–3403. Random features reduce the burden of feature engineering through inexpensive sampling. The feature family and sampling parameters still require choices. Self-guidance mitigates reliance on a hand-tuned state-relevance distribution: guiding constraints and their shadow prices use the preceding VFA to update effective state importance. The base relevance distribution is still selected; this is not a claim that all domain knowledge disappears or that actual greedy-policy costs improve monotonically. The first click crosses out the feature-engineering burden and reveals Cheap sampling; the second crosses out hand-tuned state importance and reveals Automatic updates from past solutions. Campus photograph supplied by the presenter.
+The convergence guarantee is the FALP result in Theorem 1. Sampling replaces hand-designed individual features, while the feature family and sampling distribution still need to be specified. Self-guidance updates effective state relevance through the guiding constraints. Proposition 5 and the discussion that follows connect the sequence to the worst-case greedy-policy bound in Proposition 4. Campus photograph supplied by the presenter.
 :::

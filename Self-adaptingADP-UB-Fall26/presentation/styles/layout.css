@@ -252,8 +252,6 @@ body:not(.reveal-viewport) .discrete-methods-overview .tutorial-focus {color:var
 .deck-links {font-size:13px;display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:14px;}
 .cover .source .deck-links {margin-top:0;}
 .cover .source .deck-links a {color:var(--accent);}
-/* Keep the title for navigation and reading view, but omit it on the slide. */
-.reveal .dictionary > h2 {visibility:hidden;}
 .dictionary .definition-grid {margin-top:30px!important;}
 .dictionary .definition .term {font-size:58px;}
 .dictionary .definition p {font-size:25px;}
@@ -465,15 +463,16 @@ body:not(.reveal-viewport) .cover h2 {font-size:52px;}
 .mdp-premise,.reveal .mdp-premise {font-size:24px;line-height:1.3;margin:0 0 14px;}
 .mdp-premise strong {color:var(--teal);}
 .mdp-table {width:100%;table-layout:fixed;border-collapse:collapse;}
-.reveal .mdp-table th,.mdp-table th {font-size:22px;color:var(--muted);font-weight:500;padding:7px 12px;text-align:left;}
-.reveal .mdp-table td,.mdp-table td {font-size:24px;line-height:1.25;padding:8px 12px;vertical-align:middle;border-bottom:1px solid var(--line);}
-.mdp-table th:first-child {width:46%;}
-.mdp-table td:first-child strong {font-size:24px;font-weight:600;color:var(--accent);}
+.reveal .mdp-table th,.mdp-table th {font-size:20px;color:var(--muted);font-weight:500;padding:6px 12px;text-align:left;}
+.reveal .mdp-table td,.mdp-table td {font-size:22px;line-height:1.25;padding:7px 12px;vertical-align:middle;border-bottom:1px solid var(--line);}
+.mdp-table th:first-child {width:14%;}
+.mdp-table th:nth-child(2) {width:23%;}
+.mdp-table td:first-child strong {font-weight:600;color:var(--accent);}
 .mdp-table td:last-child {background:#f2f7f9;}
 .mdp-formula {font-family:Georgia,"Times New Roman",serif;font-size:28px;line-height:1.25;margin:2px 0;}
 .mdp-formula sub,.mdp-formula sup {font-size:65%;}
-.mdp-table .mdp-cost-formula {font-size:26px;}
-.mdp-table .mdp-cost-caption {font-size:22px;color:var(--muted);}
+.mdp-table .mdp-formula {font-size:24px;}
+.mdp-table .mdp-cost-caption {font-size:20px;color:var(--muted);}
 .mdp-objective {display:block;text-align:center;background:#FCE8D8;margin-top:16px;padding:10px 14px;}
 .mdp-objective strong {font-size:24px;line-height:1.2;color:#89451f;}
 .mdp-objective .mdp-formula {font-size:30px;margin:6px 0 0;text-align:center;}
@@ -749,3 +748,8 @@ body:not(.reveal-viewport) .cover h2 {font-size:52px;}
 body:not(.reveal-viewport) #s01.cover {padding:65px 24px;}
 body:not(.reveal-viewport) #s01.cover .slide-body {padding:0;}
 body:not(.reveal-viewport) #s01.cover > h2 {font-family:inherit;margin:0 auto 28px;}
+
+/* Use the same stationary Bellman formula and typography as the MDP bridge. */
+#s07 .growth-bellman-equation h3 {font-family:inherit;font-size:25px;font-weight:500;line-height:1.25;color:var(--teal);margin:0 0 10px;}
+#s07 .growth-bellman-equation .polished-math {font-size:25px;}
+#s07 .growth-bellman-equation mjx-container[display="true"] {margin:0;padding:0;}
